@@ -1,0 +1,39 @@
+package tp1.socket;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+
+/**
+ * @author Daniela Gonçalves A48579 42D
+ * 
+ * A classe Server, inicia uma conexão TCP no porto x 
+ * e espera pela conexão de clientes.
+ */
+
+public class Server {
+	
+	public final static int PORT = 100;  // Porto onde vai ficar à espera
+
+	public static void main(String[] args) {
+
+		ServerSocket serverSocket = null;
+
+		try {
+			serverSocket = new ServerSocket(PORT); // Socket de Servidor
+			Socket newSock = null;				   // Socket	
+
+			for (;;) {
+				System.out.println("Servidor TCP concorrente aguarda ligacao no porto " + DEFAULT_PORT + "...");
+
+				// Espera connect do cliente
+				newSock = serverSocket.accept();
+
+				Thread th = new HandleConnectionThread(newSock);
+				th.start();
+			}
+		} catch (IOException e) {
+			System.err.println("Erro: " + e);
+		}
+	} 	
+}

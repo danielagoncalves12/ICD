@@ -1,0 +1,56 @@
+package tp1.battleship;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+public class GameView {
+
+	/** 
+	 * Método printBoard
+	 * Apresenta o tabuleiro do jogo.
+	 */
+	public void printBoard(List<List<Integer>> jogo) {
+		
+		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
+		
+		// Apresentação das letras
+		System.out.print("   ");
+		for (int i = 0; i < 10; i++) {
+			System.out.print(" " + letters[i] + " ");
+		}
+		System.out.println();
+
+		// Apresentação da borda do tabuleiro
+		System.out.print("   X ");
+		for (int i = 0; i <= 28; i++) {
+			System.out.print((i != 28) ? "-" : " X\n");
+		}
+		
+		// Apresentação do conteúdo do tabuleiro
+		for (int i = 0; i < 10; i++) {
+			
+			System.out.print(i+1 + " "));
+			System.out.print((i != 9) ? " |" : "|");
+			for (int j = 0; j < 10; j++) {
+			
+				System.out.print(" " + jogo.get(i).get(j) + " ");
+				System.out.print((j == 9) ? "|" : "");
+			}
+			System.out.println();
+		}
+		
+		// Apresentação da borda do tabuleiro
+		System.out.print("   X ");
+		for (int i = 0; i <= 28; i++) {
+			System.out.print((i != 28) ? "-" : " X\n");
+		}
+	}
+	
+	public static void main(String[] args) {
+		
+		List<List<Integer>> jogo = new ArrayList(Collections.nCopies(10, new ArrayList(Collections.nCopies(10, 0))));
+
+		new GameView().printBoard(jogo);
+	}
+}
