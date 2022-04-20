@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 /**
  * @author Daniela Gonçalves A48579 42D
@@ -18,19 +19,26 @@ public class Client {
     
     public static void main(String[] args) {
         
-        Socket socket     = null;
+        Socket     socket = null;
         BufferedReader is = null;
         PrintWriter    os = null;
+        Scanner      scan = null;
         
         try {
             socket = new Socket(HOST, PORT);  // Criação do Socket
 
-            System.out.println("Ligação: " + socket);              					 // Mostrar os parametros da ligação
-            os = new PrintWriter(socket.getOutputStream(), true); 					 // Stream para escrita no socket
-            is = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
+            System.out.println("Ligação: " + socket + "\n");              			   // Mostrar os parametros da ligação
+            os   = new PrintWriter(socket.getOutputStream(), true); 				   // Stream para escrita no socket
+            is   = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
+            scan = new Scanner(System.in);
 
-            os.println("Hello!");	            			 // Escreve no socket
-            System.out.println("Cliente: " + is.readLine()); // Mostrar o que se recebe do socket
+            // Receber o Menu do Servidor
+            String inputLine;
+            while(!((inputLine = is.readLine()).isEmpty())) System.out.println(inputLine);
+            
+            System.out.print("\nEscolha: ");
+            String option = scan.nextLine();
+            os.write(option);
             
         } 
         catch (IOException e) {

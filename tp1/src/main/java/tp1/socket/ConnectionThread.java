@@ -18,21 +18,46 @@ public class ConnectionThread extends Thread {
 	public ConnectionThread(Socket connection) {
 		this.connection = connection;
 	}
+	
+	public void printMainMenu(BufferedReader is, PrintWriter os) throws IOException {
+		
+		os.println("Bem-vindo ao jogo Batalha Naval!");
+		os.println("1 - Criar conta");
+		os.println("2 - Iniciar sessao");
+		os.println("3 - Sair\r\n");
+	}
 
 	public void run() {
 
 		BufferedReader is = null;
 		PrintWriter os    = null;
+		
+		String option = "";
 
 		try {
-			// circuito virtual estabelecido: socket cliente na variavel newSock
-			System.out.println("Iniciou a Thread " + this.getId() + ", " + connection.getRemoteSocketAddress());
+			System.out.println("Iniciou a Thread " + this.getId() + ", Computador -> " + connection.getRemoteSocketAddress());
 
 			is = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			os = new PrintWriter(connection.getOutputStream(), true);
+
+			printMainMenu(is, os);	 // Apresenta o menu do jogo ao cliente
+			option = is.readLine();  // Thread do servidor espera pela resposta do cliente
 			
-			String inputLine = is.readLine();
-			System.out.println("Servidor: Recebi '" + inputLine + "'");
+			switch(option) {
+			case "1": 
+				System.out.println("Thread " + this.getId() + " > Criar conta!");
+				break;
+				
+			case "2":
+				System.out.println("Thread " + this.getId() + " > Iniciar sessão!");
+				break;
+				
+			case "3":
+				System.out.println("Thread " + this.getId() + " > Terminou!");
+				break;
+			}
+			
+			//System.out.println("Servidor: Recebi '" + inputLine + "'");
 			//os.println("@" + inputLine.toUpperCase()); // converte para maiusculas
 														
 		} catch (IOException e) {
