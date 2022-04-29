@@ -3,6 +3,8 @@ package tp1.socket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Daniela Gonçalves A48579 42D
@@ -17,18 +19,21 @@ public class Server {
 
 	public static void main(String[] args) {
 
-		ServerSocket serverSocket = null;
+		ServerSocket serverSocket = null;			       // Socket do servidor
 
 		try {
-			serverSocket  = new ServerSocket(PORT); // Socket de Servidor
-			Socket socket = null;		  		    // Socket	
+			serverSocket   = new ServerSocket(PORT); // Socket de servidor
+			Socket player1 = null;					// Socket de ligação do jogador 1
+			Socket player2 = null;					// Socket de ligação do jogador 2
 
 			while (true) {
-				System.out.println("> Servidor a aguardar por clientes, conexão TCP no porto " + PORT + " ...");
+				System.out.println("> Servidor, conexão TCP no porto " + PORT + " ...");
 				
-				socket = serverSocket.accept(); 			  // Aguarda pela conexão de um cliente
-				Thread thread = new ConnectionThread(socket); // Cria um Thread
-				thread.start();								  // Inicia o Thread anteriormente criado
+				player1 = serverSocket.accept(); 	// Aguarda pela conexão de um jogador 1			
+				player2 = serverSocket.accept(); 	// Aguarda pela conexão de um jogador 2
+				
+				Thread thread = new ConnectionThread(player1, player2);  // Cria um Thread
+				thread.start();								  	   		 // Inicia a Thread anteriormente criada				
 			}
 		} catch (IOException e) {
 			System.err.println("Erro: " + e);

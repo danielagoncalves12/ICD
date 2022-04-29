@@ -3,4 +3,8 @@
 	<list key="MRU_RUNTIME_STORE">
 		<item value="NULL_RUNTIME"/>
 	</list>
+	<list key="J2EE_IMPORT_null">
+		<item value="C:\Users\Daniela\Downloads\AtiveUsers.war"/>
+		<item value="C:\Users\Daniela\Downloads\JogoGaloSimples.war"/>
+	</list>
 </section>
