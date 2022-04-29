@@ -7,6 +7,8 @@ import java.util.Scanner;
 public class GameModel {
 
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
+	private int[][] boardPlayer2 = new int[10][10]; // Tabuleiro do jogador 2
+	
 	private GameView view = new GameView();			// Visualização na consola
 	private HashMap<String, Integer> columnValue = new HashMap<>();
 	
@@ -14,6 +16,7 @@ public class GameModel {
 		
 		// Preencher o tabuleiro inicial com zeros [Por explorar (Sem navio)]
 		Arrays.stream(boardPlayer1).forEach(a -> Arrays.fill(a, 0));
+		Arrays.stream(boardPlayer2).forEach(a -> Arrays.fill(a, 0));
 		
 		columnValue.put("A", 0);
 		columnValue.put("B", 1);
@@ -27,7 +30,46 @@ public class GameModel {
 		columnValue.put("J", 9);
 		
 		// Pergunta ao jogador, pelas posições dos navios
-		chooseShipPosition();
+		//chooseShipPosition();
+		randomShipPosition(boardPlayer1);
+		randomShipPosition(boardPlayer2);
+	}
+	
+	public void randomShipPosition(int[][] boardPlayer) {
+		
+		for (int i = 0; i < boardPlayer.length; i++) {
+			for (int j = 0; j < boardPlayer[0].length; j++) {
+				boardPlayer[i][j] = (Math.random() > 0.85 ? 1 : 0);
+			}	
+		}
+	}
+	
+	public String play(int player, String choice) {
+		
+		int line   = Character.getNumericValue(choice.charAt(0)) - 1;
+		int column = columnValue.get(choice.charAt(1) + "");
+		
+		int state;
+		String result;
+		
+		if (player == 1) {
+			state = boardPlayer2[line][column];
+			boardPlayer2[line][column] = (state == 0) ? 3 : (state == 1) ? 2 : (state == 2) ? 2 : 3;
+		}
+		else {
+			state = boardPlayer1[line][column];
+			boardPlayer1[line][column] = (state == 0) ? 3 : (state == 1) ? 2 : (state == 2) ? 2 : 3;
+		}
+		return (state == 0) ? "Tiro no mar!" 
+			 : (state == 1) ? "Navio atingido!"
+			 : (state == 2) ? "Navio já descoberto..."
+			 : "Espaço já explorado.";		 
+	}
+	
+	public String getBoard(int player) {
+	
+		if (player == 1) return view.printBoard(boardPlayer1);
+		else return view.printBoard(boardPlayer2);
 	}
 	
 	public void chooseShipPosition() {

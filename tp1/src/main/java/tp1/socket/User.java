@@ -25,32 +25,22 @@ public class User {
         Scanner      scan = null;
         
         try {
-            socket = new Socket(HOST, PORT);  // Criação do Socket
+            socket = new Socket(HOST, PORT);  // Ligação ao Socket servidor
 
-            // System.out.println("Ligação: " + socket + "\n");              		   // Mostrar os parametros da ligação
-            os   = new PrintWriter(socket.getOutputStream(), true); 				   // Stream para escrita no socket
-            is   = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
-            scan = new Scanner(System.in);
+            is = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
+            os = new PrintWriter(socket.getOutputStream(), true); 
 
-            System.out.println("Nickname: ");
-            
-            try (Scanner scanner = new Scanner(System.in)) {
-				String inputString = scanner.nextLine();
-				
-				// Stream para escrita no socket
-				os = new PrintWriter(socket.getOutputStream(), true); 
-				  // Stream para leitura do socket
-	            is = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-	            // lança a tarefa que vai ler a lista
-	            Thread th = new ThreadReader(is);
-				th.start();
-				// Escreve no socket, regista utilizador
-				os.println(inputString);
-				
-				System.out.println("Press Enter key to finish...");
-				scanner.nextLine();
-			}
+            try (Scanner in = new Scanner(System.in)) {
+		        for(;;) {
+		        	
+					// Mostrar o que se recebe do socket
+					System.out.println(is.readLine().replaceAll("\7", "\n")); 
+					String jogada = in.nextLine();
+					os.println(jogada);
+					System.out.println(is.readLine().replaceAll("\7", "\n")); 
+					System.out.println(is.readLine().replaceAll("\7", "\n")); 
+				}
+            }
         } 
         catch (IOException e) {
             System.err.println("Erro na ligação -> " + e.getMessage());   
@@ -68,36 +58,3 @@ public class User {
 
     }	
 }
-
-class ThreadReader extends Thread {
-
-	private BufferedReader is;
-
-	public ThreadReader(BufferedReader is) {
-		this.is = is;
-	}
-
-	public void run() {
-
-		try {
-			for(;;) {
-				
-				String nickNames = (String) is.readLine();
-				if(nickNames==null)
-					break;
-				System.out.println(nickNames.replaceAll("\7", "\n"));
-			}
-
-		} catch (IOException e) {
-			
-		} finally {
-			try {
-				if (is != null)
-					is.close();
-			} catch (IOException e) {
-			}
-		}
-		System.out.println("Terminou a Thread " + this.getId());
-	} // end run
-
-} 

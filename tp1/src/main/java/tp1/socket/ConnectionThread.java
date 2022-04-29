@@ -19,9 +19,9 @@ public class ConnectionThread extends Thread {
 	private Socket con1, con2;
 	private Hashtable<String, Socket> activePlayers = new Hashtable<String, Socket>();
 
-	public ConnectionThread(Socket con1, Socket con2) {
+	public ConnectionThread(Socket con1) {
 		this.con1 = con1;
-		this.con2 = con2;
+		//this.con2 = con2;
 	}
 
 	private boolean isSocketAlive(Socket socket) {
@@ -60,12 +60,11 @@ public class ConnectionThread extends Thread {
 	
 	public void run() {
 
-		BufferedReader is1 = null, is2 = null;
-		PrintWriter    os1 = null, os2 = null;
+		BufferedReader is1 = null;
+		PrintWriter    os1 = null;
 
 		try {
-			System.out.println("Thread: Jogo iniciado..., Jogador 1 -> " + con1.getRemoteSocketAddress() 
-													 + ", Jogador 2 -> " + con2.getRemoteSocketAddress());
+			System.out.println("Entrou um utilizador, IP: " + con1.getRemoteSocketAddress());
 
 			// Jogador 1
 			is1 = new BufferedReader(new InputStreamReader(con1.getInputStream()));
@@ -73,37 +72,11 @@ public class ConnectionThread extends Thread {
 			
 			String inputLine = is1.readLine();
 			regista(inputLine, con1);
-			System.out.println("Registou: " + inputLine);
+			System.out.println("Bem-vindo: " + inputLine + "!");
 			
-			// Jogador 2
-			is2 = new BufferedReader(new InputStreamReader(con2.getInputStream()));
-			os2 = new PrintWriter(con2.getOutputStream(), true);
-
-			inputLine = is2.readLine();
-			regista(inputLine, con2);
-			System.out.println("Registou: " + inputLine);
-		
 			// Envia os utilizadores registados para todos os utilizadores ativos
 			broadcast();
 			
-
-			/*printMainMenu(is, os);  // Apresenta o menu do jogo ao cliente
-			option = is.readLine();  // Thread do servidor espera pela resposta do cliente
-			
-			switch(option) {
-			case "1": 
-				System.out.println("Thread " + this.getId() + " > Criar conta!");
-				break;
-				
-			case "2":
-				System.out.println("Thread " + this.getId() + " > Iniciar sessão!");
-				break;
-				
-			case "3":
-				System.out.println("Thread " + this.getId() + " > Terminou!");
-				break;
-			}
-			*/
 			//System.out.println("Servidor: Recebi '" + inputLine + "'");
 			//os.println("@" + inputLine.toUpperCase()); // converte para maiusculas
 														
@@ -113,16 +86,11 @@ public class ConnectionThread extends Thread {
 			// garantir que o socket está fechado
 			try {
 				if (is1 != null) is1.close();
-				if (is2 != null) is2.close();
-				
-				if (os1 != null) os1.close();
-				if (os2 != null) os2.close();
-								
+				if (os1 != null) os1.close();				
 				if (con1 != null) con1.close();
-				if (con2 != null) con2.close();
 			} catch (IOException e) {
 			}
 		}
-		System.out.println("Terminou a Thread " + this.getId() + ", " + con1.getRemoteSocketAddress() + ", " + con2.getRemoteSocketAddress());
+		System.out.println("Terminou a Thread " + this.getId() + ", " + con1.getRemoteSocketAddress());
 	}
 }
