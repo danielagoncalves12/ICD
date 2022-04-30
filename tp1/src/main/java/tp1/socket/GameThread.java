@@ -9,11 +9,11 @@ import java.net.Socket;
 import tp1.battleship.GameModel;
 import tp1.battleship.Jogo;
 
-public class Game extends Thread {
+public class GameThread extends Thread {
 
 	private Socket player1, player2;
 	
-	public Game(Socket player1, Socket player2) {
+	public GameThread(Socket player1, Socket player2) {
 		
 		this.player1 = player1;
 		this.player2 = player2;
@@ -42,23 +42,25 @@ public class Game extends Thread {
 			GameModel game = new GameModel();
 			
 			os1.println(game.getBoardView(1).replaceAll("\n", "\7"));
+			os1.println(game.getBoard(2).replaceAll("\n", "\7"));
+			
+			os2.println(game.getBoardView(2).replaceAll("\n", "\7"));
+			os2.println(game.getBoard(1).replaceAll("\n", "\7"));
 
 			// usar o caracter bell como separador em vez do \n não se deve fazer!!! porque não é genérico.
 			for(;;) {			
 
 				// Jogador 1, recebe o tabuleiro do Jogador 2
-				os1.println((game.getBoard(2) + "\nSua vez -> Jogada do jogador 1:").replaceAll("\n", "\7")); 
+				os1.println(("Sua vez -> Introduza uma jogada:").replaceAll("\n", "\7")); 
 
 				// Jogador 1 faz a sua jogada
-				os2.println("Jogador 1 esta a escolher a sua jogada...");
 				String inputLine1 = is1.readLine();
 				if(inputLine1 == null)
 					break;
 
 				// É demonstrado o resultado da jogada
 				String result1 = game.play(1, inputLine1);
-				os1.println((game.getBoard(2)).replaceAll("\n", "\7")); 
-				os1.println("Resultado: " + result1);
+				os1.println(game.getBoard(2) + "\nResultado: " + result1 + "\nO jogador 2 esta a escolher uma jogada...");
 
 				// Verificar se o jogador 1 ganhou		
 				if (game.checkWin(1)) {
@@ -71,18 +73,16 @@ public class Game extends Thread {
 				
 				
 				// Jogador 2, recebe o tabuleiro do Jogador 1
-				os2.println((game.getBoard(1) + "\nSua vez -> Jogada do jogador 2:").replaceAll("\n", "\7")); 
+				os2.println(("Sua vez -> Introduza uma jogada:").replaceAll("\n", "\7")); 
 				
 				// Jogador 2 faz a sua jogada
-				os1.println("Jogador 2 esta a escolher a sua jogada...");
 				String inputLine2 = is2.readLine();
 				if(inputLine2 == null)
 					break;
 
 				// É demonstrado o resultado da jogada
 				String result2 = game.play(2, inputLine2);
-				os2.println((game.getBoard(1)).replaceAll("\n", "\7")); 
-				os2.println("Resultado: " + result2);
+				os2.println(game.getBoard(1) + "\nResultado: " + result2 + "\nO jogador 1 esta a escolher uma jogada...");
 
 				// Verificar se o jogador 2 ganhou			
 				if (game.checkWin(2)) {

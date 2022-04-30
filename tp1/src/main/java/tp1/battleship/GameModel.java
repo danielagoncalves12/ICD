@@ -53,7 +53,7 @@ public class GameModel {
 	 */
 	public String getBoard(int player) {
 	
-		String board = "Tabuleiro do jogador " + player + ": Tente atirar num navio!\n\n";
+		String board = "Tabuleiro do jogador " + player + ":\n\n";
 		
 		if (player == 1) return board + view.printBoard(boardPlayer1);
 		else return board + view.printBoard(boardPlayer2);
