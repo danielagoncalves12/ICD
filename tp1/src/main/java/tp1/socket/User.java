@@ -33,17 +33,27 @@ public class User {
             playerNum = Integer.parseInt(is.readLine());
             System.out.println("Bem-vindo jogador " + playerNum + "!!");
             
+            System.out.println(is.readLine().replaceAll("\7", "\n"));
+            
             try (Scanner scan = new Scanner(System.in)) {
 		        for(;;) {
 		        	
 					// Mostrar o que se recebe do socket
 
+		        	if (playerNum == 2) {
+		        		System.out.println(is.readLine().replaceAll("\7", "\n"));
+		        	}
+		        	
 					System.out.println(is.readLine().replaceAll("\7", "\n"));  // Receber tabuleiro do adversário
 					String play = scan.nextLine();							   // Scan da jogada 
 					os.println(play);										   // Demonstrar a jogada escrita (ex. 1A)
 					
 					System.out.println(is.readLine().replaceAll("\7", "\n"));  // Receber tabuleiro do adversário atualizado
 					System.out.println(is.readLine().replaceAll("\7", "\n"));  // Resultado da jogada
+					
+					if (playerNum == 1) { 
+						System.out.println(is.readLine().replaceAll("\7", "\n"));
+					}
 				}
             }
         } 

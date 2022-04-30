@@ -2,6 +2,7 @@ package tp1.battleship;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Random;
 import java.util.Scanner;
 
 public class GameModel {
@@ -38,24 +39,46 @@ public class GameModel {
 		pointsPlayer2 = 0; 
 		
 		// Pergunta ao jogador, pelas posições dos navios
-		randomShipPosition(boardPlayer1);
-		randomShipPosition(boardPlayer2);
+		randomShipPosition(1);
+		randomShipPosition(2);
 	}
+
 	
 	/**
-	 * Adiciona návios de tamanho 1 aleatóriamente no
-	 * tabuleiro apenas para Debug.
-	 * @param boardPlayer - Tabuleiro
+	 * Receber o tabuleiro, pela vista do adversário, as posições dos navios ainda
+	 * não descobertos não são relevadas. Esta função é usada unicamente para apresentar
+	 * o tabuleiro do adversário ao jogador.
+	 * 
+	 * @param player - Jogador 1 ou 2
+	 * @return String com apresentação do tabuleiro.
 	 */
-	public void randomShipPosition(int[][] boardPlayer) {
-		
-		for (int i = 0; i < boardPlayer.length; i++) {
-			for (int j = 0; j < boardPlayer[0].length; j++) {
-				boardPlayer[i][j] = (Math.random() > 0.7 ? 1 : 0);
-			}	
-		}
-	}
+	public String getBoard(int player) {
 	
+		if (player == 1) return view.printBoard(boardPlayer1);
+		else return view.printBoard(boardPlayer2);
+	}	
+	
+	/**
+	 * Receber o tabuleiro, pela vista do jogador, as posições dos navios são reveladas
+	 * visualmente para o jogador. Esta função é usada unicamente para apresentar o 
+	 * próprio tabuleiro para o jogador.
+	 * 
+	 * @param player
+	 * @return
+	 */
+	public String getBoardView(int player) {
+
+		int[][] originalBoard = (player == 1) ? boardPlayer1 : boardPlayer2; 
+		int[][] copiedBoard   = new int[10][10];
+		int[] newLine;
+		
+		for(int i = 0; i < originalBoard.length; i++) {
+			newLine = Arrays.stream(originalBoard[i].clone()).map(j -> j == 1 ? 2 : 0).toArray();
+		    copiedBoard[i] = newLine;
+		}
+		return view.printBoard(copiedBoard);
+	}
+
 	/**
 	 * @param player - Jogador 1 ou 2
 	 * @return
@@ -92,17 +115,95 @@ public class GameModel {
 			 : (state == 2) ? "Navio já descoberto..."
 			 : "Espaço já explorado.";		 
 	}
+
+	public void randomShipPosition(int player) {
+		
+		String letters = "ABCDEFGHIJ";
+		int[] shipSizes  = {5, 4, 3, 2};
+		int[] shipNumber = {1, 2, 3, 4};
+
+		for (int i = 0; i < 4; i++) {
+
+			String position = "";  // Posição
+			boolean vertical = false, check = false; // Sentido e verificação da posição
+			int number = 0;		  					 // Número de navios por posicionar
+			
+			while(number != shipNumber[i]) {
+			
+				do {			
+					String randomLine = String.valueOf(new Random().nextInt(10) + 1);
+					char randomColumn = letters.charAt(new Random().nextInt(letters.length()));					
+					if (randomLine.length() == 1) randomLine = "0" + randomLine;
+					position = randomLine + randomColumn;		
 	
-	/**
-	 * @param player - Jogador 1 ou 2
-	 * @return String com apresentação do tabuleiro.
-	 */
-	public String getBoard(int player) {
+					vertical = Math.random() < 0.5; 						      // Escolhe se o navio será posicionado verticalmente ou horizontalmente		
+					check = checkValidPosition(position, shipSizes[i], vertical); // Verifica se a posição é válida
+					
+					// Caso a posição seja válida, o navio é introduzido
+					if (check) {
+						int steps  = 0;
+						String strLine = "" + position.charAt(0) + position.charAt(1);
+						
+						int line     = Integer.parseInt(strLine) - 1;
+						int column   = columnValue.get(position.charAt(2) + "");
+						
+						while(steps != shipSizes[i]) {		
+							
+							if (vertical) {
+								if (player == 1) boardPlayer1[line++][column] = 1;
+								if (player == 2) boardPlayer2[line++][column] = 1;
+							}
+							else {
+								if (player == 1) boardPlayer1[line][column++] = 1;
+								if (player == 2) boardPlayer2[line][column++] = 1;
+							}
+							steps++;
+						}
+						number++;
+					}
+				} while(!check);
+			}		
+		}
+	}	
+
+	public boolean checkValidPosition(String position, int shipSize, boolean vertical) {
+
+		char line1  = position.charAt(0);
+		char line2  = position.charAt(1);
+		char column = position.charAt(2);
+		
+		// Verificação do sintaxe da posição
+		if (Character.isDigit(line1) && Character.isDigit(line2)) {
+			
+			String line = "" + Character.getNumericValue(line1) + Character.getNumericValue(line2);
+			int line_number = Integer.parseInt(line) - 1;
+					
+			// Verificação do sintaxe da posição
+			if (Character.isLetter(column)) {
+
+				int column_number = columnValue.get(column + "");
+				int steps = 0;						
+				while(steps != shipSize) {
+					
+					// Verificação - Dentro do tabuleiro
+					if (line_number < 0 || line_number >= 10)     return false; // Erro: Navio fora do tabuleiro
+					if (column_number < 0 || column_number >= 10) return false; // Erro: Navio fora do tabuleiro
+
+					// Verificação - Colisão com outro navio
+					if (boardPlayer1[line_number][column_number] != 0) return false; // Erro: Colisão com outro navio.
 	
-		if (player == 1) return view.printBoard(boardPlayer1);
-		else return view.printBoard(boardPlayer2);
+					if (vertical)  line_number++;
+					if (!vertical) column_number++;			
+					steps++;
+				}			
+				return true;
+			}
+		}	
+		System.out.println("Erro: Sintaxe inválida");		
+		return false;
 	}
-	
+
+	/*
 	public void chooseShipPosition() {
 		
 		String[] positionRequests = {
@@ -135,8 +236,9 @@ public class GameModel {
 					// Caso a posição seja válida, é introduzido o navio
 					if (check) {
 						int steps  = 0;
-						int line   = Character.getNumericValue(position.charAt(0)) - 1;
-						int column = columnValue.get(position.charAt(1) + "");
+						String strLine = "" + position.charAt(0) + position.charAt(1);
+						int line   = Integer.parseInt(strLine) - 1;
+						int column = columnValue.get(position.charAt(2) + "");
 						
 						while(steps != shipSizes[i]) {		
 							boardPlayer1[line++][column] = 2;
@@ -149,48 +251,7 @@ public class GameModel {
 			}		
 		}
 		System.out.println("Todos os navios foram posicionados!");
-	}
-	
-	public boolean checkValidPosition(String position, int shipSize) {
-		
-		char line   = position.charAt(0);
-		char column = position.charAt(1);
-		
-		// Verificação do sintaxe da posição
-		if (Character.isDigit(line)) {
-			
-			int line_number = Character.getNumericValue(line) - 1;
-			if (Character.isLetter(column)) {
+	}*/
 
-				int column_number = columnValue.get(column + "");
-				int steps = 0;						
-				while(steps != shipSize) {
-					
-					// Verificação - Dentro do tabuleiro
-					if (line_number < 0 || line_number >= 10) {
-						System.out.println("Erro: Navio fora do tabuleiro.");		
-						return false;
-					}
-
-					// Verificação - Colisão com outro navio
-					if (boardPlayer1[line_number][column_number] != 0) {
-						System.out.println("Erro: Colisão com outro navio.");		
-						return false;
-					}
-					line_number++;
-					steps++;
-				}			
-				return true;
-			}
-		}
-		
-		System.out.println("Erro: Sintaxe inválida");		
-		return false;
-	}
 	
-	
-	public static void main(String[] args) {
-		
-		new GameModel();
-	}
 }

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
     <fullyQualifiedTypeName name="java.util.Collections"/>
-    <fullyQualifiedTypeName name="java.util.Random"/>
     <fullyQualifiedTypeName name="java.util.Arrays"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.util.Scanner"/>
@@ -14,4 +13,5 @@
     <fullyQualifiedTypeName name="java.net.Socket"/>
     <fullyQualifiedTypeName name="tp1.battleship.Jogo"/>
     <fullyQualifiedTypeName name="tp1.battleship.GameModel"/>
+    <fullyQualifiedTypeName name="java.util.Random"/>
 </qualifiedTypeNameHistroy>
