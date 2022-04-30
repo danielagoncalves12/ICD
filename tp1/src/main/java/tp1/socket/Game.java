@@ -40,6 +40,8 @@ public class Game extends Thread {
 			os2.println("2");
 			
 			GameModel game = new GameModel();
+			
+			os1.println(game.getBoardView(1).replaceAll("\n", "\7"));
 
 			// usar o caracter bell como separador em vez do \n não se deve fazer!!! porque não é genérico.
 			for(;;) {			

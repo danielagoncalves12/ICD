@@ -32,8 +32,8 @@ public class User {
 
             playerNum = Integer.parseInt(is.readLine());
             System.out.println("Bem-vindo jogador " + playerNum + "!!");   
-            System.out.println("Todos os seus navios foram posicionados aleatoriamente.");
-
+            System.out.println(is.readLine().replaceAll("\7", "\n"));  		   // Mostrar tabuleiro do jogador
+            
             try (Scanner scan = new Scanner(System.in)) {
 		        for(;;) {
 		        	

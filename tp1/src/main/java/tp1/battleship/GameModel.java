@@ -43,7 +43,6 @@ public class GameModel {
 		randomShipPosition(2);
 	}
 
-	
 	/**
 	 * Receber o tabuleiro, pela vista do adversário, as posições dos navios ainda
 	 * não descobertos não são relevadas. Esta função é usada unicamente para apresentar
@@ -54,8 +53,10 @@ public class GameModel {
 	 */
 	public String getBoard(int player) {
 	
-		if (player == 1) return view.printBoard(boardPlayer1);
-		else return view.printBoard(boardPlayer2);
+		String board = "Tabuleiro do jogador " + player + ": Tente atirar num navio!\n\n";
+		
+		if (player == 1) return board + view.printBoard(boardPlayer1);
+		else return board + view.printBoard(boardPlayer2);
 	}	
 	
 	/**
@@ -68,6 +69,8 @@ public class GameModel {
 	 */
 	public String getBoardView(int player) {
 
+		String board = "O seu tabuleiro: Todos os navios foram posicionados aleatoriamente!\n\n";
+		
 		int[][] originalBoard = (player == 1) ? boardPlayer1 : boardPlayer2; 
 		int[][] copiedBoard   = new int[10][10];
 		int[] newLine;
@@ -76,7 +79,7 @@ public class GameModel {
 			newLine = Arrays.stream(originalBoard[i].clone()).map(j -> j == 1 ? 2 : 0).toArray();
 		    copiedBoard[i] = newLine;
 		}
-		return view.printBoard(copiedBoard);
+		return board + view.printBoard(copiedBoard);
 	}
 
 	/**
