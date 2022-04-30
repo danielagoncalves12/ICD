@@ -16,11 +16,11 @@ import java.util.List;
 
 public class Server {
 	
-	public final static int PORT = 1000;  // Porto onde a conexão TCP permitirá entrada
+	public final static int PORT = 1001;  // Porto onde a conexão TCP permitirá entrada
 
 	public static void main(String[] args) {
 
-		ServerSocket serverSocket = null;			        // Socket do servidor
+		ServerSocket serverSocket = null;			 // Socket do servidor
 
 		try {
 			serverSocket  = new ServerSocket(PORT);  // Socket de servidor

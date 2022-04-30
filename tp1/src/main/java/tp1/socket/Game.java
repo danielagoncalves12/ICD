@@ -40,16 +40,13 @@ public class Game extends Thread {
 			os2.println("2");
 			
 			GameModel game = new GameModel();
-			
-			os1.println("Jogador 1! todos os seus navios foram posicionados aleatoriamente! \n" + game.getBoardView(1));
-			os2.println("Jogador 2! todos os seus navios foram posicionados aleatoriamente! \n" + game.getBoardView(2));
-			
+
 			// usar o caracter bell como separador em vez do \n não se deve fazer!!! porque não é genérico.
 			for(;;) {			
 
 				// Jogador 1, recebe o tabuleiro do Jogador 2
 				os1.println((game.getBoard(2) + "\nSua vez -> Jogada do jogador 1:").replaceAll("\n", "\7")); 
-			
+
 				// Jogador 1 faz a sua jogada
 				os2.println("Jogador 1 esta a escolher a sua jogada...");
 				String inputLine1 = is1.readLine();

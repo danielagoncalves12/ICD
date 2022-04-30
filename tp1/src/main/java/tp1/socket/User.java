@@ -15,7 +15,7 @@ import java.util.Scanner;
 public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
-    private final static int    PORT = 1000;        // Porto onde o Servidor aceita conexões
+    private final static int    PORT = 1001;        // Porto onde o Servidor aceita conexões
     
     public static void main(String[] args) {
         
@@ -26,20 +26,18 @@ public class User {
         int playerNum = 0;
         
         try {
-            socket = new Socket(HOST, PORT);  // Ligação ao Socket servidor
+            socket = new Socket(HOST, PORT); 										 // Ligação ao Socket servidor
             is = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
             os = new PrintWriter(socket.getOutputStream(), true); 
 
             playerNum = Integer.parseInt(is.readLine());
-            System.out.println("Bem-vindo jogador " + playerNum + "!!");
-            
-            System.out.println(is.readLine().replaceAll("\7", "\n"));
-            
+            System.out.println("Bem-vindo jogador " + playerNum + "!!");   
+            System.out.println("Todos os seus navios foram posicionados aleatoriamente.");
+
             try (Scanner scan = new Scanner(System.in)) {
 		        for(;;) {
 		        	
 					// Mostrar o que se recebe do socket
-
 		        	if (playerNum == 2) {
 		        		System.out.println(is.readLine().replaceAll("\7", "\n"));
 		        	}
