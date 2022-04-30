@@ -33,7 +33,7 @@ public class Server {
 				player2 = serverSocket.accept();  // Aguarda pela conexão de o jogador 2
 				
 				Thread thread = new GameThread(player1, player2);  // Cria um Thread
-				thread.start();								 // Inicia a Thread anteriormente criada				
+				thread.start();								       // Inicia a Thread anteriormente criada				
 			}
 		} catch (IOException e) {
 			System.err.println("Erro: " + e);

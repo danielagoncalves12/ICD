@@ -53,7 +53,8 @@ public class GameModel {
 	 */
 	public String getBoard(int player) {
 	
-		String board = "Tabuleiro do jogador " + player + ":\n\n";
+		String board = "Tabuleiro do jogador " + player + ":\nPontuacao atual -> Jogador 1: " 
+					 			  + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos.\n\n";
 		
 		if (player == 1) return board + view.printBoard(boardPlayer1);
 		else return board + view.printBoard(boardPlayer2);
@@ -74,9 +75,15 @@ public class GameModel {
 		int[][] originalBoard = (player == 1) ? boardPlayer1 : boardPlayer2; 
 		int[][] copiedBoard   = new int[10][10];
 		int[] newLine;
-		
+
 		for(int i = 0; i < originalBoard.length; i++) {
-			newLine = Arrays.stream(originalBoard[i].clone()).map(j -> j == 1 ? 2 : 0).toArray();
+			newLine = Arrays.stream(originalBoard[i].clone()).map(j -> 
+			
+					(j == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW : 
+					(j == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW  : 
+					(j == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW  : 
+					(j == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW  : j).toArray();	
+			
 		    copiedBoard[i] = newLine;
 		}
 		return board + view.printBoard(copiedBoard);
@@ -99,35 +106,50 @@ public class GameModel {
 	 */
 	public String play(int player, String choice) {
 		
-		int line   = Character.getNumericValue(choice.charAt(0)) - 1;
-		int column = columnValue.get(Character.toUpperCase(choice.charAt(1)) + "");		
-		int state;
-
-		if (player == 1) {
-			state = boardPlayer2[line][column];
-			if (state == 1) pointsPlayer1++;
-			boardPlayer2[line][column] = (state == 0) ? 3 : (state == 1) ? 2 : (state == 2) ? 2 : 3;
+		int line, column;
+		
+		if (choice.length() == 2) {
+			line   = Character.getNumericValue(choice.charAt(0)) - 1;
+			column = columnValue.get(Character.toUpperCase(choice.charAt(1)) + "");
 		}
 		else {
-			state = boardPlayer1[line][column];
-			if (state == 1) pointsPlayer2++;
-			boardPlayer1[line][column] = (state == 0) ? 3 : (state == 1) ? 2 : (state == 2) ? 2 : 3;
+			int line1  = Character.getNumericValue(choice.charAt(0));
+			int line2  = Character.getNumericValue(choice.charAt(1));
+			line   = Integer.parseInt("" + line1 + line2) - 1;
+			column = columnValue.get(Character.toUpperCase(choice.charAt(2)) + "");	
 		}
-		return (state == 0) ? "Tiro no mar!" 
-			 : (state == 1) ? "Navio atingido!"
-			 : (state == 2) ? "Navio já descoberto..."
-			 : "Espaço já explorado.";		 
+
+		int state;
+		int[][] board = (player == 1) ? boardPlayer2 : boardPlayer1;
+
+		state = board[line][column];
+		if (state >= 6 && state <= 9) if (player == 1) pointsPlayer1++; else pointsPlayer2++;
+			
+		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY :      // Não encontrou navio
+							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-aviões
+							  (state == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW :  // Encontrou Navio-tanque
+							  (state == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW :  // Encontrou Contratorpedeiro
+							  (state == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW :  // Encontrou Submarino
+							  board[line][column];
+		
+		return (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 
+			 : (state == ShipType.TYPE1HIDDEN) ? "Porta-avioes atingido!"
+			 : (state == ShipType.TYPE2HIDDEN) ? "Navio-tanque atingido!"
+			 : (state == ShipType.TYPE3HIDDEN) ? "Contratorpedeiro atingido!"
+			 : (state == ShipType.TYPE4HIDDEN) ? "Submarino atingido!"
+			 : "Espaco ja explorado.";		 
 	}
 
 	public void randomShipPosition(int player) {
 		
 		String letters = "ABCDEFGHIJ";
-		int[] shipSizes  = {5, 4, 3, 2};
-		int[] shipNumber = {1, 2, 3, 4};
+		int[] shipSizes  = {5, 4, 3, 2};  // Dimensão de cada navio
+		int[] shipNumber = {1, 2, 3, 4};  // Número de navios a posicionar de cada tipo
+		int[] shipSymbol = {ShipType.TYPE1HIDDEN, ShipType.TYPE2HIDDEN, ShipType.TYPE3HIDDEN, ShipType.TYPE4HIDDEN};
 
 		for (int i = 0; i < 4; i++) {
 
-			String position = "";  // Posição
+			String position = "";  					 // Posição
 			boolean vertical = false, check = false; // Sentido e verificação da posição
 			int number = 0;		  					 // Número de navios por posicionar
 			
@@ -139,8 +161,8 @@ public class GameModel {
 					if (randomLine.length() == 1) randomLine = "0" + randomLine;
 					position = randomLine + randomColumn;		
 	
-					vertical = Math.random() < 0.5; 						      // Escolhe se o navio será posicionado verticalmente ou horizontalmente		
-					check = checkValidPosition(position, shipSizes[i], vertical); // Verifica se a posição é válida
+					vertical = Math.random() < 0.5; 						      		  // Escolhe se o navio será posicionado verticalmente ou horizontalmente		
+					check = checkValidPosition(player, position, shipSizes[i], vertical); // Verifica se a posição é válida
 					
 					// Caso a posição seja válida, o navio é introduzido
 					if (check) {
@@ -153,12 +175,12 @@ public class GameModel {
 						while(steps != shipSizes[i]) {		
 							
 							if (vertical) {
-								if (player == 1) boardPlayer1[line++][column] = 1;
-								if (player == 2) boardPlayer2[line++][column] = 1;
+								if (player == 1) boardPlayer1[line++][column] = shipSymbol[i];
+								if (player == 2) boardPlayer2[line++][column] = shipSymbol[i];
 							}
 							else {
-								if (player == 1) boardPlayer1[line][column++] = 1;
-								if (player == 2) boardPlayer2[line][column++] = 1;
+								if (player == 1) boardPlayer1[line][column++] = shipSymbol[i];
+								if (player == 2) boardPlayer2[line][column++] = shipSymbol[i];
 							}
 							steps++;
 						}
@@ -168,9 +190,17 @@ public class GameModel {
 			}		
 		}
 	}	
+	
+	public static void main(String[] args) {
+		
+		GameModel game = new GameModel();
+		System.out.println(game.getBoardView(1));
+	}
 
-	public boolean checkValidPosition(String position, int shipSize, boolean vertical) {
+	public boolean checkValidPosition(int player, String position, int shipSize, boolean vertical) {
 
+		int[][] board = (player == 1) ? boardPlayer1 : boardPlayer2;
+		
 		char line1  = position.charAt(0);
 		char line2  = position.charAt(1);
 		char column = position.charAt(2);
@@ -187,16 +217,20 @@ public class GameModel {
 				int column_number = columnValue.get(column + "");
 				int steps = 0;						
 				while(steps != shipSize) {
-					
+
 					// Verificação - Dentro do tabuleiro
 					if (line_number < 0 || line_number >= 10)     return false; // Erro: Navio fora do tabuleiro
 					if (column_number < 0 || column_number >= 10) return false; // Erro: Navio fora do tabuleiro
 
 					// Verificação - Colisão com outro navio
-					if (boardPlayer1[line_number][column_number] != 0) return false; // Erro: Colisão com outro navio.
+					if (board[line_number][column_number] != 0)   return false; // Erro: Colisão com outro navio.
+					
+					// Verificação - 1 Espaço de afastamento (Contíguos)
+					if (!checkContiguous(board, line_number, column_number)) return false;
 	
-					if (vertical)  line_number++;
-					if (!vertical) column_number++;			
+					// Verificar proxima posicao
+					if (vertical) line_number++;
+					else column_number++;			
 					steps++;
 				}			
 				return true;
@@ -206,6 +240,28 @@ public class GameModel {
 		return false;
 	}
 
+	
+	
+	private boolean checkContiguous(int[][] board, int lin, int col) {
+
+		if (col != 0) {
+			if (board[lin][col-1] != 0) return false;
+			if (lin != 0) if (board[lin-1][col-1] != 0) return false;
+			if (lin != 9) if (board[lin+1][col-1]	!= 0) return false;
+		}
+		
+		if (col != 9) {
+			if (board[lin][col+1] != 0) return false;
+			if (lin != 0) if (board[lin-1][col+1] != 0) return false;
+			if (lin != 9) if (board[lin+1][col+1]	!= 0) return false;
+		}
+
+		if (lin != 0) if (board[lin-1][col] != 0) return false;
+		if (lin != 9) if (board[lin+1][col] != 0) return false;
+		
+		return true;
+	}
+	
 	/*
 	public void chooseShipPosition() {
 		

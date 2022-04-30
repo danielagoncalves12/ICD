@@ -7,17 +7,29 @@ public class GameView {
 	
 	private Map<Integer, String> view = new HashMap<Integer, String>();
 
+	public void convertSymbols() {
+		
+		view.put(ShipType.EMPTYHIDDEN, new String(" ")); // Por explorar (Sem navio)
+	    view.put(ShipType.EMPTY, new String("."));       // Pressionado (Sem Sucesso)
+	    
+	    view.put(ShipType.TYPE1SHOW, new String("P"));   // Porta-aviões encontrado
+	    view.put(ShipType.TYPE2SHOW, new String("N"));   // Navio-tanque encontrado
+	    view.put(ShipType.TYPE3SHOW, new String("C"));   // Contratorpedeiro encontrado
+	    view.put(ShipType.TYPE4SHOW, new String("S"));   // Submarino encontrado
+	    
+	    view.put(ShipType.TYPE1HIDDEN, new String(" ")); // Porta-aviões escondido
+	    view.put(ShipType.TYPE2HIDDEN, new String(" ")); // Navio-tanque escondido
+	    view.put(ShipType.TYPE3HIDDEN, new String(" ")); // Contratorpedeiro escondido
+	    view.put(ShipType.TYPE4HIDDEN, new String(" ")); // Submarino escondido	
+	}
+	
 	/** 
 	 * Método printBoard
 	 * Apresenta o tabuleiro do jogo.
 	 */
 	public String printBoard(int[][] board) {
-		
-		view.put(0, new String(" ")); // Por explorar (Sem navio)
-	    view.put(1, new String(" ")); // Por explorar (Com navio)
-	    view.put(2, new String("X")); // Pressionado (Sucesso)
-	    view.put(3, new String(".")); // Pressionado (Sem sucesso)
-		
+
+		convertSymbols();
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 		StringBuilder strBoard = new StringBuilder();
 

@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 import tp1.battleship.GameModel;
-import tp1.battleship.Jogo;
 
 public class GameThread extends Thread {
 
@@ -41,11 +39,12 @@ public class GameThread extends Thread {
 			
 			GameModel game = new GameModel();
 			
-			os1.println(game.getBoardView(1).replaceAll("\n", "\7"));
-			os1.println(game.getBoard(2).replaceAll("\n", "\7"));
+			os1.println(game.getBoardView(1).replaceAll("\n", "\7"));  // Enviar tabuleiro do jogador 1
+			os1.println(game.getBoard(2).replaceAll("\n", "\7"));      // Enviar tabuleiro do seu adversário
 			
-			os2.println(game.getBoardView(2).replaceAll("\n", "\7"));
-			os2.println(game.getBoard(1).replaceAll("\n", "\7"));
+			System.out.println(game.getBoardView(2));
+			os2.println(game.getBoardView(2).replaceAll("\n", "\7"));  // Enviar tabuleiro do jogador 2
+			os2.println(game.getBoard(1).replaceAll("\n", "\7"));      // Enviar tabuleiro do seu adversário
 
 			// usar o caracter bell como separador em vez do \n não se deve fazer!!! porque não é genérico.
 			for(;;) {			
@@ -60,7 +59,7 @@ public class GameThread extends Thread {
 
 				// É demonstrado o resultado da jogada
 				String result1 = game.play(1, inputLine1);
-				os1.println(game.getBoard(2) + "\nResultado: " + result1 + "\nO jogador 2 esta a escolher uma jogada...");
+				os1.println((game.getBoard(2) + "\n\nResultado: " + result1 + "\nO jogador 2 esta a escolher uma jogada...\n").replaceAll("\n", "\7"));
 
 				// Verificar se o jogador 1 ganhou		
 				if (game.checkWin(1)) {
@@ -82,7 +81,7 @@ public class GameThread extends Thread {
 
 				// É demonstrado o resultado da jogada
 				String result2 = game.play(2, inputLine2);
-				os2.println(game.getBoard(1) + "\nResultado: " + result2 + "\nO jogador 1 esta a escolher uma jogada...");
+				os2.println((game.getBoard(1) + "\n\nResultado: " + result2 + "\nO jogador 1 esta a escolher uma jogada...\n").replaceAll("\n", "\7"));
 
 				// Verificar se o jogador 2 ganhou			
 				if (game.checkWin(2)) {

@@ -14,4 +14,6 @@
     <fullyQualifiedTypeName name="tp1.battleship.Jogo"/>
     <fullyQualifiedTypeName name="tp1.battleship.GameModel"/>
     <fullyQualifiedTypeName name="java.util.Random"/>
+    <fullyQualifiedTypeName name="java.lang.Integer"/>
+    <fullyQualifiedTypeName name="tp1.battleship.ShipType"/>
 </qualifiedTypeNameHistroy>
