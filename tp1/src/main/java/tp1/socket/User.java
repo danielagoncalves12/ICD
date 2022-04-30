@@ -22,23 +22,28 @@ public class User {
         Socket     socket = null;
         BufferedReader is = null;
         PrintWriter    os = null;
-        Scanner      scan = null;
+        
+        int playerNum = 0;
         
         try {
             socket = new Socket(HOST, PORT);  // Ligação ao Socket servidor
-
             is = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
             os = new PrintWriter(socket.getOutputStream(), true); 
 
-            try (Scanner in = new Scanner(System.in)) {
+            playerNum = Integer.parseInt(is.readLine());
+            System.out.println("Bem-vindo jogador " + playerNum + "!!");
+            
+            try (Scanner scan = new Scanner(System.in)) {
 		        for(;;) {
 		        	
 					// Mostrar o que se recebe do socket
-					System.out.println(is.readLine().replaceAll("\7", "\n")); 
-					String jogada = in.nextLine();
-					os.println(jogada);
-					System.out.println(is.readLine().replaceAll("\7", "\n")); 
-					System.out.println(is.readLine().replaceAll("\7", "\n")); 
+
+					System.out.println(is.readLine().replaceAll("\7", "\n"));  // Receber tabuleiro do adversário
+					String play = scan.nextLine();							   // Scan da jogada 
+					os.println(play);										   // Demonstrar a jogada escrita (ex. 1A)
+					
+					System.out.println(is.readLine().replaceAll("\7", "\n"));  // Receber tabuleiro do adversário atualizado
+					System.out.println(is.readLine().replaceAll("\7", "\n"));  // Resultado da jogada
 				}
             }
         } 

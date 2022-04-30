@@ -23,7 +23,7 @@ public class Game extends Thread {
 
 		BufferedReader is1 = null;
 		PrintWriter    os1 = null;
-		
+
 		BufferedReader is2 = null;
 		PrintWriter    os2 = null;
 		
@@ -33,75 +33,63 @@ public class Game extends Thread {
 			
 			is1 = new BufferedReader(new InputStreamReader(player1.getInputStream()));
 			os1 = new PrintWriter(player1.getOutputStream(), true);
+			os1.print("1");		
 			
 			is2 = new BufferedReader(new InputStreamReader(player2.getInputStream()));
 			os2 = new PrintWriter(player2.getOutputStream(), true);
+			os2.print("2");
 			
 			GameModel game = new GameModel();
 			
+			// usar o caracter bell como separador em vez do \n não se deve fazer!!! porque não é genérico.
 			for(;;) {			
-				// usar o caracter bell como separador em vez do \n
-				// não se deve fazer!!! porque não é genérico.
 
 				// Jogador 1, recebe o tabuleiro do Jogador 2
 				os1.println((game.getBoard(2) + "\nJogada do jogador 1:").replaceAll("\n", "\7")); 
 			
+				// Jogador 1 faz a sua jogada
+				//os2.println("Jogador 1 está a escolher a sua jogada...");
 				String inputLine1 = is1.readLine();
 				if(inputLine1 == null)
 					break;
 
-				os1.println("Resultado: " + game.play(1, inputLine1));
+				// É demonstrado o resultado da jogada
+				String result1 = game.play(1, inputLine1);
 				os1.println((game.getBoard(2)).replaceAll("\n", "\7")); 
+				os1.println("Resultado: " + result1);
 				
-				//JG.jogar(Short.parseShort(inputLine1), 'X');
-				//JG.mostrar();
-				
-				/*
-				if(JG.vitoria('X')) {
-					String resp=(JG.JogoToTXT() + "\nVitória do X!").replaceAll("\n", "\7");
-					os1.println(resp); 
-					os2.println(resp);
+				// Verificar se o jogador 1 ganhou		
+				if (game.checkWin(1)) {
+					String result = (game.getBoard(2) + "\nVitoria do Jogador 1! Localizou os 30 navios.").replaceAll("\n", "\7");
+					os1.println(result); 
+					os2.println(result);
 					break;
 				}
-				else
-					if(JG.empate()) {
-						String resp=(JG.JogoToTXT()+"\nEmpate!").replaceAll("\n", "\7");
-						os1.println(resp); 
-						os2.println(resp);
-						break;
-					}
-				*/
+
 				
+				
+				// Jogador 2, recebe o tabuleiro do Jogador 1
 				os2.println((game.getBoard(1) + "\nJogada do jogador 2:").replaceAll("\n", "\7")); 
 				
+				// Jogador 2 faz a sua jogada
+				//os1.println("Jogador 2 está a escolher a sua jogada...");
 				String inputLine2 = is2.readLine();
 				if(inputLine2 == null)
 					break;
 
-				os2.println("Resultado: " + game.play(2, inputLine2));
+				// É demonstrado o resultado da jogada
+				String result2 = game.play(2, inputLine2);
 				os2.println((game.getBoard(1)).replaceAll("\n", "\7")); 
+				os2.println("Resultado: " + result2);
 				
-				/*
-				JG.jogar(Short.parseShort(inputLine2), 'O');
-				JG.mostrar();
-				*/
-				/*
-				if(JG.vitoria('O')) {
-					String resp=(JG.JogoToTXT()+"\nVitória do O!").replaceAll("\n", "\7");
-					os1.println(resp); 
-					os2.println(resp);
+				// Verificar se o jogador 2 ganhou			
+				if (game.checkWin(2)) {
+					String result = (game.getBoard(1) + "\nVitoria do Jogador 2! Localizou os 30 navios.").replaceAll("\n", "\7");
+					os1.println(result); 
+					os2.println(result);
 					break;
 				}
-				else
-					if(JG.empate()) {
-						String resp=(JG.JogoToTXT()+"\nEmpate!").replaceAll("\n", "\7");
-						os1.println(resp); 
-						os2.println(resp);
-						break;
-					}*/
-			}
-			
-			
+			}		
 		} catch (IOException e) {
 			System.err.println("Erro na ligaçao : "
 					+ e.getMessage());

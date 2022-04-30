@@ -6,8 +6,13 @@ import java.util.Scanner;
 
 public class GameModel {
 
+	// Constantes
+	private int MAXPOINTS = 30;
+	
+	// Variáveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
 	private int[][] boardPlayer2 = new int[10][10]; // Tabuleiro do jogador 2
+	private int pointsPlayer1, pointsPlayer2; 		// Pontuação dos jogadores
 	
 	private GameView view = new GameView();			// Visualização na consola
 	private HashMap<String, Integer> columnValue = new HashMap<>();
@@ -29,35 +34,57 @@ public class GameModel {
 		columnValue.put("I", 8);
 		columnValue.put("J", 9);
 		
+		pointsPlayer1 = 0;
+		pointsPlayer2 = 0; 
+		
 		// Pergunta ao jogador, pelas posições dos navios
-		//chooseShipPosition();
 		randomShipPosition(boardPlayer1);
 		randomShipPosition(boardPlayer2);
 	}
 	
+	/**
+	 * Adiciona návios de tamanho 1 aleatóriamente no
+	 * tabuleiro apenas para Debug.
+	 * @param boardPlayer - Tabuleiro
+	 */
 	public void randomShipPosition(int[][] boardPlayer) {
 		
 		for (int i = 0; i < boardPlayer.length; i++) {
 			for (int j = 0; j < boardPlayer[0].length; j++) {
-				boardPlayer[i][j] = (Math.random() > 0.85 ? 1 : 0);
+				boardPlayer[i][j] = (Math.random() > 0.7 ? 1 : 0);
 			}	
 		}
 	}
 	
+	/**
+	 * @param player - Jogador 1 ou 2
+	 * @return
+	 */
+	public boolean checkWin(int player) {
+		
+		if (player == 1) return pointsPlayer1 == MAXPOINTS;
+		else return pointsPlayer2 == MAXPOINTS;
+	}
+	
+	/**
+	 * @param player - Jogador 1 ou 2
+	 * @param choice - Jogada, linha e coluna (Exemplo: 1A, 5F, etc)
+	 * @return String que contém o estado do jogo.
+	 */
 	public String play(int player, String choice) {
 		
 		int line   = Character.getNumericValue(choice.charAt(0)) - 1;
-		int column = columnValue.get(choice.charAt(1) + "");
-		
+		int column = columnValue.get(Character.toUpperCase(choice.charAt(1)) + "");		
 		int state;
-		String result;
-		
+
 		if (player == 1) {
 			state = boardPlayer2[line][column];
+			if (state == 1) pointsPlayer1++;
 			boardPlayer2[line][column] = (state == 0) ? 3 : (state == 1) ? 2 : (state == 2) ? 2 : 3;
 		}
 		else {
 			state = boardPlayer1[line][column];
+			if (state == 1) pointsPlayer2++;
 			boardPlayer1[line][column] = (state == 0) ? 3 : (state == 1) ? 2 : (state == 2) ? 2 : 3;
 		}
 		return (state == 0) ? "Tiro no mar!" 
@@ -66,6 +93,10 @@ public class GameModel {
 			 : "Espaço já explorado.";		 
 	}
 	
+	/**
+	 * @param player - Jogador 1 ou 2
+	 * @return String com apresentação do tabuleiro.
+	 */
 	public String getBoard(int player) {
 	
 		if (player == 1) return view.printBoard(boardPlayer1);
