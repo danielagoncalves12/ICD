@@ -6,8 +6,7 @@ public class ShipType {
 	public static int EMPTYHIDDEN = 0;
 	public static int EMPTY = 1;
 	
-	// Tipos de navio
-	
+	// Tipos de navio	
 	public static int TYPE1SHOW = 2;
 	public static int TYPE2SHOW = 3;
 	public static int TYPE3SHOW = 4;

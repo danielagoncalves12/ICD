@@ -1,11 +1,8 @@
 package tp1.socket;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Daniela Gonçalves A48579 42D

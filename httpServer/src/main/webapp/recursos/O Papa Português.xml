@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<?xml-stylesheet type="text/xsl" href="poema_xml_to_html.xsl"?>
+<poema>
+	<autor>João Sardinha</autor>
+	<título>O Papa Português</título>
+	<estrofe>
+		<verso>Com D. Afonso terceiro</verso>
+		<verso>Surgiu Pedro Julião</verso>
+		<verso>Se foi Cónego primeiro</verso>
+		<verso>Mais tarde Papa João</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Prior da igreja nomeado</verso>
+		<verso>No tempo p'lo "Bolonhês"</verso>
+		<verso>De João XXI chamado</verso>
+		<verso>Foi o Papa Português</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Foi no tempo grande Bispo</verso>
+		<verso>Pedro Espano conhecido</verso>
+		<verso>Se de Braga Arcebispo</verso>
+		<verso>Não foi de Papa esquecido</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Este Pedro Julião</verso>
+		<verso>Lá nas Universidades</verso>
+		<verso>Antes de ser Papa João</verso>
+		<verso>Teve em Medicina e Artes</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Como Teólogo e novo</verso>
+		<verso>Este Pedro Julião</verso>
+		<verso>Se ajudou muito Povo</verso>
+		<verso>Foi Biólogo por opção</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Lá traçada sua sina</verso>
+		<verso>De vir a ser Papa João</verso>
+		<verso>Professor de Medicina</verso>
+		<verso>Foi esta mais outra opção</verso>
+	</estrofe>
+	<estrofe>
+		<verso>No tempo ser um Doutor</verso>
+		<verso>Pois não era fácil não</verso>
+		<verso>Foi o maior sim senhor</verso>
+		<verso>Este Pedro Julião</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Sendo ele o mais letrado</verso>
+		<verso>Cardeais até então</verso>
+		<verso>Valeu-lhe ter estudado</verso>
+		<verso>Para ser Papa João</verso>
+	</estrofe>
+	<estrofe>
+		<verso>João vinte devia ser</verso>
+		<verso>Mas lá erro o alterou</verso>
+		<verso>Por nada poder fazer</verso>
+		<verso>Papa João vinte e um ficou</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Oito meses no Papado</verso>
+		<verso>Ficou "BOM PAPA JOÃO"</verso>
+		<verso>Isto é que está gravado</verso>
+		<verso>Deste Pedro Julião</verso>
+	</estrofe>
+	<estrofe>
+		<verso>Papa estava atarefado</verso>
+		<verso>Não se sabe a estudar</verso>
+		<verso>Caiu-lhe em cima o telhado</verso>
+		<verso>Morrendo a trabalhar</verso>
+	</estrofe>
+	<estrofe>
+		<verso>História não o esqueceu</verso>
+		<verso>Papa João XXI chamado</verso>
+		<verso>Se faz anos que morreu</verso>
+		<verso>Vai só hoje aqui lembrado</verso>
+	</estrofe>
+</poema>

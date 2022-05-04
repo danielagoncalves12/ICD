@@ -1,13 +1,13 @@
 applyBackground=false
-approved.defs.file.last.changed.time=1624986146000
+approved.defs.file.last.changed.time=1649720987000
 configurationInstallLocation=/C\:/Program Files (x86)/Eclipse/
 ct.upsell.display.after=1650133128500
 eclipse.preferences.version=1
 iconcolormode=pastel
 iconreplacement=true
 includeThemingInOomph=false
-last.download.attempt.time=1651325828529
-lastConfiguration=1651325819379
+last.download.attempt.time=1651671226874
+lastConfiguration=1651691232643
 newinstall=false
 showWelcomeDialog=false
-workbench.theme=Light Purple
+workbench.theme=Dark Gray

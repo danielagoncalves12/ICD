@@ -44,20 +44,20 @@ public class GameModel {
 	}
 
 	/**
-	 * Receber o tabuleiro, pela vista do adversário, as posições dos navios ainda
-	 * não descobertos não são relevadas. Esta função é usada unicamente para apresentar
-	 * o tabuleiro do adversário ao jogador.
+	 * Receber o tabuleiro do adversário, as posições dos navios que ainda não foram descobertos
+	 * não são reveladas. Esta função é usada unicamente para apresentar o tabuleiro do adversário
+	 * ao jogador.
 	 * 
-	 * @param player - Jogador 1 ou 2
+	 * @param values1 - Jogador 1 ou 2
 	 * @return String com apresentação do tabuleiro.
 	 */
-	public String getBoard(int player) {
+	public String getBoard(String player) {
 	
-		String board = "Tabuleiro do jogador " + player + ":\nPontuacao atual -> Jogador 1: " 
-					 			  + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos.\n\n";
+		String intro = "\nPontuacao atual - Jogador 1: " + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos." +
+		"\nTabuleiro do jogador " + (player.equals("1") ? 2 : 1) + ":\n\n";
 		
-		if (player == 1) return board + view.printBoard(boardPlayer1);
-		else return board + view.printBoard(boardPlayer2);
+		if (player.equals("1")) return intro + view.printBoard(boardPlayer2);
+		else return intro + view.printBoard(boardPlayer1);
 	}	
 	
 	/**
@@ -104,7 +104,7 @@ public class GameModel {
 	 * @param choice - Jogada, linha e coluna (Exemplo: 1A, 5F, etc)
 	 * @return String que contém o estado do jogo.
 	 */
-	public String play(int player, String choice) {
+	public String play(String player, String choice) {
 		
 		int line, column;
 		
@@ -120,10 +120,10 @@ public class GameModel {
 		}
 
 		int state;
-		int[][] board = (player == 1) ? boardPlayer2 : boardPlayer1;
+		int[][] board = (player.equals("1")) ? boardPlayer2 : boardPlayer1;
 
 		state = board[line][column];
-		if (state >= 6 && state <= 9) if (player == 1) pointsPlayer1++; else pointsPlayer2++;
+		if (state >= 6 && state <= 9) if (player.equals("1")) pointsPlayer1++; else pointsPlayer2++;
 			
 		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY :      // Não encontrou navio
 							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-aviões
@@ -132,12 +132,13 @@ public class GameModel {
 							  (state == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW :  // Encontrou Submarino
 							  board[line][column];
 		
-		return (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 
+		return "Resultado: " + (
+			   (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 
 			 : (state == ShipType.TYPE1HIDDEN) ? "Porta-avioes atingido!"
 			 : (state == ShipType.TYPE2HIDDEN) ? "Navio-tanque atingido!"
 			 : (state == ShipType.TYPE3HIDDEN) ? "Contratorpedeiro atingido!"
 			 : (state == ShipType.TYPE4HIDDEN) ? "Submarino atingido!"
-			 : "Espaco ja explorado.";		 
+			 : "Espaco ja explorado.");		 
 	}
 
 	public void randomShipPosition(int player) {
@@ -190,12 +191,6 @@ public class GameModel {
 			}		
 		}
 	}	
-	
-	public static void main(String[] args) {
-		
-		GameModel game = new GameModel();
-		System.out.println(game.getBoardView(1));
-	}
 
 	public boolean checkValidPosition(int player, String position, int shipSize, boolean vertical) {
 
@@ -261,56 +256,4 @@ public class GameModel {
 		
 		return true;
 	}
-	
-	/*
-	public void chooseShipPosition() {
-		
-		String[] positionRequests = {
-				"Posicione um porta-aviões (5 quadrados)",
-				"Posicione dois navios-tanque (4 quadrados)",
-				"Posicione três contratorpedeiros (3 quadrados)",
-				"Posicione quatro submarinos (2 quadrados)"
-		};
-		
-		int[] shipSizes  = {5, 4, 3, 2};
-		int[] shipNumber = {1, 2, 3, 4};
-		
-		Scanner scan = new Scanner(System.in);
-
-		for (int i = 0; i < positionRequests.length; i++) {
-		
-			System.out.println(positionRequests[i]);
-			
-			String position = "";  // Posição introduzida pelo utilizador
-			boolean check = false; // Verificação da posição
-			int number = 0;		   // Número de navios por posicionar
-			
-			while(number != shipNumber[i]) {
-			
-				do {
-					System.out.println("Insira o número e letra (Ex. 1A): ");
-					position = scan.nextLine();
-					check = checkValidPosition(position, shipSizes[i]);
-	
-					// Caso a posição seja válida, é introduzido o navio
-					if (check) {
-						int steps  = 0;
-						String strLine = "" + position.charAt(0) + position.charAt(1);
-						int line   = Integer.parseInt(strLine) - 1;
-						int column = columnValue.get(position.charAt(2) + "");
-						
-						while(steps != shipSizes[i]) {		
-							boardPlayer1[line++][column] = 2;
-							steps++;
-						}
-						number++;
-					}
-				} while(!check);
-				this.view.printBoard(boardPlayer1);
-			}		
-		}
-		System.out.println("Todos os navios foram posicionados!");
-	}*/
-
-	
 }
