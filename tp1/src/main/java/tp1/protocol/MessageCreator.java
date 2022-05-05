@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
-	public String messagePosition(String player, String choice, String result, boolean ack) throws ParserConfigurationException {
+	public static String messagePosition(String player, String choice, String result, boolean ack) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -27,18 +27,15 @@ public class MessageCreator {
         Element elementRequest = document.createElement("request");
         
         // Elemento Player
-        if (!player.equals("")) {
-        	Element elementPlayer = document.createElement("player");
-        	elementPlayer.appendChild(document.createTextNode(player));
-        	elementRequest.appendChild(elementPlayer);
-        }
+    	Element elementPlayer = document.createElement("player");
+    	elementPlayer.appendChild(document.createTextNode(player));
+    	elementRequest.appendChild(elementPlayer);
 		
         // Elemento Position
-        if (!choice.equals("")) {
-        	Element elementChoice = document.createElement("choice");
-        	elementChoice.appendChild(document.createTextNode(choice));
-        	elementRequest.appendChild(elementChoice);
-        }
+    	Element elementChoice = document.createElement("choice");
+    	elementChoice.appendChild(document.createTextNode(choice));
+    	elementRequest.appendChild(elementChoice);
+        
         elementPosition.appendChild(elementRequest);
         
         // Elemento Reply
@@ -55,12 +52,12 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);
 	}
 
-	public String messagePosition(String player, String position) throws ParserConfigurationException {
+	public static String messagePosition(String player, String position) throws ParserConfigurationException {
 		
 		return messagePosition(player, position, "", false);
 	}
 	
-	public String messageBoard(String player, String result, boolean ack) throws ParserConfigurationException {
+	public static String messageBoard(String player, String view, String result, boolean ack) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -79,11 +76,14 @@ public class MessageCreator {
         Element elementRequest = document.createElement("request");
         
         // Elemento Player
-        if (!player.equals("")) {
-        	Element elementPlayer = document.createElement("player");
-        	elementPlayer.appendChild(document.createTextNode(player));
-        	elementRequest.appendChild(elementPlayer);
-        }
+    	Element elementPlayer = document.createElement("player");
+    	elementPlayer.appendChild(document.createTextNode(player));
+    	elementRequest.appendChild(elementPlayer);
+               
+        // Elemento View
+        Element elementView = document.createElement("view");
+        elementView.appendChild(document.createTextNode(view));
+        elementRequest.appendChild(elementView);
 
         elementBoard.appendChild(elementRequest);
         
@@ -101,8 +101,8 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);
 	}
 	
-	public String messageBoard(String player) throws ParserConfigurationException {
+	public static String messageBoard(String player, String view) throws ParserConfigurationException {
 		
-		return messageBoard(player, "", false);
+		return messageBoard(player, view, "", false);
 	}
 }

@@ -68,11 +68,11 @@ public class GameModel {
 	 * @param player
 	 * @return
 	 */
-	public String getBoardView(int player) {
+	public String getBoardView(String player) {
 
 		String board = "O seu tabuleiro: Todos os navios foram posicionados aleatoriamente!\n\n";
 		
-		int[][] originalBoard = (player == 1) ? boardPlayer1 : boardPlayer2; 
+		int[][] originalBoard = (player.equals("1")) ? boardPlayer1 : boardPlayer2; 
 		int[][] copiedBoard   = new int[10][10];
 		int[] newLine;
 
@@ -93,9 +93,9 @@ public class GameModel {
 	 * @param player - Jogador 1 ou 2
 	 * @return
 	 */
-	public boolean checkWin(int player) {
+	public boolean checkWin(String player) {
 		
-		if (player == 1) return pointsPlayer1 == MAXPOINTS;
+		if (player.equals("1")) return pointsPlayer1 == MAXPOINTS;
 		else return pointsPlayer2 == MAXPOINTS;
 	}
 	

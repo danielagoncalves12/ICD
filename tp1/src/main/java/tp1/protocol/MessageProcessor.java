@@ -7,6 +7,8 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import tp1.battleship.GameModel;
+
 public class MessageProcessor {
 
 	/**
@@ -14,7 +16,7 @@ public class MessageProcessor {
 	 * @param message
 	 * @return
 	 */
-	public String process(String message) {
+	public static String process(String message) {
 
 		Document doc  = XMLUtils.stringToDocument(message);
 		Node root     = doc.getElementsByTagName("protocol").item(0);
@@ -28,7 +30,7 @@ public class MessageProcessor {
 		return null;
 	}
 	
-	public String position(Document doc) {
+	private static String position(Document doc) {
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
 		String queryRead   = "//position/@read", queryPlayer = "//request/player";
@@ -42,26 +44,27 @@ public class MessageProcessor {
 			nodeChoice = ((NodeList) xPath.compile(queryChoice).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodeResult = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
-
-		if (attRead.getNodeValue().equals("false")) return nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
-		else return nodeResult.getTextContent();
+		
+		if (attRead.getNodeValue().equals("false")) return "position" + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
+		else return nodeResult.getTextContent();		
 	}
 	
-	public String board(Document doc) {
+	private static String board(Document doc) {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        String queryRead   = "//board/@read", queryPlayer = "//request/player";
-        String queryResult = "//reply/board";
+        String queryRead   = "//board/@read", queryView = "//request/view";
+        String queryPlayer = "//request/player", queryResult = "//reply/board";
         
-        Node attRead = null, nodePlayer = null, nodeBoard = null;
+        Node attRead = null, nodeView = null, nodePlayer = null, nodeBoard = null;
         
 		try {
 			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeView   = ((NodeList) xPath.compile(queryView).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodeBoard  = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
  
-		if (attRead.getNodeValue().equals("false")) return nodePlayer.getTextContent();
+		if (attRead.getNodeValue().equals("false")) return "board" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 		else return nodeBoard.getTextContent();
 	}
 	

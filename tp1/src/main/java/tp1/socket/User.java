@@ -12,7 +12,6 @@ import tp1.protocol.MessageProcessor;
 
 /**
  * @author Daniela Gonçalves A48579 42D
- * 
  */
 
 public class User {
@@ -20,14 +19,26 @@ public class User {
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 1001;        // Porto onde o Servidor aceita conexões
     
+    public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) throws ParserConfigurationException, IOException {
+    	
+    	System.out.println(MessageCreator.messageBoard(player, view));
+		os.println(MessageCreator.messageBoard(player, view)); 						   // Envia uma mensagem (Request), a pedir o tabuleiro
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o conteúdo desejado
+		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, recebendo o tabuleiro
+    }
+    
+    public static String sendRequestPosition(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {
+    	
+		os.println(MessageCreator.messagePosition(player, position)); 				   // Envia uma mensagem (Request), com a jogada desejada
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o resultado da jogada
+		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, apresentando o resultado
+    }
+    
     public static void main(String[] args) throws ParserConfigurationException {
         
         Socket     socket = null; 
         BufferedReader is = null;
         PrintWriter    os = null;
-        
-        MessageCreator     msgCreator = null;
-        MessageProcessor msgProcessor = null;
         
         String playerNum = "0";
         
@@ -36,35 +47,23 @@ public class User {
             is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
             os     = new PrintWriter(socket.getOutputStream(), true); 
             
-            msgCreator   = new MessageCreator();
-            msgProcessor = new MessageProcessor(); 
             playerNum = is.readLine();
-            System.out.println("Bem-vindo jogador " + playerNum + "!!"); 
-            
-            // Receber o próprio tabuleiro     
-            System.out.println(is.readLine().replaceAll("\7", "\n")); // Mostrar tabuleiro do jogador
-            
-            // Receber tabuleiro do adversário
-            os.println(msgCreator.messageBoard(playerNum));										  // Enviar a Request (Tabuleiro)
-            String boardOpponent = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n"); // Receber a Reply  (Tabuleiro)
-            System.out.println(msgProcessor.process(boardOpponent));                              // Apresentar o tabuleiro
+            System.out.println("Bem-vindo jogador " + playerNum + "!!");              
+            System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
+            System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
             
             try (Scanner scan = new Scanner(System.in)) {
 		        for(;;) {    
 		        	
-		        	System.out.println(is.readLine().replaceAll("\7", "\n"));  	  		   // Mensagem de introdução da jogada
+		        	// Mensagem de introdução da jogada
+		        	System.out.println(is.readLine());
 		        	
-		        	// Enviar a mensagem com a jogada
-					String position = scan.nextLine();						     		   // Scan da jogada 
-					os.println(msgCreator.messagePosition(playerNum, position));  		   // Enviar a Request (Posicao)
-					String reply  = is.readLine().replaceAll("\7", "\n");		  		   // Receber a Reply  (Posicao)
-					System.out.println(msgProcessor.process(reply)); 			  		   // Apresentar o resultado			
+		        	// Enviar Request com a jogada escolhida
+					String position = scan.nextLine();
+					System.out.println(User.sendRequestPosition(os, is, playerNum, position));
 					
-					// Enviar a mensagem a pedir o tabuleiro atualizado
-					os.println(msgCreator.messageBoard(playerNum));				  		   // Enviar a Request (Tabuleiro)
-					reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n"); // Receber a Reply  (Tabuleiro)
-					System.out.println(msgProcessor.process(reply)); 					   // Apresentar o tabuleiro
-					
+					// Enviar Request a pedir o tabuleiro do aversário atualizado
+					System.out.print(User.sendRequestBoard(os, is, playerNum, "false"));			
 				}
             }
         } 

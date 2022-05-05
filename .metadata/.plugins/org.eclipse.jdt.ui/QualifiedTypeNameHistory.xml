@@ -8,7 +8,6 @@
     <fullyQualifiedTypeName name="java.util.Hashtable"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="java.util.List"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
     <fullyQualifiedTypeName name="java.net.Socket"/>
     <fullyQualifiedTypeName name="tp1.battleship.Jogo"/>
     <fullyQualifiedTypeName name="java.util.Random"/>
@@ -33,11 +32,23 @@
     <fullyQualifiedTypeName name="javax.xml.transform.Transformer"/>
     <fullyQualifiedTypeName name="javax.xml.transform.dom.DOMSource"/>
     <fullyQualifiedTypeName name="javax.xml.transform.stream.StreamResult"/>
-    <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="java.io.StringWriter"/>
     <fullyQualifiedTypeName name="javax.xml.transform.TransformerException"/>
-    <fullyQualifiedTypeName name="tp1.battleship.GameModel"/>
     <fullyQualifiedTypeName name="tp1.protocol.MessageProcess"/>
     <fullyQualifiedTypeName name="tp1.protocol.MessageCreator"/>
+    <fullyQualifiedTypeName name="java.security.KeyStore.Entry.Attribute"/>
+    <fullyQualifiedTypeName name="java.lang.System"/>
+    <fullyQualifiedTypeName name="tp1.battleship.GameModel"/>
     <fullyQualifiedTypeName name="tp1.protocol.MessageProcessor"/>
+    <fullyQualifiedTypeName name="tp1.socket.GameThread"/>
+    <fullyQualifiedTypeName name="java.lang.InterruptedException"/>
+    <fullyQualifiedTypeName name="javax.xml.validation.SchemaFactory"/>
+    <fullyQualifiedTypeName name="javax.xml.validation.Schema"/>
+    <fullyQualifiedTypeName name="javax.xml.XMLConstants"/>
+    <fullyQualifiedTypeName name="java.io.File"/>
+    <fullyQualifiedTypeName name="org.xml.sax.SAXException"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="javax.xml.transform.stream.StreamSource"/>
+    <fullyQualifiedTypeName name="javax.xml.bind.Validator"/>
+    <fullyQualifiedTypeName name="javax.xml.validation.Validator"/>
 </qualifiedTypeNameHistroy>

@@ -22,19 +22,36 @@ public class GameThread extends Thread {
 		this.player2 = player2;
 	}
 	
+	public static void sendReply(GameModel game, PrintWriter os, BufferedReader is) throws ParserConfigurationException, IOException {
+		
+		String request = is.readLine();									   // Lê o Request do jogador
+		if (request == null) return;									   // Caso o jogador tenha fechado o socket, cancela
+		String method  = MessageProcessor.process(request).split(",")[0];  // Primeiro argumento representa o tipo de pedido
+		String player = "", argument = "", result = "";
+		
+		if (method.equals("position")) {
+			
+			player   = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
+			argument = MessageProcessor.process(request).split(",")[2]; // Posição da jogada
+			result   = game.play(player, argument);						// Aplicação da jogada
+		} 
+		else if (method.equals("board")) {
+			
+			player   = MessageProcessor.process(request).split(",")[1]; // Número do jogador
+			argument = MessageProcessor.process(request).split(",")[2]; // Tipo de tabuleiro
+			result   = (argument.equals("true")) ? game.getBoardView(player) : game.getBoard(player);
+		}
+		
+		String reply = MessageCreator.messageBoard(player, argument, result, true);
+		os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
+	}
+	
 	public void run() {
 
-		BufferedReader is1 = null;
-		PrintWriter    os1 = null;
+		BufferedReader is1 = null, is2 = null;
+		PrintWriter    os1 = null, os2 = null;
 
-		BufferedReader is2 = null;
-		PrintWriter    os2 = null;
-		
-		MessageProcessor msgProcessor = new MessageProcessor();
-		MessageCreator   msgCreator   = new MessageCreator();
-		
 		try { 
-
 			System.out.println("Jogo iniciado!");
 			
 			// BufferedReader e PrintWriter do jogador 1
@@ -50,55 +67,22 @@ public class GameThread extends Thread {
 			// Instância do jogo Batalha Naval
 			GameModel game = new GameModel();
 
-			
-			
-			os1.println(game.getBoardView(1).replaceAll("\n", "\7"));  // Enviar tabuleiro do jogador 1
-			
-			// Enviar tabuleiro do adversário ao jogador 1
-			String      board1 = is1.readLine();
-			String     player1 = msgProcessor.process(board1);
-			String replyBoard1 = msgCreator.messageBoard(player1, game.getBoard(player1), true);			
-			os1.println(replyBoard1.replaceAll("\r", "\6").replaceAll("\n", "\7"));
-
-			
-			os2.println(game.getBoardView(2).replaceAll("\n", "\7"));  // Enviar tabuleiro do jogador 2
-			
-			// Enviar tabuleiro do adversário ao jogador 2
-			String      board2 = is2.readLine();
-			String     player2 = msgProcessor.process(board2);
-			String replyBoard2 = msgCreator.messageBoard(player2, game.getBoard(player2), true);			
-			os2.println(replyBoard2.replaceAll("\r", "\6").replaceAll("\n", "\7"));
-
-			
+			GameThread.sendReply(game, os1, is1);  // Enviar o próprio tabuleiro ao jogador 1	
+			GameThread.sendReply(game, os1, is1);  // Enviar tabuleiro do adversário ao jogador 1
+					
+			GameThread.sendReply(game, os2, is2);  // Enviar o próprio tabuleiro ao jogador 2	
+			GameThread.sendReply(game, os2, is2);  // Enviar tabuleiro do adversário ao jogador 2		
 			
 			for(;;) {			
 
 				// --------- Jogador 1 --------- //
-				
-				// Jogador 1, recebe o tabuleiro do Jogador 2
-				os1.println(("Sua vez -> Introduza uma jogada:").replaceAll("\n", "\7")); 
 
-				// Jogada do jogador 1
-				String msg1 = is1.readLine();
-				if (msg1 == null) break;
-
-				// Processa o pedido recebido (posicao) e envia uma mensagem de resposta ao jogador
-				player1 = msgProcessor.process(msg1).split(",")[0];
-				String position1 = msgProcessor.process(msg1).split(",")[1];		
-				String replyPos1 = msgCreator.messagePosition(player1, position1, game.play(player1, position1), true);
-				os1.println(replyPos1.replaceAll("\n", "\7"));	   // Envia o resultado da jogada para o jogador 1
-							
-				// Pedido do tabuleiro para o jogador 1
-				msg1 = is1.readLine(); if (msg1 == null) break;
-				
-				// Processa o pedido recebido (tabuleiro) e envia uma mensagem de resposta ao jogador
-				player1 = msgProcessor.process(msg1);
-				board1 = game.getBoard(player1);
-				replyBoard1 = msgCreator.messageBoard(player1, board1, true);
-				os1.println(replyBoard1.replaceAll("\r", "\6").replaceAll("\n", "\7")); // Envia o tabuleiro para o jogador 1
+				os1.println("Sua vez -> Introduza uma jogada:");
+				GameThread.sendReply(game, os1, is1);  // Responde ao pedido da jogada do jogador 1
+				GameThread.sendReply(game, os1, is1);  // Responde ao pedido do tabuleiro adversário do jogador 1
 
 				// Verificar se o jogador 1 ganhou		
-				if (game.checkWin(1)) {
+				if (game.checkWin("1")) {
 					String result = (game.getBoard("1") + "\nVitoria do Jogador 1! Localizou os 30 navios.").replaceAll("\n", "\7");
 					os1.println(result); 
 					os2.println(result);
@@ -106,31 +90,13 @@ public class GameThread extends Thread {
 				}
 
 				// --------- Jogador 2 --------- //
-				
-				// Jogador 2, recebe o tabuleiro do Jogador 1
-				os2.println(("Sua vez -> Introduza uma jogada:").replaceAll("\n", "\7")); 
 
-				// Jogada do jogador 2
-				String msg2 = is2.readLine();
-				if (msg2 == null) break;
-
-				// Processa o pedido recebido (posicao) e envia uma mensagem de resposta ao jogador
-				player2 = msgProcessor.process(msg2).split(",")[0];
-				String position2 = msgProcessor.process(msg2).split(",")[1];		
-				String replyPos2 = msgCreator.messagePosition(player2, position2, game.play(player2, position2), true);
-				os2.println(replyPos2.replaceAll("\n", "\7"));	   // Envia o resultado da jogada para o jogador 1
-							
-				// Pedido do tabuleiro para o jogador 2
-				msg2 = is2.readLine(); if (msg2 == null) break;
-				
-				// Processa o pedido recebido (tabuleiro) e envia uma mensagem de resposta ao jogador
-				player2 = msgProcessor.process(msg2);
-				board2  = game.getBoard(player2);
-				replyBoard2 = msgCreator.messageBoard(player2, board2, true);
-				os2.println(replyBoard2.replaceAll("\r", "\6").replaceAll("\n", "\7")); // Envia o tabuleiro para o jogador 2
+				os2.println("Sua vez -> Introduza uma jogada:");
+				GameThread.sendReply(game, os2, is2);  // Responde ao pedido da jogada do jogador 2
+				GameThread.sendReply(game, os2, is2);  // Responde ao pedido do tabuleiro adversário do jogador 2
 
 				// Verificar se o jogador 2 ganhou			
-				if (game.checkWin(2)) {
+				if (game.checkWin("2")) {
 					String result = (game.getBoard("2") + "\nVitoria do Jogador 2! Localizou os 30 navios.").replaceAll("\n", "\7");
 					os1.println(result); 
 					os2.println(result);
