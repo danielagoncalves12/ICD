@@ -8,7 +8,7 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
-	public static String messagePosition(String player, String choice, String result, boolean ack) throws ParserConfigurationException {
+	public static String message(String method, String player, String argument, String result, boolean ack) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -18,10 +18,11 @@ public class MessageCreator {
         Element elementRoot = document.createElement("protocol");
         document.appendChild(elementRoot);
         
-        // Elemento Posicao
-        Element elementPosition = document.createElement("position");
-        elementPosition.setAttribute("read", ack ? "true" : "false");
-        elementRoot.appendChild(elementPosition); 
+        // Elemento Método (Position, Board, etc)
+        Element elementMethod = document.createElement("method");
+        elementMethod.setAttribute("type", method);
+        elementMethod.setAttribute("read", ack ? "true" : "false");
+        elementRoot.appendChild(elementMethod); 
 
         // Elemento Request
         Element elementRequest = document.createElement("request");
@@ -32,11 +33,11 @@ public class MessageCreator {
     	elementRequest.appendChild(elementPlayer);
 		
         // Elemento Position
-    	Element elementChoice = document.createElement("choice");
-    	elementChoice.appendChild(document.createTextNode(choice));
-    	elementRequest.appendChild(elementChoice);
+    	Element elementArgument = document.createElement("argument");
+    	elementArgument.appendChild(document.createTextNode(argument));
+    	elementRequest.appendChild(elementArgument);
         
-        elementPosition.appendChild(elementRequest);
+        elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
         Element elementReply = document.createElement("reply");
@@ -47,62 +48,13 @@ public class MessageCreator {
         	elementResult.appendChild(document.createTextNode(result));
         	elementReply.appendChild(elementResult);
         }
-        elementPosition.appendChild(elementReply);
+        elementMethod.appendChild(elementReply);
 
         return XMLUtils.documentToString(document);
 	}
 
-	public static String messagePosition(String player, String position) throws ParserConfigurationException {
+	public static String message(String method, String player, String position) throws ParserConfigurationException {
 		
-		return messagePosition(player, position, "", false);
-	}
-	
-	public static String messageBoard(String player, String view, String result, boolean ack) throws ParserConfigurationException {
-		
-		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
-        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-        Document document = documentBuilder.newDocument();
-
-        // Elemento Protocol
-        Element elementRoot = document.createElement("protocol");
-        document.appendChild(elementRoot);
-        
-        // Elemento Tabuleiro
-        Element elementBoard = document.createElement("board");
-        elementBoard.setAttribute("read", ack ? "true" : "false");
-        elementRoot.appendChild(elementBoard);
-
-        // Elemento Request
-        Element elementRequest = document.createElement("request");
-        
-        // Elemento Player
-    	Element elementPlayer = document.createElement("player");
-    	elementPlayer.appendChild(document.createTextNode(player));
-    	elementRequest.appendChild(elementPlayer);
-               
-        // Elemento View
-        Element elementView = document.createElement("view");
-        elementView.appendChild(document.createTextNode(view));
-        elementRequest.appendChild(elementView);
-
-        elementBoard.appendChild(elementRequest);
-        
-        // Elemento Reply
-        Element elementReply = document.createElement("reply");
-        
-        // Elemento Tabuleiro
-        if (!result.equals("")) {
-        	Element elementResult = document.createElement("board");
-        	elementResult.appendChild(document.createTextNode(result));
-        	elementReply.appendChild(elementResult);
-        }
-        elementBoard.appendChild(elementReply);
-
-        return XMLUtils.documentToString(document);
-	}
-	
-	public static String messageBoard(String player, String view) throws ParserConfigurationException {
-		
-		return messageBoard(player, view, "", false);
+		return message(method, player, position, "", false);
 	}
 }

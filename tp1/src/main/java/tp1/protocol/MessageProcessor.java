@@ -1,13 +1,15 @@
 package tp1.protocol;
+import java.io.IOException;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-
-import tp1.battleship.GameModel;
+import org.xml.sax.SAXException;
 
 public class MessageProcessor {
 
@@ -19,13 +21,26 @@ public class MessageProcessor {
 	public static String process(String message) {
 
 		Document doc  = XMLUtils.stringToDocument(message);
-		Node root     = doc.getElementsByTagName("protocol").item(0);
-		String method = root.getFirstChild().getNodeName(); 
+		XPath xPath   = XPathFactory.newInstance().newXPath();
+		String method = null;
+		try {
+			method = ((NodeList) xPath.compile("//method/@type").evaluate(doc, XPathConstants.NODESET)).item(0).getNodeValue();
+		} catch (DOMException | XPathExpressionException e1) {
+			e1.printStackTrace();
+		}
 
-		switch(method) {
-		
-		case "board":    return board(doc);
-		case "position": return position(doc);	
+		// Validação
+		try {
+			if (XMLUtils.validate(message, "src\\main\\webapp\\xml\\MessageValidate.xsd")) {
+
+				switch(method) {
+				
+				case "board":    return board(doc);
+				case "position": return position(doc);	
+				}
+			} else return null;
+		} catch (SAXException | IOException e) {
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -33,8 +48,8 @@ public class MessageProcessor {
 	private static String position(Document doc) {
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-		String queryRead   = "//position/@read", queryPlayer = "//request/player";
-        String queryChoice = "//request/choice", queryResult = "//reply/result";
+		String queryRead   = "//method/@read", queryPlayer = "//request/player";
+        String queryChoice = "//request/argument", queryResult = "//reply/result";
 
         Node attRead = null, nodePlayer = null, nodeChoice = null, nodeResult = null;          
         
@@ -52,8 +67,8 @@ public class MessageProcessor {
 	private static String board(Document doc) {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        String queryRead   = "//board/@read", queryView = "//request/view";
-        String queryPlayer = "//request/player", queryResult = "//reply/board";
+        String queryRead   = "//method/@read", queryPlayer = "//request/player";
+        String queryView = "//request/argument", queryResult = "//reply/result";
         
         Node attRead = null, nodeView = null, nodePlayer = null, nodeBoard = null;
         

@@ -21,15 +21,14 @@ public class User {
     
     public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) throws ParserConfigurationException, IOException {
     	
-    	System.out.println(MessageCreator.messageBoard(player, view));
-		os.println(MessageCreator.messageBoard(player, view)); 						   // Envia uma mensagem (Request), a pedir o tabuleiro
+		os.println(MessageCreator.message("board", player, view)); 					   // Envia uma mensagem (Request), a pedir o tabuleiro
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o conteúdo desejado
 		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, recebendo o tabuleiro
     }
     
     public static String sendRequestPosition(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {
     	
-		os.println(MessageCreator.messagePosition(player, position)); 				   // Envia uma mensagem (Request), com a jogada desejada
+		os.println(MessageCreator.message("position", player, position)); 			   // Envia uma mensagem (Request), com a jogada desejada
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o resultado da jogada
 		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, apresentando o resultado
     }
