@@ -1,16 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
-
-	<Player>	
-		<Nickname>Nick</Nickname>
-		<Password>games</Password>
-		<Picture></Picture>	
-	</Player>
-
-	<Player>	
-		<Nickname>Nick</Nickname>
-		<Password>games</Password>
-		<Picture></Picture>	
-	</Player>
-
-</Data>
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<Player><Nickname>Nick</Nickname><Password>games</Password><Picture/></Player>
+<Player><Nickname>Daniela</Nickname><Password>goncalves</Password><Picture/></Player></Data>

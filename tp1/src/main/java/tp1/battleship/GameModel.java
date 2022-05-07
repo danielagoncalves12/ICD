@@ -8,7 +8,7 @@ import java.util.Random;
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 30;
+	private int MAXPOINTS = 2;
 	
 	// Variáveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1

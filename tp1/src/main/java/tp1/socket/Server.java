@@ -28,7 +28,7 @@ public class Server {
 				
 				// Enviar o pedido para o utilizador se registar
 				player = serverSocket.accept();
-				Thread register = new RegisterThread(player);
+				Thread register = new SessionThread(player);
 				register.start();
 				
 			}

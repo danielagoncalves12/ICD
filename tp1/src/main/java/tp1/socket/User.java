@@ -36,16 +36,24 @@ public class User {
             
             // Registo (Nickname)       
             Thread reader = new ReaderThread(is);
-			reader.start();
-			
+			reader.start();		
 			String nickname = scan.nextLine();				
 			os.println(nickname);
+
+			reader = new ReaderThread(is);
+			reader.start();		
+			String password = scan.nextLine();				
+			os.println(password);
+			
+			String state = is.readLine();
+			
+			System.out.println("Sessao: " + state + "\n");    	
+			if (state.equals("Palavra-passe incorreta!")) return;
 			
 			System.out.println("A espera da conexao de outro jogador...");
         
             // Inicio do jogo      
-            playerNum = is.readLine();
-            System.out.println("Bem-vindo jogador " + playerNum + "!!");            
+            System.out.println("Es jogador numero " + is.readLine() + "!!");            
             System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
             System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
                

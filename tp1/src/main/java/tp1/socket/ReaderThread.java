@@ -13,13 +13,9 @@ class ReaderThread extends Thread {
 
 	public void run() {
 
-		try {
-			for(;;) {				
-				String nickname = (String) is.readLine();
-				if (nickname.equals("registered")) break;
-				System.out.println(nickname.replaceAll("\7", "\n"));
-			}
-
+		try {			
+			String read = (String) is.readLine();
+			System.out.println(read.replaceAll("\7", "\n"));
 		} catch (IOException e) {}
 	} 
 }

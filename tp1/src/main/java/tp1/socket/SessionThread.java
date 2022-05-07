@@ -7,42 +7,68 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
 
-public class RegisterThread extends Thread {
+import tp1.protocol.Session;
+
+public class SessionThread extends Thread {
 
 	public static Hashtable<String, Socket> activeUsers = new Hashtable<String, Socket>();
 	private Socket user;
+	private BufferedReader is;
+	private PrintWriter os;
 	
-	public RegisterThread(Socket user) {
+	public SessionThread(Socket user) {		
 		this.user = user;
+		try {
+			this.is = new BufferedReader(new InputStreamReader(user.getInputStream()));
+			this.os = new PrintWriter(user.getOutputStream(), true);
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
 	}
 	
 	public void run() {
-		
-		BufferedReader is = null;
-		PrintWriter    os = null;
-		
-		try {
-			is = new BufferedReader(new InputStreamReader(user.getInputStream()));
-			os = new PrintWriter(user.getOutputStream(), true);
 
-			os.println("Registo: Bem-vindo jogador! Introduza o seu nickname: ");
+		try {
+			os.println("Batalha Naval: Introduza o seu nickname: ");
 			String nickname = is.readLine();
 			
-			login(nickname, user);
-			os.println("registered");
-			
+			try {
+				login(nickname, user);
+			} catch (InterruptedException e) {
+				return;
+			}
+	
 			System.out.println("Utilizador registado: " + nickname);
 			
 			// Verifica se existe dois utilizadores registados e activos para começar um jogo
 			startGame();
 			
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 				
 	}
 	
-	private synchronized void login(String nickname, Socket user) {
+	private synchronized void login(String nickname, Socket user) throws Exception {
+
+		// Se a conta já existir, pede para iniciar sessão
+		if (!Session.availableNickname(nickname)) {
+					
+			os.println("Bem-vindo de volta " + nickname + "! Introduza a sua palavra-passe:");
+			String password = is.readLine();
+			if (!Session.login(nickname, password)) {
+				os.println("Palavra-passe incorreta!");
+				this.interrupt();
+			}
+			os.println("Sucesso!");
+		}
+		// Caso contrário, o novo utilizador é registado
+		else { 		
+			os.println("Bem-vindo " + nickname + "! Escolha uma palavra-passe:");
+			String password = is.readLine();
+			Session.register(nickname, password, "");
+			os.println("Inscrito com sucesso!");
+		}		
 		activeUsers.put(nickname, user);
 	}
 

@@ -66,11 +66,11 @@ public class XMLUtils {
 		
 		// check input
 		boolean isValid = true;
-		try  {
+		try {
 			validator.validate(source);
 		} 
 		catch (SAXException e) {
-			System.err.println("Not valid");
+			System.err.println("XML Invalido.");
 			isValid = false;
 		}
 		
