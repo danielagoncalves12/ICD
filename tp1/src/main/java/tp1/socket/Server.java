@@ -20,17 +20,17 @@ public class Server {
 		ServerSocket serverSocket = null;			 // Socket do servidor
 
 		try {
-			serverSocket  = new ServerSocket(PORT);  // Socket de servidor
-			Socket player1, player2 = null;		     // Socket de ligação do jogador 
+			serverSocket  = new ServerSocket(PORT);  // Socket de servidor		
+			Socket player;							 // Socket de um jogador
 
 			while (true) {
 				System.out.println("> Servidor, conexão TCP no porto " + PORT + " ...");
 				
-				player1 = serverSocket.accept();  // Aguarda pela conexão de o jogador 1
-				player2 = serverSocket.accept();  // Aguarda pela conexão de o jogador 2
+				// Enviar o pedido para o utilizador se registar
+				player = serverSocket.accept();
+				Thread register = new RegisterThread(player);
+				register.start();
 				
-				Thread thread = new GameThread(player1, player2);  // Cria um Thread
-				thread.start();								       // Inicia a Thread anteriormente criada				
 			}
 		} catch (IOException e) {
 			System.err.println("Erro: " + e);

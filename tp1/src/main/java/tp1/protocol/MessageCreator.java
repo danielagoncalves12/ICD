@@ -18,7 +18,7 @@ public class MessageCreator {
         Element elementRoot = document.createElement("protocol");
         document.appendChild(elementRoot);
         
-        // Elemento Método (Position, Board, etc)
+        // Elemento Method (Position, Board, etc)
         Element elementMethod = document.createElement("method");
         elementMethod.setAttribute("type", method);
         elementMethod.setAttribute("read", ack ? "true" : "false");
@@ -32,7 +32,7 @@ public class MessageCreator {
     	elementPlayer.appendChild(document.createTextNode(player));
     	elementRequest.appendChild(elementPlayer);
 		
-        // Elemento Position
+        // Elemento Argument
     	Element elementArgument = document.createElement("argument");
     	elementArgument.appendChild(document.createTextNode(argument));
     	elementRequest.appendChild(elementArgument);
@@ -42,7 +42,7 @@ public class MessageCreator {
         // Elemento Reply
         Element elementReply = document.createElement("reply");
         
-        // Elemento Resultado
+        // Elemento Result
         if (!result.equals("")) {
         	Element elementResult = document.createElement("result");
         	elementResult.appendChild(document.createTextNode(result));

@@ -19,6 +19,66 @@ public class User {
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 1001;        // Porto onde o Servidor aceita conexões
     
+    public static void main(String[] args) throws ParserConfigurationException {
+        
+        Socket     socket = null; 
+        BufferedReader is = null;
+        PrintWriter    os = null;
+        Scanner      scan = null;
+        
+        String playerNum = "0";
+        
+        try {
+            socket = new Socket(HOST, PORT); 										     // Ligação ao Socket servidor
+            is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
+            os     = new PrintWriter(socket.getOutputStream(), true); 
+            scan   = new Scanner(System.in);
+            
+            // Registo (Nickname)       
+            Thread reader = new ReaderThread(is);
+			reader.start();
+			
+			String nickname = scan.nextLine();				
+			os.println(nickname);
+			
+			System.out.println("A espera da conexao de outro jogador...");
+        
+            // Inicio do jogo      
+            playerNum = is.readLine();
+            System.out.println("Bem-vindo jogador " + playerNum + "!!");            
+            System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
+            System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
+               
+	        for(;;) {    
+
+	        	// Mensagem de introdução da jogada
+	        	System.out.println(is.readLine());
+	        	
+	        	// Enviar Request com a jogada escolhida
+				String position = scan.nextLine();
+				System.out.println(User.sendRequestPosition(os, is, playerNum, position));
+				
+				// Enviar Request a pedir o tabuleiro do aversário atualizado
+				System.out.print(User.sendRequestBoard(os, is, playerNum, "false"));			
+			}	
+	        
+        } 
+        catch (IOException e) {
+            System.err.println("Erro na ligação -> " + e.getMessage());   
+        }
+        finally {
+            try {
+                if (os != null) os.close();
+                if (is != null) is.close();
+                if (socket != null ) socket.close();
+                scan.close();
+            }
+            catch (IOException e) { 
+            	System.err.println("Erro I/O -> " + e.getMessage());   
+            }
+        }
+    }	
+    
     public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) throws ParserConfigurationException, IOException {
     	
 		os.println(MessageCreator.message("board", player, view)); 					   // Envia uma mensagem (Request), a pedir o tabuleiro
@@ -32,53 +92,4 @@ public class User {
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o resultado da jogada
 		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, apresentando o resultado
     }
-    
-    public static void main(String[] args) throws ParserConfigurationException {
-        
-        Socket     socket = null; 
-        BufferedReader is = null;
-        PrintWriter    os = null;
-        
-        String playerNum = "0";
-        
-        try {
-            socket = new Socket(HOST, PORT); 										     // Ligação ao Socket servidor
-            is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
-            os     = new PrintWriter(socket.getOutputStream(), true); 
-            
-            playerNum = is.readLine();
-            System.out.println("Bem-vindo jogador " + playerNum + "!!");              
-            System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
-            System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
-            
-            try (Scanner scan = new Scanner(System.in)) {
-		        for(;;) {    
-		        	
-		        	// Mensagem de introdução da jogada
-		        	System.out.println(is.readLine());
-		        	
-		        	// Enviar Request com a jogada escolhida
-					String position = scan.nextLine();
-					System.out.println(User.sendRequestPosition(os, is, playerNum, position));
-					
-					// Enviar Request a pedir o tabuleiro do aversário atualizado
-					System.out.print(User.sendRequestBoard(os, is, playerNum, "false"));			
-				}
-            }
-        } 
-        catch (IOException e) {
-            System.err.println("Erro na ligação -> " + e.getMessage());   
-        }
-        finally {
-            try {
-                if (os != null) os.close();
-                if (is != null) is.close();
-                if (socket != null ) socket.close();
-            }
-            catch (IOException e) { 
-            	System.err.println("Erro I/O -> " + e.getMessage());   
-            }
-        }
-
-    }	
 }

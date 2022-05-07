@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-
 import javax.xml.parsers.ParserConfigurationException;
-
 import tp1.battleship.GameModel;
 import tp1.protocol.MessageCreator;
 import tp1.protocol.MessageProcessor;
@@ -20,30 +18,6 @@ public class GameThread extends Thread {
 		
 		this.player1 = player1;
 		this.player2 = player2;
-	}
-	
-	public static void sendReply(GameModel game, PrintWriter os, BufferedReader is) throws ParserConfigurationException, IOException {
-		
-		String request = is.readLine();									   // Lê o Request do jogador
-		if (request == null) return;									   // Caso o jogador tenha fechado o socket, cancela
-		String method  = MessageProcessor.process(request).split(",")[0];  // Primeiro argumento representa o tipo de pedido
-		String player = "", argument = "", result = "", reply = "";
-		
-		if (method.equals("position")) {
-			
-			player   = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
-			argument = MessageProcessor.process(request).split(",")[2]; // Posição da jogada
-			result   = game.play(player, argument);						// Aplicação da jogada
-			reply    = MessageCreator.message("position", player, argument, result, true);
-		} 
-		else if (method.equals("board")) {
-			
-			player   = MessageProcessor.process(request).split(",")[1]; // Número do jogador
-			argument = MessageProcessor.process(request).split(",")[2]; // Tipo de tabuleiro
-			result   = (argument.equals("true")) ? game.getBoardView(player) : game.getBoard(player);
-			reply    = MessageCreator.message("board", player, argument, result, true);
-		}
-		os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
 	}
 	
 	public void run() {
@@ -74,13 +48,11 @@ public class GameThread extends Thread {
 			GameThread.sendReply(game, os2, is2);  // Enviar tabuleiro do adversário ao jogador 2		
 			
 			for(;;) {			
-
 				// --------- Jogador 1 --------- //
-
 				os1.println("Sua vez -> Introduza uma jogada:");
 				GameThread.sendReply(game, os1, is1);  // Responde ao pedido da jogada do jogador 1
 				GameThread.sendReply(game, os1, is1);  // Responde ao pedido do tabuleiro adversário do jogador 1
-
+				
 				// Verificar se o jogador 1 ganhou		
 				if (game.checkWin("1")) {
 					String result = (game.getBoard("1") + "\nVitoria do Jogador 1! Localizou os 30 navios.").replaceAll("\n", "\7");
@@ -89,12 +61,11 @@ public class GameThread extends Thread {
 					break;
 				}
 
-				// --------- Jogador 2 --------- //
-
+				// --------- Jogador 2 --------- //			
 				os2.println("Sua vez -> Introduza uma jogada:");
 				GameThread.sendReply(game, os2, is2);  // Responde ao pedido da jogada do jogador 2
 				GameThread.sendReply(game, os2, is2);  // Responde ao pedido do tabuleiro adversário do jogador 2
-
+				
 				// Verificar se o jogador 2 ganhou			
 				if (game.checkWin("2")) {
 					String result = (game.getBoard("2") + "\nVitoria do Jogador 2! Localizou os 30 navios.").replaceAll("\n", "\7");
@@ -104,10 +75,9 @@ public class GameThread extends Thread {
 				}
 			}		
 		} catch (IOException | ParserConfigurationException e) {
-			System.err.println("Erro na ligaçao : "
-					+ e.getMessage());
+			System.err.println("Erro na ligaçao : " + e.getMessage());
 		} finally {
-			// garantir que o socket é fechado
+			// Garantir que o socket é fechado
 			try {
 				if (is1 != null)     is1.close();
 				if (os1 != null)     os1.close();
@@ -118,7 +88,31 @@ public class GameThread extends Thread {
 			} catch (IOException e) {
 			}
 		}
-		System.out.println("Terminou a Thread " + this.getId() + ", "
-				+ player1.getRemoteSocketAddress()+ ", " + player2.getRemoteSocketAddress());
-	} // end run
+		System.out.println("Terminou a Thread " + this.getId() + ", " + player1.getRemoteSocketAddress()+ ", " + player2.getRemoteSocketAddress());
+	}
+	
+	
+	public static void sendReply(GameModel game, PrintWriter os, BufferedReader is) throws ParserConfigurationException, IOException {
+		
+		String request = is.readLine();									   // Lê o Request do jogador
+		if (request == null) {return;}								       // Caso o jogador tenha fechado o socket, cancela
+		String method  = MessageProcessor.process(request).split(",")[0];  // Primeiro argumento representa o tipo de pedido
+		String player = "", argument = "", result = "", reply = "";
+		
+		if (method.equals("position")) {
+			
+			player   = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
+			argument = MessageProcessor.process(request).split(",")[2]; // Posição da jogada
+			result   = game.play(player, argument);						// Aplicação da jogada
+			reply    = MessageCreator.message("position", player, argument, result, true);
+		} 
+		else if (method.equals("board")) {
+			
+			player   = MessageProcessor.process(request).split(",")[1]; // Número do jogador
+			argument = MessageProcessor.process(request).split(",")[2]; // Tipo de tabuleiro
+			result   = (argument.equals("true")) ? game.getBoardView(player) : game.getBoard(player);
+			reply    = MessageCreator.message("board", player, argument, result, true);
+		}
+		os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
+	}
 }
