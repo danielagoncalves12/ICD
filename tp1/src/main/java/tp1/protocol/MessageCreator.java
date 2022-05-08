@@ -28,15 +28,18 @@ public class MessageCreator {
         Element elementRequest = document.createElement("request");
         
         // Elemento Player
-    	Element elementPlayer = document.createElement("player");
-    	elementPlayer.appendChild(document.createTextNode(player));
-    	elementRequest.appendChild(elementPlayer);
+        if (!player.equals("")) {
+	    	Element elementPlayer = document.createElement("player");
+	    	elementPlayer.appendChild(document.createTextNode(player));
+	    	elementRequest.appendChild(elementPlayer);
+        }
 		
         // Elemento Argument
-    	Element elementArgument = document.createElement("argument");
-    	elementArgument.appendChild(document.createTextNode(argument));
-    	elementRequest.appendChild(elementArgument);
-        
+        if (!argument.equals("")) {
+	    	Element elementArgument = document.createElement("argument");
+	    	elementArgument.appendChild(document.createTextNode(argument));
+	    	elementRequest.appendChild(elementArgument);
+        }
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply

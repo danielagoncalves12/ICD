@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+import tp1.session.SessionThread;
+
 /**
  * @author Daniela Gonçalves A48579 42D
  * 

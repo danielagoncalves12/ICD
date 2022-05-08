@@ -13,13 +13,18 @@ import org.xml.sax.SAXException;
 
 public class MessageProcessor {
 
+	private static String queryRead     = "//method/@read";
+	private static String queryPlayer   = "//request/player";
+	private static String queryArgument = "//request/argument";
+	private static String queryResult   = "//reply/result";
+	
 	/**
 	 * Processa uma mensagem de formato xml
 	 * @param message
 	 * @return
 	 */
 	public static String process(String message) {
-
+		
 		Document doc  = XMLUtils.stringToDocument(message);
 		XPath xPath   = XPathFactory.newInstance().newXPath();
 		String method = null;
@@ -37,6 +42,7 @@ public class MessageProcessor {
 				
 				case "board":    return board(doc);
 				case "position": return position(doc);	
+				case "info": 	 return info(doc);
 				}
 			} else return null;
 		} catch (SAXException | IOException e) {
@@ -48,15 +54,12 @@ public class MessageProcessor {
 	private static String position(Document doc) {
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-		String queryRead   = "//method/@read", queryPlayer = "//request/player";
-        String queryChoice = "//request/argument", queryResult = "//reply/result";
-
         Node attRead = null, nodePlayer = null, nodeChoice = null, nodeResult = null;          
         
 		try {
 			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeChoice = ((NodeList) xPath.compile(queryChoice).evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeChoice = ((NodeList) xPath.compile(queryArgument).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodeResult = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
@@ -67,15 +70,12 @@ public class MessageProcessor {
 	private static String board(Document doc) {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        String queryRead   = "//method/@read", queryPlayer = "//request/player";
-        String queryView = "//request/argument", queryResult = "//reply/result";
-        
         Node attRead = null, nodeView = null, nodePlayer = null, nodeBoard = null;
         
 		try {
 			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeView   = ((NodeList) xPath.compile(queryView).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeView   = ((NodeList) xPath.compile(queryArgument).evaluate(doc, XPathConstants.NODESET)).item(0);
 			nodeBoard  = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
  
@@ -83,4 +83,19 @@ public class MessageProcessor {
 		else return nodeBoard.getTextContent();
 	}
 	
+	private static String info(Document doc) {
+		
+		XPath xPath  = XPathFactory.newInstance().newXPath();
+        Node attRead = null, nodeType = null, nodePlayer = null, nodeInfo = null;
+        
+		try {
+			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeType   = ((NodeList) xPath.compile(queryArgument).evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeInfo   = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
+		} catch (XPathExpressionException e) { e.printStackTrace(); }
+ 
+		if (attRead.getNodeValue().equals("false")) return "info" + "," + nodePlayer.getTextContent() + "," + nodeType.getTextContent();
+		else return nodeInfo.getTextContent();
+	}
 }

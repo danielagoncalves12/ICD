@@ -16,6 +16,7 @@ class ReaderThread extends Thread {
 		try {			
 			String read = (String) is.readLine();
 			System.out.println(read.replaceAll("\7", "\n"));
+			
 		} catch (IOException e) {}
 	} 
 }

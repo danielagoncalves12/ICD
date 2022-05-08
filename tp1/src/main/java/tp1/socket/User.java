@@ -30,74 +30,99 @@ public class User {
         
         try {
             socket = new Socket(HOST, PORT); 										     // Ligação ao Socket servidor
-            is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para leitura do socket
-            os     = new PrintWriter(socket.getOutputStream(), true); 
-            scan   = new Scanner(System.in);
-            
-            // Registo (Nickname)       
-            Thread reader = new ReaderThread(is);
-			reader.start();		
+            is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para a leitura do socket
+            os     = new PrintWriter(socket.getOutputStream(), true); 					 // Stream para a escrita no socket 
+            scan   = new Scanner(System.in);											 // Scanner para a introdução de dados
+         
+            // Login/Registo (Nickname) 
+            String read = (String) is.readLine();
+			System.out.println(read.replaceAll("\7", "\n"));
 			String nickname = scan.nextLine();				
 			os.println(nickname);
 
-			reader = new ReaderThread(is);
-			reader.start();		
+			// Login/Registo (Password)
+			read = (String) is.readLine();
+			System.out.println(read.replaceAll("\7", "\n"));
 			String password = scan.nextLine();				
 			os.println(password);
 			
+			// Estado da sessão
 			String state = is.readLine();
-			
+
 			System.out.println("Sessao: " + state + "\n");    	
-			if (state.equals("Palavra-passe incorreta!")) return;
-			
+			if (state.equals("Palavra-passe incorreta!")) return;		
 			System.out.println("A espera da conexao de outro jogador...");
         
-            // Inicio do jogo      
-            System.out.println("Es jogador numero " + is.readLine() + "!!");            
+            // Inicio do jogo    
+			playerNum = User.sendRequestInfo(os, is, "0");
+            System.out.println("Es o jogador numero " + playerNum + "!!");            
             System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
             System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
                
-	        for(;;) {    
-
-	        	// Mensagem de introdução da jogada
-	        	System.out.println(is.readLine());
-	        	
+	        while (true) {
 	        	// Enviar Request com a jogada escolhida
-				String position = scan.nextLine();
-				System.out.println(User.sendRequestPosition(os, is, playerNum, position));
+	        	System.out.println(User.sendRequestInfo(os, is, playerNum));
+				System.out.println(User.sendRequestPosition(os, is, playerNum, scan.nextLine()));
 				
-				// Enviar Request a pedir o tabuleiro do aversário atualizado
-				System.out.print(User.sendRequestBoard(os, is, playerNum, "false"));			
-			}	
-	        
+				// Enviar Request a pedir o tabuleiro do adversário atualizado
+				System.out.print(User.sendRequestBoard(os, is, playerNum, "false"));     	
+			}
         } 
-        catch (IOException e) {
-            System.err.println("Erro na ligação -> " + e.getMessage());   
+        catch (IOException ignored) {
+           // System.err.println();   
         }
         finally {
             try {
+            	scan.close();
                 if (os != null) os.close();
                 if (is != null) is.close();
-                if (socket != null ) socket.close();
-                scan.close();
+                if (socket != null) socket.close();
+                
+                System.exit(0);
             }
             catch (IOException e) { 
             	System.err.println("Erro I/O -> " + e.getMessage());   
             }
         }
     }	
-    
+
+    /**
+     * Envia uma Request ao servidor, a pedir o tabuleiro e recebe a resposta do mesmo. O argumento player
+     * indica a qual jogador o tabuleiro se destina. Quando o argumento view é igual a true, indica que o
+     * utilizador quer receber o próprio tabuleiro, com todos os navios visíveis, caso seja falso, indica
+     * que quer receber o tabuleiro do adversário, com os navios que ainda não foram encontrados ocultos.
+     */
     public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) throws ParserConfigurationException, IOException {
-    	
-		os.println(MessageCreator.message("board", player, view)); 					   // Envia uma mensagem (Request), a pedir o tabuleiro
-		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o conteúdo desejado
-		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, recebendo o tabuleiro
+		os.println(MessageCreator.message("board", player, view)); 
+		return receiveAnswer(is);
     }
     
-    public static String sendRequestPosition(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {
-    	
-		os.println(MessageCreator.message("position", player, position)); 			   // Envia uma mensagem (Request), com a jogada desejada
-		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o resultado da jogada
-		return MessageProcessor.process(reply);										   // A resposta do servidor é processada, apresentando o resultado
+    /**
+     * Envia uma Request ao servidor, a pedir que uma jogada (posição do tiro) seja aplicada no jogo e 
+     * recebe uma resposta do mesmo, que contem o resultado da jogada. O argumento player indica qual o 
+     * jogador a enviar a jogada. O argumento position contem a posição do tiro escolhida pelo jogador.
+     */
+    public static String sendRequestPosition(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {	
+		os.println(MessageCreator.message("position", player, position));
+		return receiveAnswer(is);
+    }
+    
+    /**
+     * Envia uma Request ao servidor, a pedir por informação, que varia de acordo com o estado atual do
+     * jogo, por exemplo, uma resposta a este tipo de pedido poderá ser um aviso a um jogador que é a sua 
+     * vez de jogar, ou então, avisar os jogadores que o jogo terminou porque um dos jogadores ganhou.
+     */
+    public static String sendRequestInfo(PrintWriter os, BufferedReader is, String player) throws ParserConfigurationException, IOException {		
+    	os.println(MessageCreator.message("info", player, "game")); 
+		return receiveAnswer(is);
+    }
+    
+    /**
+     * Recebe a resposta do servidor, a partir do Stream de Leitura do socket.
+     */
+    public static String receiveAnswer(BufferedReader is) throws IOException {   	
+    	String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o conteúdo
+    	if (reply == null) return "";												   // Caso venha nulo, significa que o Stream fechou
+    	return MessageProcessor.process(reply);										   // A resposta do servidor é processada, retornando o conteúdo desejado
     }
 }

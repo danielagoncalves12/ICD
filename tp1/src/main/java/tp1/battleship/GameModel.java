@@ -8,7 +8,7 @@ import java.util.Random;
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 2;
+	private int MAXPOINTS = 30;
 	
 	// Variáveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
@@ -39,8 +39,8 @@ public class GameModel {
 		pointsPlayer2 = 0; 
 		
 		// Pergunta ao jogador, pelas posições dos navios
-		randomShipPosition(1);
-		randomShipPosition(2);
+		randomShipPosition("1");
+		randomShipPosition("2");
 	}
 
 	/**
@@ -70,7 +70,7 @@ public class GameModel {
 	 */
 	public String getBoardView(String player) {
 
-		String board = "O seu tabuleiro: Todos os navios foram posicionados aleatoriamente!\n\n";
+		String board = "Seu tabuleiro: Todos os navios foram posicionados aleatoriamente\n\n";
 		
 		int[][] originalBoard = (player.equals("1")) ? boardPlayer1 : boardPlayer2; 
 		int[][] copiedBoard   = new int[10][10];
@@ -80,9 +80,9 @@ public class GameModel {
 			newLine = Arrays.stream(originalBoard[i].clone()).map(j -> 
 			
 					(j == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW : 
-					(j == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW  : 
-					(j == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW  : 
-					(j == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW  : j).toArray();	
+					(j == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW : 
+					(j == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW : 
+					(j == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW : j).toArray();	
 			
 		    copiedBoard[i] = newLine;
 		}
@@ -141,13 +141,15 @@ public class GameModel {
 			 : "Espaco ja explorado.");		 
 	}
 
-	public void randomShipPosition(int player) {
+	public void randomShipPosition(String player) {
 		
 		String letters = "ABCDEFGHIJ";
 		int[] shipSizes  = {5, 4, 3, 2};  // Dimensão de cada navio
 		int[] shipNumber = {1, 2, 3, 4};  // Número de navios a posicionar de cada tipo
 		int[] shipSymbol = {ShipType.TYPE1HIDDEN, ShipType.TYPE2HIDDEN, ShipType.TYPE3HIDDEN, ShipType.TYPE4HIDDEN};
 
+		int[][] board = player.equals("1") ? boardPlayer1 : boardPlayer2;
+		
 		for (int i = 0; i < 4; i++) {
 
 			String position = "";  					 // Posição
@@ -175,14 +177,8 @@ public class GameModel {
 						
 						while(steps != shipSizes[i]) {		
 							
-							if (vertical) {
-								if (player == 1) boardPlayer1[line++][column] = shipSymbol[i];
-								if (player == 2) boardPlayer2[line++][column] = shipSymbol[i];
-							}
-							else {
-								if (player == 1) boardPlayer1[line][column++] = shipSymbol[i];
-								if (player == 2) boardPlayer2[line][column++] = shipSymbol[i];
-							}
+							if (vertical) board[line++][column] = shipSymbol[i];
+							else board[line][column++] = shipSymbol[i];
 							steps++;
 						}
 						number++;
@@ -192,9 +188,9 @@ public class GameModel {
 		}
 	}	
 
-	public boolean checkValidPosition(int player, String position, int shipSize, boolean vertical) {
+	public boolean checkValidPosition(String player, String position, int shipSize, boolean vertical) {
 
-		int[][] board = (player == 1) ? boardPlayer1 : boardPlayer2;
+		int[][] board = (player.equals("1")) ? boardPlayer1 : boardPlayer2;
 		
 		char line1  = position.charAt(0);
 		char line2  = position.charAt(1);

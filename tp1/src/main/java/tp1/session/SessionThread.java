@@ -1,4 +1,4 @@
-package tp1.socket;
+package tp1.session;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
 
-import tp1.protocol.Session;
+import tp1.socket.GameThread;
 
 public class SessionThread extends Thread {
 
@@ -38,7 +38,7 @@ public class SessionThread extends Thread {
 				return;
 			}
 	
-			System.out.println("Utilizador registado: " + nickname);
+			System.out.println("O utilizador " + nickname + " entrou no jogo.");
 			
 			// Verifica se existe dois utilizadores registados e activos para começar um jogo
 			startGame();

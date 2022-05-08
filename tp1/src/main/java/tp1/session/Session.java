@@ -1,4 +1,4 @@
-package tp1.protocol;
+package tp1.session;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -20,6 +20,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import tp1.protocol.XMLUtils;
 
 public class Session {
 
