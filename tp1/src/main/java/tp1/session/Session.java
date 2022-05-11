@@ -133,7 +133,6 @@ public class Session {
 		
 		try {
 			pass = ((NodeList) (xPath.compile(queryPassword).evaluate(doc, XPathConstants.NODESET))).item(0);
-
 			if (password.equals(pass.getTextContent())) return true;
 		    
 		} catch (XPathExpressionException e) { e.printStackTrace(); }	

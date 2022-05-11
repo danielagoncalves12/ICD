@@ -42,14 +42,14 @@ public class GameThread extends Thread {
 			
 			// Instância do jogo Batalha Naval
 			GameModel game = new GameModel();
-			GameThread.sendReply(game, os1, is1, "1");
-			GameThread.sendReply(game, os2, is2, "2");
+			GameThread.sendReply(game, os1, is1, "1"); // Indicar ao jogador que é o jogador número 1
+			GameThread.sendReply(game, os2, is2, "2"); // Indicar ao jogador que é o jogador número 2
 
-			GameThread.sendReply(game, os1, is1);  // Enviar o próprio tabuleiro ao jogador 1	
-			GameThread.sendReply(game, os1, is1);  // Enviar tabuleiro do adversário ao jogador 1
+			GameThread.sendReply(game, os1, is1);      // Enviar o próprio tabuleiro ao jogador 1	
+			GameThread.sendReply(game, os1, is1);      // Enviar tabuleiro do adversário ao jogador 1
 					
-			GameThread.sendReply(game, os2, is2);  // Enviar o próprio tabuleiro ao jogador 2	
-			GameThread.sendReply(game, os2, is2);  // Enviar tabuleiro do adversário ao jogador 2		
+			GameThread.sendReply(game, os2, is2);      // Enviar o próprio tabuleiro ao jogador 2	
+			GameThread.sendReply(game, os2, is2);      // Enviar tabuleiro do adversário ao jogador 2		
 			
 			for(;;) {			
 				// --------- Jogador 1 --------- //
@@ -100,41 +100,39 @@ public class GameThread extends Thread {
 	
 	public static void sendReply(GameModel game, PrintWriter os, BufferedReader is, String info) throws ParserConfigurationException, IOException {
 		
-		String request = is.readLine();									   // Lê o Request do jogado
-
-		if (request == null) return;								       // Caso o jogador tenha fechado o socket, cancela
+		String request = is.readLine();									   // Lê a mensagem de Request do jogador
 		String method  = MessageProcessor.process(request).split(",")[0];  // Primeiro argumento representa o tipo de pedido
-		String player = "", argument = "", result = "", reply = "";
-		
-		player   = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
-		argument = MessageProcessor.process(request).split(",")[2]; // Posição / View / Info
-		
+
 		// Resposta a um pedido de jogada
-		if (method.equals("Position")) {
+		if (method.equals("Play")) {
 			
-			result = game.play(player, argument);	// Aplicação da jogada		
-			reply = MessageCreator.messagePlay(player, argument, result, true);
+			String player   = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
+			String position = MessageProcessor.process(request).split(",")[2]; // Posição		
+			String result   = game.play(player, position);					   // Aplicação da jogada	
+			
+			String reply = MessageCreator.messagePlay(player, position, result);
+			os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
 		} 
 		
 		// Resposta a um pedido de tabuleiro
 		else if (method.equals("Board")) {
 
-			HashMap<String, List<List<Integer>>> dic = null;
-			
-			if (argument.equals("true")) dic = game.getBoardPositionsView(player);
-			else dic = game.getBoardPositions(player);
+			String player = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
+			String view   = MessageProcessor.process(request).split(",")[2]; // Tipo de visualização		
+			HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
+																			  : game.getBoardPositions(player));
 
-			//if (!info.equals("")) result = info;
-			reply = MessageCreator.messageBoard(player, argument, dic, true);	
+			String reply = MessageCreator.messageBoard(player, view, board);
+			os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
 		}
 		else if (method.equals("Info")) {
 
-			//if (!info.equals("")) result = info;
-			result = info;
-			reply = MessageCreator.messageInfo(player, argument, result, true);	
+			String player = MessageProcessor.process(request).split(",")[1]; // Número do Jogador
+			String result = info;
+			
+			String reply = MessageCreator.messageInfo(player, result);
+			os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
 		}
-		
-		os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
 	}
 	
 	/*public String winMessage(GameModel game, String player) {

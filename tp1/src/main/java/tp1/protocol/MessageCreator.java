@@ -12,10 +12,10 @@ public class MessageCreator {
 
 	public static String messageBoard(String player, String view) throws ParserConfigurationException {
 		
-		return messageBoard(player, view, null, false);
+		return messageBoard(player, view, null);
 	}
 	
-	public static String messageBoard(String player, String view, HashMap<String, List<List<Integer>>> dic, boolean ack) throws ParserConfigurationException {
+	public static String messageBoard(String player, String view, HashMap<String, List<List<Integer>>> dic) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -27,7 +27,6 @@ public class MessageCreator {
         
         // Elemento Method (Position, Board, etc)
         Element elementMethod = document.createElement("Board");
-        elementMethod.setAttribute("Read", ack ? "true" : "false");
         elementRoot.appendChild(elementMethod); 
 
         // Elemento Request
@@ -82,10 +81,10 @@ public class MessageCreator {
 	
 	public static String messagePlay(String player, String position) throws ParserConfigurationException {
 		
-		return messagePlay(player, position, "", false);
+		return messagePlay(player, position, "");
 	}
 
-	public static String messagePlay(String player, String argument, String result, boolean ack) throws ParserConfigurationException {
+	public static String messagePlay(String player, String position, String result) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -97,7 +96,6 @@ public class MessageCreator {
         
         // Elemento Method (Position, Board, etc)
         Element elementMethod = document.createElement("Play");
-        elementMethod.setAttribute("Read", ack ? "true" : "false");
         elementRoot.appendChild(elementMethod); 
 
         // Elemento Request
@@ -111,9 +109,9 @@ public class MessageCreator {
         }
 		
         // Elemento Argument
-        if (!argument.equals("")) {
+        if (!position.equals("")) {
 	    	Element elementArgument = document.createElement("Position");
-	    	elementArgument.appendChild(document.createTextNode(argument));
+	    	elementArgument.appendChild(document.createTextNode(position));
 	    	elementRequest.appendChild(elementArgument);
         }
         elementMethod.appendChild(elementRequest);
@@ -122,19 +120,22 @@ public class MessageCreator {
         Element elementReply = document.createElement("Reply");
         
         // Elemento Result
-        if (!result.equals("")) elementReply.appendChild(document.createTextNode(result));
-
+        if (!result.equals("")) {
+        	Element elementResult = document.createElement("Result");
+        	elementResult.appendChild(document.createTextNode(result));
+        	elementReply.appendChild(elementResult);
+        }
         elementMethod.appendChild(elementReply);
 
         return XMLUtils.documentToString(document);
 	}
 	
-	public static String messageInfo(String player, String info) throws ParserConfigurationException {
+	public static String messageInfo(String player) throws ParserConfigurationException {
 		
-		return messageInfo(player, info, "", false);
+		return messageInfo(player, "");
 	}
 
-	public static String messageInfo(String player, String info, String result, boolean ack) throws ParserConfigurationException {
+	public static String messageInfo(String player, String info) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -146,7 +147,6 @@ public class MessageCreator {
         
         // Elemento Method (Position, Board, etc)
         Element elementMethod = document.createElement("Info");
-        elementMethod.setAttribute("Read", ack ? "true" : "false");
         elementRoot.appendChild(elementMethod); 
 
         // Elemento Request
@@ -158,34 +158,19 @@ public class MessageCreator {
 	    	elementPlayer.appendChild(document.createTextNode(player));
 	    	elementRequest.appendChild(elementPlayer);
         }
-		
-        // Elemento Argument
-        if (!info.equals("")) {
-	    	Element elementArgument = document.createElement("Info");
-	    	elementArgument.appendChild(document.createTextNode(info));
-	    	elementRequest.appendChild(elementArgument);
-        }
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
         Element elementReply = document.createElement("Reply");
         
-        // Elemento Result
-        if (!result.equals("")) elementReply.appendChild(document.createTextNode(result));
-
+        // Elemento Info
+        if (!info.equals("")) {
+        	Element elementInfo = document.createElement("Info");
+        	elementInfo.appendChild(document.createTextNode(info));
+        	elementReply.appendChild(elementInfo);
+        }
         elementMethod.appendChild(elementReply);
 
-        return XMLUtils.documentToString(document);
-	}
-	
-	
-	public static String messageBoardPositions(HashMap<String, List<List<Integer>>> dic) throws ParserConfigurationException {
-		
-		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
-        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-        Document document = documentBuilder.newDocument();
-
-        
         return XMLUtils.documentToString(document);
 	}
 }

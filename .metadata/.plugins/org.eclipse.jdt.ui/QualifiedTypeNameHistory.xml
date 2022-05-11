@@ -10,7 +10,6 @@
     <fullyQualifiedTypeName name="javax.xml.soap.Node"/>
     <fullyQualifiedTypeName name="javax.xml.xpath.XPath"/>
     <fullyQualifiedTypeName name="javax.xml.xpath.XPathFactory"/>
-    <fullyQualifiedTypeName name="javax.xml.xpath.XPathConstants"/>
     <fullyQualifiedTypeName name="tp1.protocol.Message"/>
     <fullyQualifiedTypeName name="javax.swing.text.Document"/>
     <fullyQualifiedTypeName name="java.io.StringWriter"/>
@@ -32,7 +31,6 @@
     <fullyQualifiedTypeName name="javax.xml.transform.Source"/>
     <fullyQualifiedTypeName name="java.net.Socket"/>
     <fullyQualifiedTypeName name="tp1.socket.RegisterThread"/>
-    <fullyQualifiedTypeName name="java.util.concurrent.Semaphore"/>
     <fullyQualifiedTypeName name="java.util.Iterator"/>
     <fullyQualifiedTypeName name="java.nio.file.Files"/>
     <fullyQualifiedTypeName name="java.nio.charset.StandardCharsets"/>
@@ -59,5 +57,7 @@
     <fullyQualifiedTypeName name="tp1.protocol.XMLUtils"/>
     <fullyQualifiedTypeName name="tp1.battleship.GameView"/>
     <fullyQualifiedTypeName name="org.w3c.dom.Element"/>
+    <fullyQualifiedTypeName name="java.util.concurrent.Semaphore"/>
+    <fullyQualifiedTypeName name="javax.xml.xpath.XPathConstants"/>
     <fullyQualifiedTypeName name="tp1.battleship.ShipType"/>
 </qualifiedTypeNameHistroy>

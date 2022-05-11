@@ -40,29 +40,15 @@ public class User {
             is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para a leitura do socket
             os     = new PrintWriter(socket.getOutputStream(), true); 					 // Stream para a escrita no socket 
             scan   = new Scanner(System.in);											 // Scanner para a introdução de dados
-         
-            // Login/Registo (Nickname) 
-            String read = (String) is.readLine();
-			System.out.println(read.replaceAll("\7", "\n"));
-			String nickname = scan.nextLine();				
-			os.println(nickname);
+            
+            // Sessão do utilizador 
+            if (!sessionState(os, is, scan)) System.exit(0);;
 
-			// Login/Registo (Password)
-			read = (String) is.readLine();
-			System.out.println(read.replaceAll("\7", "\n"));
-			String password = scan.nextLine();				
-			os.println(password);
-			
-			// Estado da sessão
-			String state = is.readLine();
-
-			System.out.println("Sessao: " + state + "\n");    	
-			if (state.equals("Palavra-passe incorreta!")) return;		
 			System.out.println("A espera da conexao de outro jogador...");
         
-            // Inicio do jogo    
-			playerNum = User.sendRequestInfo(os, is, "0");
-            System.out.println("Es o jogador numero " + playerNum + "!!");
+            // Início do jogo    
+			playerNum = User.sendRequestInfo(os, is, playerNum);				 // Pede o número do jogador
+			System.out.println("Es o jogador numero " + playerNum + "!!");  	 // Demonstra ao jogador
             System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
             System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
                
@@ -93,6 +79,28 @@ public class User {
         }
     }	
 
+    public static boolean sessionState(PrintWriter os, BufferedReader is, Scanner scan) throws IOException {
+  
+    	// Login/Registo (Nickname) 
+        String read = (String) is.readLine();
+		System.out.println(read.replaceAll("\7", "\n"));
+		String nickname = scan.nextLine();				
+		os.println(nickname);
+
+		// Login/Registo (Password)
+		read = (String) is.readLine();
+		System.out.println(read.replaceAll("\7", "\n"));
+		String password = scan.nextLine();				
+		os.println(password);
+		
+		// Estado da sessão
+		String state = is.readLine();
+
+		System.out.println("Sessao: " + state + "\n");    	
+		if (state.equals("Palavra-passe incorreta!")) return false;
+		return true;
+    }
+    
     /**
      * Envia uma Request ao servidor, a pedir o tabuleiro e recebe a resposta do mesmo. O argumento player
      * indica a qual jogador o tabuleiro se destina. Quando o argumento view é igual a true, indica que o
@@ -120,7 +128,8 @@ public class User {
      * jogador a enviar a jogada. O argumento position contem a posição do tiro escolhida pelo jogador.
      */
     public static String sendRequestPlay(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {	
-		os.println(MessageCreator.messagePlay(player, position));	
+		
+    	os.println(MessageCreator.messagePlay(player, position));	
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		return MessageProcessor.process(reply);
     }
@@ -131,7 +140,8 @@ public class User {
      * vez de jogar, ou então, avisar os jogadores que o jogo terminou porque um dos jogadores ganhou.
      */
     public static String sendRequestInfo(PrintWriter os, BufferedReader is, String player) throws ParserConfigurationException, IOException {		
-    	os.println(MessageCreator.messageInfo(player, "game")); 
+    	
+    	os.println(MessageCreator.messageInfo(player)); 
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		return MessageProcessor.process(reply);
     }

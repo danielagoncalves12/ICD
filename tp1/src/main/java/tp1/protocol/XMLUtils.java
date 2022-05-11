@@ -55,16 +55,15 @@ public class XMLUtils {
 	
 	public static boolean validate(String inputXml, String schemaLocation) throws SAXException, IOException {
 	
-		// build the schema
 		SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
 		File schemaFile = new File(schemaLocation);
 		Schema schema = factory.newSchema(schemaFile);
 		Validator validator = schema.newValidator();
 		
-		// create a source from a string
+		// Criar uma Stream a partir da String
 		Source source = new StreamSource(new StringReader(inputXml));
 		
-		// check input
+		// Validação
 		boolean isValid = true;
 		try {
 			validator.validate(source);
@@ -72,8 +71,7 @@ public class XMLUtils {
 		catch (SAXException e) {
 			System.err.println("XML Invalido.");
 			isValid = false;
-		}
-		
+		}		
 		return isValid;
 	}
 }

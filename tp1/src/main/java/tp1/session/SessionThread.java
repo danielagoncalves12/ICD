@@ -31,14 +31,8 @@ public class SessionThread extends Thread {
 		try {
 			os.println("Batalha Naval: Introduza o seu nickname: ");
 			String nickname = is.readLine();
-			
-			try {
-				login(nickname, user);
-			} catch (InterruptedException e) {
-				return;
-			}
-	
-			System.out.println("O utilizador " + nickname + " entrou no jogo.");
+						
+			login(nickname, user);
 			
 			// Verifica se existe dois utilizadores registados e activos para começar um jogo
 			startGame();
@@ -58,7 +52,7 @@ public class SessionThread extends Thread {
 			String password = is.readLine();
 			if (!Session.login(nickname, password)) {
 				os.println("Palavra-passe incorreta!");
-				this.interrupt();
+				return;
 			}
 			os.println("Sucesso!");
 		}
@@ -69,6 +63,7 @@ public class SessionThread extends Thread {
 			Session.register(nickname, password, "");
 			os.println("Inscrito com sucesso!");
 		}		
+		System.out.println("O utilizador " + nickname + " entrou no jogo.");
 		activeUsers.put(nickname, user);
 	}
 

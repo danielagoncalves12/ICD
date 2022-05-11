@@ -92,6 +92,14 @@ public class GameModel {
 		return dic;
 	}	
 	
+	/**
+	 * Receber o tabuleiro, pela vista do jogador, as posições dos navios são reveladas
+	 * visualmente para o jogador. Esta função é usada unicamente para apresentar o 
+	 * próprio tabuleiro para o jogador.
+	 * 
+	 * @param player
+	 * @return Dicionário com as posições de cada tipo de navio
+	 */
 	public HashMap<String, List<List<Integer>>> getBoardPositionsView(String player) {
 
 		int[][] board = (player.equals("1")) ? boardPlayer1 : boardPlayer2;
@@ -104,9 +112,7 @@ public class GameModel {
 			for (int j = 0; j < board[i].length; j++) {
 				
 				int cell = board[i][j];
-				
-				// Vazio
-				if (cell == ShipType.EMPTY || cell == ShipType.EMPTYHIDDEN)     positionEmpty.add(Arrays.asList(i, j));
+
 				// Porta-aviões
 				if (cell == ShipType.TYPE1SHOW || cell == ShipType.TYPE1HIDDEN) positionType1.add(Arrays.asList(i, j));	
 				// Navio-tanque
@@ -128,14 +134,7 @@ public class GameModel {
 		return dic;
 	}
 	
-	/**
-	 * Receber o tabuleiro, pela vista do jogador, as posições dos navios são reveladas
-	 * visualmente para o jogador. Esta função é usada unicamente para apresentar o 
-	 * próprio tabuleiro para o jogador.
-	 * 
-	 * @param player
-	 * @return
-	 */
+
 	/*public String getBoardView(String player) {
 
 		String board = "Seu tabuleiro: Todos os navios foram posicionados aleatoriamente\n\n";

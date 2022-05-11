@@ -1,32 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="protocol">
+
+  <xs:element name="Protocol">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="method">
+
+		<xs:choice>
+        <xs:element name="Board">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="request">
+              <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="player" type="xs:unsignedByte" minOccurs="0" maxOccurs="1"/>
-                    <xs:element name="argument" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="Player" type="xs:unsignedByte" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="View" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
-              <xs:element name="reply">
+              <xs:element name="Reply">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="result" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="Board" type="BoardType" minOccurs="0" maxOccurs="1"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
             </xs:sequence>
-            <xs:attribute name="read" type="xs:boolean" use="required" />
-            <xs:attribute name="type" type="xs:string" use="required" />
           </xs:complexType>
         </xs:element>
+
+		<xs:element name="Play">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Request">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Player" type="xs:unsignedByte" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="Position" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Reply">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Result" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
+		<xs:element name="Info">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Request">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Player" type="xs:unsignedByte" minOccurs="1" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Reply">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Info" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+		</xs:choice>
+
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+
+
+   <xs:complexType name="BoardType">
+      <xs:sequence>
+
+	    <xs:element name="Empty">
+    	  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+
+		<xs:element name="Tanker">
+		  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+		
+		<xs:element name="Destroyer">
+		  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+
+		<xs:element name="Submarine">
+		  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+
+		<xs:element name="Aircraft">
+		  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+
+      </xs:sequence>
+  </xs:complexType>
 </xs:schema>
