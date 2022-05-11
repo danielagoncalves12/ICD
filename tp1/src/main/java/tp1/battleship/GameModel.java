@@ -1,7 +1,9 @@
 package tp1.battleship;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 
@@ -14,8 +16,6 @@ public class GameModel {
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
 	private int[][] boardPlayer2 = new int[10][10]; // Tabuleiro do jogador 2
 	private int pointsPlayer1, pointsPlayer2; 		// Pontuação dos jogadores
-	
-	private GameView view = new GameView();			// Visualização na consola
 	private HashMap<String, Integer> columnValue = new HashMap<>();
 	
 	public GameModel() {
@@ -43,22 +43,90 @@ public class GameModel {
 		randomShipPosition("2");
 	}
 
+	public int[][] getBoard(String player) {
+		
+		return (player.equals("1")) ? boardPlayer1 : boardPlayer2;
+	}
+	
 	/**
-	 * Receber o tabuleiro do adversário, as posições dos navios que ainda não foram descobertos
+	 * Receber o array do tabuleiro do adversário, as posições dos navios que ainda não foram descobertos
 	 * não são reveladas. Esta função é usada unicamente para apresentar o tabuleiro do adversário
 	 * ao jogador.
 	 * 
 	 * @param values1 - Jogador 1 ou 2
-	 * @return String com apresentação do tabuleiro.
+	 * @return Dicionário com as posições do respetivo tipo de navio.
 	 */
-	public String getBoard(String player) {
-	
-		String intro = "\nPontuacao atual - Jogador 1: " + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos." +
-		"\nTabuleiro do jogador " + (player.equals("1") ? 2 : 1) + ":\n\n";
+	public HashMap<String, List<List<Integer>>> getBoardPositions(String player) {
+
+		int[][] board = (player.equals("1")) ? boardPlayer2 : boardPlayer1;
 		
-		if (player.equals("1")) return intro + view.printBoard(boardPlayer2);
-		else return intro + view.printBoard(boardPlayer1);
+		List<List<Integer>> positionEmpty = new ArrayList<>();
+		List<List<Integer>> positionType1 = new ArrayList<>(), positionType2 = new ArrayList<>();
+		List<List<Integer>> positionType3 = new ArrayList<>(), positionType4 = new ArrayList<>();
+		
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				
+				int cell = board[i][j];
+				
+				// Vazio
+				if (cell == ShipType.EMPTY)     positionEmpty.add(Arrays.asList(i, j));
+				// Porta-aviões
+				if (cell == ShipType.TYPE1SHOW) positionType1.add(Arrays.asList(i, j));	
+				// Navio-tanque
+				if (cell == ShipType.TYPE2SHOW) positionType2.add(Arrays.asList(i, j));				
+				// Contratorpedeiro
+				if (cell == ShipType.TYPE3SHOW) positionType3.add(Arrays.asList(i, j));						
+				// Submarino
+				if (cell == ShipType.TYPE4SHOW) positionType4.add(Arrays.asList(i, j));			
+			}
+		}
+			
+		HashMap<String, List<List<Integer>>> dic = new HashMap<>();
+		dic.put("Empty", positionEmpty);
+		dic.put("Aircraft", positionType1);
+		dic.put("Tanker", positionType2);
+		dic.put("Destroyer", positionType3);
+		dic.put("Submarine", positionType4);
+
+		return dic;
 	}	
+	
+	public HashMap<String, List<List<Integer>>> getBoardPositionsView(String player) {
+
+		int[][] board = (player.equals("1")) ? boardPlayer1 : boardPlayer2;
+		
+		List<List<Integer>> positionEmpty = new ArrayList<>();
+		List<List<Integer>> positionType1 = new ArrayList<>(), positionType2 = new ArrayList<>();
+		List<List<Integer>> positionType3 = new ArrayList<>(), positionType4 = new ArrayList<>();
+		
+		for (int i = 0; i < board.length; i++) {
+			for (int j = 0; j < board[i].length; j++) {
+				
+				int cell = board[i][j];
+				
+				// Vazio
+				if (cell == ShipType.EMPTY || cell == ShipType.EMPTYHIDDEN)     positionEmpty.add(Arrays.asList(i, j));
+				// Porta-aviões
+				if (cell == ShipType.TYPE1SHOW || cell == ShipType.TYPE1HIDDEN) positionType1.add(Arrays.asList(i, j));	
+				// Navio-tanque
+				if (cell == ShipType.TYPE2SHOW || cell == ShipType.TYPE2HIDDEN) positionType2.add(Arrays.asList(i, j));				
+				// Contratorpedeiro
+				if (cell == ShipType.TYPE3SHOW || cell == ShipType.TYPE3HIDDEN) positionType3.add(Arrays.asList(i, j));						
+				// Submarino
+				if (cell == ShipType.TYPE4SHOW || cell == ShipType.TYPE4HIDDEN) positionType4.add(Arrays.asList(i, j));			
+			}
+		}
+			
+		HashMap<String, List<List<Integer>>> dic = new HashMap<>();
+		dic.put("Empty", positionEmpty);
+		dic.put("Aircraft", positionType1);
+		dic.put("Tanker", positionType2);
+		dic.put("Destroyer", positionType3);
+		dic.put("Submarine", positionType4);
+
+		return dic;
+	}
 	
 	/**
 	 * Receber o tabuleiro, pela vista do jogador, as posições dos navios são reveladas
@@ -68,7 +136,7 @@ public class GameModel {
 	 * @param player
 	 * @return
 	 */
-	public String getBoardView(String player) {
+	/*public String getBoardView(String player) {
 
 		String board = "Seu tabuleiro: Todos os navios foram posicionados aleatoriamente\n\n";
 		
@@ -87,7 +155,7 @@ public class GameModel {
 		    copiedBoard[i] = newLine;
 		}
 		return board + view.printBoard(copiedBoard);
-	}
+	}*/
 
 	/**
 	 * @param player - Jogador 1 ou 2

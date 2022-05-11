@@ -1,86 +1,125 @@
 package tp1.protocol;
-import java.io.IOException;
+
+import java.util.Arrays;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
-import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+import tp1.battleship.GameView;
+import tp1.battleship.ShipType;
 
 public class MessageProcessor {
 
-	private static String queryRead     = "//method/@read";
-	private static String queryPlayer   = "//request/player";
-	private static String queryArgument = "//request/argument";
-	private static String queryResult   = "//reply/result";
-	
 	/**
 	 * Processa uma mensagem de formato xml
 	 * @param message
 	 * @return
 	 */
 	public static String process(String message) {
-		
+
 		Document doc  = XMLUtils.stringToDocument(message);
-		XPath xPath   = XPathFactory.newInstance().newXPath();
-		String method = null;
-		try {
-			method = ((NodeList) xPath.compile("//method/@type").evaluate(doc, XPathConstants.NODESET)).item(0).getNodeValue();
-		} catch (DOMException | XPathExpressionException e1) {
-			e1.printStackTrace();
-		}
+
+		Node protocol = doc.getElementsByTagName("Protocol").item(0);
+		String method = protocol.getFirstChild().getNodeName();
 
 		// Validação
-		try {
-			if (XMLUtils.validate(message, "src\\main\\webapp\\xml\\MessageValidate.xsd")) {
+			//if (XMLUtils.validate(message, "src\\main\\webapp\\xml\\MessageValidate.xsd")) {
 
-				switch(method) {
-				
-				case "board":    return board(doc);
-				case "position": return position(doc);	
-				case "info": 	 return info(doc);
-				}
-			} else return null;
-		} catch (SAXException | IOException e) {
-			e.printStackTrace();
+		switch(method) {
+		
+		case "Board": return board(doc);
+		case "Play":  return play(doc);	
+		case "Info":  return info(doc);
 		}
 		return null;
 	}
 	
-	private static String position(Document doc) {
-		
+	private static String play(Document doc) {
+
 		XPath xPath  = XPathFactory.newInstance().newXPath();
         Node attRead = null, nodePlayer = null, nodeChoice = null, nodeResult = null;          
         
 		try {
-			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeChoice = ((NodeList) xPath.compile(queryArgument).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeResult = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
+			attRead    = ((NodeList) xPath.compile("//Play/@Read").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodePlayer = ((NodeList) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeChoice = ((NodeList) xPath.compile("//Request/Position").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeResult = ((NodeList) xPath.compile("//Reply").evaluate(doc, XPathConstants.NODESET)).item(0);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
-		if (attRead.getNodeValue().equals("false")) return "position" + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
+		if (attRead.getNodeValue().equals("false")) return "Position" + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
 		else return nodeResult.getTextContent();		
 	}
 	
 	private static String board(Document doc) {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node attRead = null, nodeView = null, nodePlayer = null, nodeBoard = null;
+        Node attRead = null, nodeView = null, nodePlayer = null;
+        int[][] board = null;
         
 		try {
-			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeView   = ((NodeList) xPath.compile(queryArgument).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeBoard  = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
+			attRead    = ((NodeList) xPath.compile("//Board/@Read").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodePlayer = ((NodeList) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeView   = ((NodeList) xPath.compile("//Request/View").evaluate(doc, XPathConstants.NODESET)).item(0);
+
+			if (attRead.getNodeValue().equals("true")) {
+				
+				board = new int[10][10];
+				Arrays.stream(board).forEach(a -> Arrays.fill(a, 0));
+				
+				NodeList positions0 = ((NodeList) xPath.compile("//Empty/Position").evaluate(doc, XPathConstants.NODESET));
+				NodeList positions1 = ((NodeList) xPath.compile("//Aircraft/Position").evaluate(doc, XPathConstants.NODESET));
+				NodeList positions2 = ((NodeList) xPath.compile("//Tanker/Position").evaluate(doc, XPathConstants.NODESET));
+				NodeList positions3 = ((NodeList) xPath.compile("//Destroyer/Position").evaluate(doc, XPathConstants.NODESET));
+				NodeList positions4 = ((NodeList) xPath.compile("//Submarine/Position").evaluate(doc, XPathConstants.NODESET));
+
+				for (int i = 0; i < positions0.getLength(); i++) {
+	
+					String value = positions0.item(i).getTextContent();
+					int lin = Character.getNumericValue(value.charAt(0));
+					int col = Character.getNumericValue(value.charAt(1));
+
+					board[lin][col] = ShipType.EMPTY;
+				}
+				
+				for (int i = 0; i < positions1.getLength(); i++) {
+					String value = positions1.item(i).getTextContent();
+					int lin = Character.getNumericValue(value.charAt(0));
+					int col = Character.getNumericValue(value.charAt(1));
+					
+					board[lin][col] = ShipType.TYPE1SHOW;
+				}
+				
+				for (int i = 0; i < positions2.getLength(); i++) {
+					String value = positions2.item(i).getTextContent();
+					int lin = Character.getNumericValue(value.charAt(0));
+					int col = Character.getNumericValue(value.charAt(1));
+					
+					board[lin][col] = ShipType.TYPE2SHOW;
+				}
+				
+				for (int i = 0; i < positions3.getLength(); i++) {
+					String value = positions3.item(i).getTextContent();
+					int lin = Character.getNumericValue(value.charAt(0));
+					int col = Character.getNumericValue(value.charAt(1));
+					
+					board[lin][col] = ShipType.TYPE3SHOW;
+				}
+				
+				for (int i = 0; i < positions4.getLength(); i++) {
+					String value = positions4.item(i).getTextContent();
+					int lin = Character.getNumericValue(value.charAt(0));
+					int col = Character.getNumericValue(value.charAt(1));
+					
+					board[lin][col] = ShipType.TYPE4SHOW;
+				}
+			}
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
- 
-		if (attRead.getNodeValue().equals("false")) return "board" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
-		else return nodeBoard.getTextContent();
+		
+		if (attRead.getNodeValue().equals("false")) return "Board" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
+		else return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), board);
 	}
 	
 	private static String info(Document doc) {
@@ -89,13 +128,14 @@ public class MessageProcessor {
         Node attRead = null, nodeType = null, nodePlayer = null, nodeInfo = null;
         
 		try {
-			attRead    = ((NodeList) xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodePlayer = ((NodeList) xPath.compile(queryPlayer).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeType   = ((NodeList) xPath.compile(queryArgument).evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeInfo   = ((NodeList) xPath.compile(queryResult).evaluate(doc, XPathConstants.NODESET)).item(0);
+			attRead    = ((NodeList) xPath.compile("//Info/@Read").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodePlayer = ((NodeList) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeType   = ((NodeList) xPath.compile("//Request/Info").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodeInfo   = ((NodeList) xPath.compile("//Reply").evaluate(doc, XPathConstants.NODESET)).item(0);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
  
-		if (attRead.getNodeValue().equals("false")) return "info" + "," + nodePlayer.getTextContent() + "," + nodeType.getTextContent();
+		if (attRead.getNodeValue().equals("false")) return "Info" + "," + nodePlayer.getTextContent() + "," + nodeType.getTextContent();
 		else return nodeInfo.getTextContent();
 	}
+
 }

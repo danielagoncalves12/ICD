@@ -5,10 +5,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.Scanner;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPathExpressionException;
+
+import org.w3c.dom.Document;
+
+import tp1.battleship.GameView;
 import tp1.protocol.MessageCreator;
 import tp1.protocol.MessageProcessor;
+import tp1.protocol.XMLUtils;
 
 /**
  * @author Daniela Gonçalves A48579 42D
@@ -55,21 +62,21 @@ public class User {
         
             // Inicio do jogo    
 			playerNum = User.sendRequestInfo(os, is, "0");
-            System.out.println("Es o jogador numero " + playerNum + "!!");            
+            System.out.println("Es o jogador numero " + playerNum + "!!");
             System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
             System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
                
 	        while (true) {
 	        	// Enviar Request com a jogada escolhida
 	        	System.out.println(User.sendRequestInfo(os, is, playerNum));
-				System.out.println(User.sendRequestPosition(os, is, playerNum, scan.nextLine()));
+				System.out.println(User.sendRequestPlay(os, is, playerNum, scan.nextLine()));
 				
 				// Enviar Request a pedir o tabuleiro do adversário atualizado
 				System.out.print(User.sendRequestBoard(os, is, playerNum, "false"));     	
 			}
         } 
-        catch (IOException ignored) {
-           // System.err.println();   
+        catch (IOException e) {
+           System.err.println(e.getMessage());   
         }
         finally {
             try {
@@ -92,9 +99,19 @@ public class User {
      * utilizador quer receber o próprio tabuleiro, com todos os navios visíveis, caso seja falso, indica
      * que quer receber o tabuleiro do adversário, com os navios que ainda não foram encontrados ocultos.
      */
-    public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) throws ParserConfigurationException, IOException {
-		os.println(MessageCreator.message("board", player, view)); 
-		return receiveAnswer(is);
+    public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) {
+		
+    	String board = null;
+    	
+    	try {
+			os.println(MessageCreator.messageBoard(player, view));
+			String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
+			board = MessageProcessor.process(reply); 
+			
+		} catch (ParserConfigurationException | IOException e) {
+			e.printStackTrace();
+		} 
+		return board;
     }
     
     /**
@@ -102,9 +119,10 @@ public class User {
      * recebe uma resposta do mesmo, que contem o resultado da jogada. O argumento player indica qual o 
      * jogador a enviar a jogada. O argumento position contem a posição do tiro escolhida pelo jogador.
      */
-    public static String sendRequestPosition(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {	
-		os.println(MessageCreator.message("position", player, position));
-		return receiveAnswer(is);
+    public static String sendRequestPlay(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {	
+		os.println(MessageCreator.messagePlay(player, position));	
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
+		return MessageProcessor.process(reply);
     }
     
     /**
@@ -113,16 +131,8 @@ public class User {
      * vez de jogar, ou então, avisar os jogadores que o jogo terminou porque um dos jogadores ganhou.
      */
     public static String sendRequestInfo(PrintWriter os, BufferedReader is, String player) throws ParserConfigurationException, IOException {		
-    	os.println(MessageCreator.message("info", player, "game")); 
-		return receiveAnswer(is);
-    }
-    
-    /**
-     * Recebe a resposta do servidor, a partir do Stream de Leitura do socket.
-     */
-    public static String receiveAnswer(BufferedReader is) throws IOException {   	
-    	String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");  // O servidor retorna uma mensagem (Reply), com o conteúdo
-    	if (reply == null) return "";												   // Caso venha nulo, significa que o Stream fechou
-    	return MessageProcessor.process(reply);										   // A resposta do servidor é processada, retornando o conteúdo desejado
+    	os.println(MessageCreator.messageInfo(player, "game")); 
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
+		return MessageProcessor.process(reply);
     }
 }
