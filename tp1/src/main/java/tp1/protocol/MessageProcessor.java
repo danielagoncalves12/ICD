@@ -90,9 +90,13 @@ public class MessageProcessor {
 				for (int i = 0; i < list.length; i++) {
 					for (int j = 0; j < list[i].getLength(); j++) {
 				
-						String value = list[i].item(j).getTextContent();
-						int lin = Character.getNumericValue(value.charAt(0));
-						int col = Character.getNumericValue(value.charAt(1));
+						NodeList position = list[i].item(j).getChildNodes();
+						int lin = Integer.valueOf(position.item(0).getTextContent());
+						int col = Integer.valueOf(position.item(1).getTextContent());
+						
+						//String value = list[i].item(j).getTextContent();
+						//int lin = Character.getNumericValue(value.charAt(0));
+						//int col = Character.getNumericValue(value.charAt(1));
 						
 						board[lin][col] = (i == 0) ? ShipType.EMPTY :
 										  (i == 1) ? ShipType.TYPE1SHOW :

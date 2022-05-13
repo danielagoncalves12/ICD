@@ -65,9 +65,14 @@ public class MessageCreator {
             	for (List<Integer> pos : dic.get(key)) {
 
                 	Element position = document.createElement("Position");
-                	String tuple = String.valueOf(pos.get(0)) + String.valueOf(pos.get(1));
+                	Element line   = document.createElement("Line");
+                	line.appendChild(document.createTextNode(String.valueOf(pos.get(0))));
+                	position.appendChild(line);
+                	
+                	Element column = document.createElement("Column"); 
+                	column.appendChild(document.createTextNode(String.valueOf(pos.get(1))));
+                	position.appendChild(column);
 
-                	position.appendChild(document.createTextNode(tuple));
                 	shipType.appendChild(position);
                 }
             	elementBoard.appendChild(shipType);

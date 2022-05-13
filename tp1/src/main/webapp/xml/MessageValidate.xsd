@@ -83,7 +83,14 @@
 	    <xs:element name="Empty">
     	  <xs:complexType>
       		<xs:sequence>
-		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
 			</xs:sequence>
 		  </xs:complexType>
 	    </xs:element>
@@ -91,7 +98,14 @@
 		<xs:element name="Tanker">
 		  <xs:complexType>
       		<xs:sequence>
-		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
 			</xs:sequence>
 		  </xs:complexType>
 	    </xs:element>
@@ -99,7 +113,14 @@
 		<xs:element name="Destroyer">
 		  <xs:complexType>
       		<xs:sequence>
-		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
 			</xs:sequence>
 		  </xs:complexType>
 	    </xs:element>
@@ -107,7 +128,14 @@
 		<xs:element name="Submarine">
 		  <xs:complexType>
       		<xs:sequence>
-		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
 			</xs:sequence>
 		  </xs:complexType>
 	    </xs:element>
@@ -115,11 +143,25 @@
 		<xs:element name="Aircraft">
 		  <xs:complexType>
       		<xs:sequence>
-		  	  <xs:element name="Position" type="xs:int" minOccurs="0" maxOccurs="unbounded"/>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
 			</xs:sequence>
 		  </xs:complexType>
 	    </xs:element>
 
       </xs:sequence>
   </xs:complexType>
+
+  <xs:simpleType name="IndexPosition">
+    <xs:restriction base="xs:integer">
+      <xs:minInclusive value="0"/>
+      <xs:maxInclusive value="9"/>
+    </xs:restriction> 
+  </xs:simpleType>
 </xs:schema>
