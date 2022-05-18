@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
-<Player><Nickname>Nick</Nickname><Password>games</Password><Picture/></Player>
-<Player><Nickname>Daniela</Nickname><Password>goncalves</Password><Picture/></Player>
-<Player><Nickname>Mimi</Nickname><Password>jogo</Password><Picture/></Player></Data>
+   <Player>
+      <Nickname>Nick</Nickname>
+      <Password>games</Password>
+      <Picture>teste</Picture>
+   </Player>
+   <Player>
+      <Nickname>Daniela</Nickname>
+      <Password>Goncalves</Password>
+      <Picture>picture</Picture>
+   </Player>
+<Player><Nickname>Ze</Nickname><Password>manel</Password><Picture>default/photo.png</Picture></Player><Player><Nickname>Dannie</Nickname><Password>senha</Password><Picture>default/photo.png</Picture></Player><Player><Nickname>Teste</Nickname><Password>teste</Password><Picture>teste</Picture></Player></Data>

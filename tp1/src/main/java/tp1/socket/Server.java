@@ -25,13 +25,12 @@ public class Server {
 			serverSocket  = new ServerSocket(PORT);  // Socket de servidor		
 			Socket player;							 // Socket de um jogador
 
+			System.out.println("> Servidor, conexão TCP no porto " + PORT + " ...");
 			while (true) {
-				System.out.println("> Servidor, conexão TCP no porto " + PORT + " ...");
 				
 				// Enviar o pedido para o utilizador se registar
 				player = serverSocket.accept();
-				Thread register = new SessionThread(player);
-				register.start();
+				new SessionThread(player).start();
 				
 			}
 		} catch (IOException e) {

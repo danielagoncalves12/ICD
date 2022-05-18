@@ -1,10 +1,10 @@
-color.comment=128,128,128
-color.directive=169,183,198
-color.interpolation=204,120,50
+color.comment=153,150,139
+color.directive=237,233,246
+color.interpolation=204,153,255
 color.oppositeRegion=65,65,4
-color.string=165,194,92
-color.text=216,216,216
-color.xmlComment=98,151,85
-color.xmlTag=121,171,255
+color.string=230,255,153
+color.text=188,173,173
+color.xmlComment=153,150,139
+color.xmlTag=237,233,246
 eclipse.preferences.version=1
 overriddenByCSS=,color.oppositeRegion,color.string,color.text,color.interpolation,color.xmlComment,color.xmlTag,color.directive,color.comment,

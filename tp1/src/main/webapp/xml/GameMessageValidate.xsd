@@ -6,20 +6,28 @@
       <xs:sequence>
 
 		<xs:choice>
-        <xs:element name="Board">
+        <xs:element name="GetBoard">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Player" type="xs:unsignedByte" minOccurs="1" maxOccurs="1"/>
-                    <xs:element name="View" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="Player" type="xs:unsignedByte"/>
+                    <xs:element name="View" type="xs:boolean"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
               <xs:element name="Reply">
                 <xs:complexType>
                   <xs:sequence>
+					<xs:element name="Points" minOccurs="0" maxOccurs="1">
+					  <xs:complexType>
+                        <xs:sequence>
+					      <xs:element name="Player1" type="xs:integer"/>
+						  <xs:element name="Player2" type="xs:integer"/>
+					    </xs:sequence>
+			          </xs:complexType>
+					</xs:element>
                     <xs:element name="Board" type="BoardType" minOccurs="0" maxOccurs="1"/>
                   </xs:sequence>
                 </xs:complexType>
@@ -34,8 +42,8 @@
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Player" type="xs:unsignedByte" minOccurs="1" maxOccurs="1"/>
-                    <xs:element name="Position" type="xs:string" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="Player" type="xs:unsignedByte"/>
+                    <xs:element name="Position" type="xs:string"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -50,13 +58,13 @@
           </xs:complexType>
         </xs:element>
 
-		<xs:element name="Info">
+		<xs:element name="GetInfo">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Player" type="xs:unsignedByte" minOccurs="1" maxOccurs="1"/>
+                    <xs:element name="Player" type="xs:unsignedByte"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -70,6 +78,54 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
+
+		<xs:element name="Login">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Request">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Nickname" type="xs:string"/>
+                    <xs:element name="Password" type="xs:string"/>
+					<xs:element name="Picture" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Reply">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Result" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+			<xs:attribute name="register" type="xs:string"/>
+          </xs:complexType>
+        </xs:element>
+
+		<xs:element name="Upload">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Request">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="ContentType" type="xs:string"/>
+                    <xs:element name="Nickname" type="xs:string"/>
+					<xs:element name="Value" type="xs:string"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+              <xs:element name="Reply">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Result" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
 		</xs:choice>
 
       </xs:sequence>

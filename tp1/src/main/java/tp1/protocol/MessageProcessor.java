@@ -6,6 +6,8 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+
+import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -16,6 +18,7 @@ import tp1.battleship.ShipType;
 
 public class MessageProcessor {
 
+	private static String gameProtocolXSD = "src\\main\\webapp\\xml\\GameMessageValidate.xsd";
 	/**
 	 * Processa uma mensagem de formato xml
 	 * @param message
@@ -28,14 +31,15 @@ public class MessageProcessor {
 		String method = protocol.getFirstChild().getNodeName();
 
 		// Validação
-		try {
-			if (XMLUtils.validate(message, "src\\main\\webapp\\xml\\MessageValidate.xsd")) {
-				
+		try {		
+			if (XMLUtils.validate(message, gameProtocolXSD)) {
 				switch(method) {
 				
-				case "Board": return board(doc);
-				case "Play":  return play(doc);	
-				case "Info":  return info(doc);
+				case "GetBoard": return board(doc);
+				case "GetInfo" : return info(doc);
+				case "Play"    : return play(doc);	
+				case "Login"   : return session(doc);
+				case "Upload"  : return upload(doc);
 				}
 			}
 		} catch (SAXException | IOException e) {
@@ -45,16 +49,35 @@ public class MessageProcessor {
 		return null;
 	}
 	
-	private static String play(Document doc) {
+	private static String upload(Document doc) {
+		
+		XPath xPath  = XPathFactory.newInstance().newXPath();
+        Node nodeNickname = null, nodeContentType = null, nodeValue = null;
+        Node nodeResult = null; boolean isReply = false;          
+        
+		try {
+			nodeNickname    = (Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE);
+			nodeContentType = (Node) xPath.compile("//Request/ContentType").evaluate(doc, XPathConstants.NODE);
+			nodeValue 		= (Node) xPath.compile("//Request/Value").evaluate(doc, XPathConstants.NODE);
+			nodeResult      = (Node) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODE);
+			
+			isReply    = (boolean) xPath.compile("boolean(//Reply/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
+		} catch (XPathExpressionException e) { e.printStackTrace(); }
+		
+		if (isReply) return nodeResult.getTextContent();
+		else return "Upload" + "," + nodeContentType.getTextContent() + "," + nodeNickname.getTextContent() + "," + nodeValue.getTextContent();
+	}
+	
+	private static String play(Document doc) throws DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
         Node nodePlayer = null, nodeChoice = null, nodeResult = null;
         boolean isReply = false;          
         
 		try {
-			nodePlayer = ((NodeList) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeChoice = ((NodeList) xPath.compile("//Request/Position").evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeResult = ((NodeList) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodePlayer = (Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE);
+			nodeChoice = ((Node) xPath.compile("//Request/Position").evaluate(doc, XPathConstants.NODE));
+			nodeResult = ((Node) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODE));
 			isReply    = (boolean) xPath.compile("boolean(//Reply/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
@@ -62,23 +85,26 @@ public class MessageProcessor {
 		else return "Play" + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
 	}
 	
-	private static String board(Document doc) {
+	private static String board(Document doc) throws NumberFormatException, DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodeView = null, nodePlayer = null;
+        Node nodeView = null, nodePlayer = null, nodePoints1 = null, nodePoints2 = null;
         int[][] board = null;
         boolean isReply = false;
         
 		try {
-			nodePlayer = ((NodeList) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeView   = ((NodeList) xPath.compile("//Request/View").evaluate(doc, XPathConstants.NODESET)).item(0);
+			nodePlayer = ((Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE));
+			nodeView   = ((Node) xPath.compile("//Request/View").evaluate(doc, XPathConstants.NODE));
 			isReply    = (boolean) xPath.compile("boolean(//Reply/Board)").evaluate(doc, XPathConstants.BOOLEAN);
 
 			if (isReply) {
 				
+				nodePoints1 = ((Node) xPath.compile("//Points/Player1").evaluate(doc, XPathConstants.NODE));
+				nodePoints2 = ((Node) xPath.compile("//Points/Player2").evaluate(doc, XPathConstants.NODE));
+				
 				board = new int[10][10];
 				Arrays.stream(board).forEach(a -> Arrays.fill(a, 0));
-				
+
 				NodeList positions0 = ((NodeList) xPath.compile("//Empty/Position").evaluate(doc, XPathConstants.NODESET));
 				NodeList positions1 = ((NodeList) xPath.compile("//Aircraft/Position").evaluate(doc, XPathConstants.NODESET));
 				NodeList positions2 = ((NodeList) xPath.compile("//Tanker/Position").evaluate(doc, XPathConstants.NODESET));
@@ -93,11 +119,7 @@ public class MessageProcessor {
 						NodeList position = list[i].item(j).getChildNodes();
 						int lin = Integer.valueOf(position.item(0).getTextContent());
 						int col = Integer.valueOf(position.item(1).getTextContent());
-						
-						//String value = list[i].item(j).getTextContent();
-						//int lin = Character.getNumericValue(value.charAt(0));
-						//int col = Character.getNumericValue(value.charAt(1));
-						
+
 						board[lin][col] = (i == 0) ? ShipType.EMPTY :
 										  (i == 1) ? ShipType.TYPE1SHOW :
 										  (i == 2) ? ShipType.TYPE2SHOW :
@@ -108,23 +130,47 @@ public class MessageProcessor {
 			}
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
-		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), board);
+		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), nodePoints1.getTextContent(), nodePoints2.getTextContent(), board);
 		else return "Board" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 	}
 	
-	private static String info(Document doc) {
-		
+	private static String info(Document doc) throws DOMException, SAXException, IOException {
+
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodePlayer = null, nodeInfo = null;
+	    Node nodePlayer = null, nodeInfo = null;
+	    boolean isReply = false;
+	    
+		try {
+			nodePlayer = ((Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE));
+			nodeInfo   = ((Node) xPath.compile("//Reply/Info").evaluate(doc, XPathConstants.NODE));
+			isReply    = (boolean) xPath.compile("boolean(//Reply/Info/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			} catch (XPathExpressionException e) { e.printStackTrace(); }
+	 
+			if (isReply) return nodeInfo.getTextContent();
+			else return "Info" + "," + nodePlayer.getTextContent();
+	}
+	
+	private static String session(Document doc) throws DOMException, SAXException, IOException {
+
+		XPath xPath  = XPathFactory.newInstance().newXPath();
+        Node nodeRegister = null, nodeNickname = null, nodePassword = null, nodePicture = null, nodeResult = null;
         boolean isReply = false;
         
 		try {
-			nodePlayer = ((NodeList) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODESET)).item(0);
-			nodeInfo   = ((NodeList) xPath.compile("//Reply/Info").evaluate(doc, XPathConstants.NODESET)).item(0);
-			isReply    = (boolean) xPath.compile("boolean(//Reply/Info/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			nodeRegister = ((Node) xPath.compile("//Login/@register").evaluate(doc, XPathConstants.NODE));			
+			nodeNickname = ((Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE));
+			nodePassword = ((Node) xPath.compile("//Request/Password").evaluate(doc, XPathConstants.NODE));
+			nodePicture  = ((Node) xPath.compile("//Request/Picture").evaluate(doc, XPathConstants.NODE));
+			
+			nodeResult   = ((Node) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODE));
+			isReply    = (boolean) xPath.compile("boolean(//Reply/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
- 
-		if (isReply) return nodeInfo.getTextContent();
-		else return "Info" + "," + nodePlayer.getTextContent();
+
+		String picturePath = nodePicture.getTextContent();
+		
+		if (picturePath.equals("")) picturePath = "default/photo.png";
+		
+		if (isReply) return nodeResult.getTextContent();
+		else return nodeRegister.getNodeValue() + "," + nodeNickname.getTextContent() + "," + nodePassword.getTextContent() + "," + picturePath;
 	}
 }

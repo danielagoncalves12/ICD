@@ -58,8 +58,9 @@ public class GameThread extends Thread {
 				
 				// Verificar se o jogador 1 ganhou		
 				if (game.checkWin("1")) {
-					//GameThread.sendReply(game, os1, is1, winMessage(game, "1"));
-					//GameThread.sendReply(game, os2, is2, winMessage(game, "1"));
+					GameThread.sendReply(game, os1, is1, "");
+					GameThread.sendReply(game, os1, is1, winMessage(game, "1"));
+					GameThread.sendReply(game, os2, is2, winMessage(game, "1"));
 					break;
 				}			
 				GameThread.sendReply(game, os1, is1);  // Responde ao pedido do tabuleiro adversário do jogador 1
@@ -70,8 +71,9 @@ public class GameThread extends Thread {
 				
 				// Verificar se o jogador 2 ganhou	
 				if (game.checkWin("2")) {
-					//GameThread.sendReply(game, os1, is1, winMessage(game, "2"));
-					//GameThread.sendReply(game, os2, is2, winMessage(game, "2"));
+					GameThread.sendReply(game, os1, is1, winMessage(game, "2"));
+					GameThread.sendReply(game, os2, is2, "");
+					GameThread.sendReply(game, os2, is2, winMessage(game, "2"));
 					break;
 				}				
 				GameThread.sendReply(game, os2, is2);  // Responde ao pedido do tabuleiro adversário do jogador 2					
@@ -89,8 +91,20 @@ public class GameThread extends Thread {
 				if (os2 != null)     os2.close();
 				if (player2 != null) player2.close();
 			} catch (IOException e) {
+				System.err.print(e.getStackTrace());
 			}
 		}
+		try {
+			if (is1 != null)     is1.close();
+			if (os1 != null)     os1.close();
+			if (player1 != null) player1.close();
+			if (is2 != null)     is2.close();
+			if (os2 != null)     os2.close();
+			if (player2 != null) player2.close();
+		} catch (IOException e) {
+			System.err.print(e.getStackTrace());
+		}
+		
 		System.out.println("Terminou a Thread " + this.getId() + ", " + player1.getRemoteSocketAddress()+ ", " + player2.getRemoteSocketAddress());
 	}
 	
@@ -121,8 +135,8 @@ public class GameThread extends Thread {
 			String view   = MessageProcessor.process(request).split(",")[2]; // Tipo de visualização		
 			HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
 																			  : game.getBoardPositions(player));
-
-			String reply = MessageCreator.messageBoard(player, view, board);
+		
+			String reply = MessageCreator.messageBoard(player, view, game.getPoints("1"), game.getPoints("2"), board);
 			os.println(reply.replaceAll("\r", "\6").replaceAll("\n", "\7"));
 		}
 		else if (method.equals("Info")) {
@@ -135,9 +149,9 @@ public class GameThread extends Thread {
 		}
 	}
 	
-	/*public String winMessage(GameModel game, String player) {
+	public String winMessage(GameModel game, String player) {
 				
-		if   (game.checkWin("1")) return game.getBoard("1") + "Vitoria do Jogador 1! Localizou os 30 navios.";
-		else return game.getBoardView("2") + "Vitoria do Jogador 2! Localizou os 30 navios.";		
-	}*/
+		if (game.checkWin("1")) return "Vitoria do Jogador 1! Localizou os 30 navios.";
+		else return "Vitoria do Jogador 2! Localizou os 30 navios.";		
+	}
 }

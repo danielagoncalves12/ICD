@@ -134,6 +134,10 @@ public class GameModel {
 		return dic;
 	}
 	
+	public String getPoints(String player) {
+
+		return (player.equals("1")) ? String.valueOf(pointsPlayer1) : String.valueOf(pointsPlayer2);
+	}
 
 	/*public String getBoardView(String player) {
 

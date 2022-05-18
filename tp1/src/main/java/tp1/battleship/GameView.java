@@ -28,19 +28,18 @@ public class GameView {
 	 * Método printBoard
 	 * Apresenta o tabuleiro do jogo.
 	 */
-	public static String printBoard(String player, String view, int[][] board) {
+	public static String printBoard(String player, String view, String pointsPlayer1, String pointsPlayer2, int[][] board) {
 
-		int pointsPlayer1 = 0;
-		int pointsPlayer2 = 0;
-		
-		String intro = "";
+		String intro = "", end = "";
 		if (view.equals("true")) {
-			intro = "\nTodos os navios foram posicionados aleatoriamente!\nTabuleiro do Jogador " + player + ":\n\n";
+			intro = "\nTodos os navios foram posicionados aleatoriamente!\nTabuleiro do Jogador " + player + ":\n\n";	
 		}
 		else {
 			intro = "\nPontuacao atual - Jogador 1: " + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos." +
 					"\nTabuleiro do jogador " + (player.equals("1") ? 2 : 1) + ":\n\n";
+			end = "\nO adversário está a escolher a sua jogada...\n";
 		}
+		
 		
 		convertSymbols();
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
@@ -75,6 +74,6 @@ public class GameView {
 		strBoard.append("   X ");
 		for (int i = 0; i <= 28; i++) strBoard.append((i != 28) ? "-" : " X\n");
 		
-		return intro + strBoard.toString();
+		return intro + strBoard.toString() + end;
 	}
 }

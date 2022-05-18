@@ -9,6 +9,7 @@
               <xs:element name="Nickname" type="xs:string" />
               <xs:element name="Password" type="xs:string" />
               <xs:element name="Picture" type="xs:string"/>
+			<!--  <xs:element name="WinsNumber" type="xs:int"/> -->
             </xs:sequence>
           </xs:complexType>
         </xs:element>

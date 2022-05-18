@@ -7,6 +7,10 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
 
+import javax.xml.parsers.ParserConfigurationException;
+
+import tp1.protocol.MessageCreator;
+import tp1.protocol.MessageProcessor;
 import tp1.socket.GameThread;
 
 public class SessionThread extends Thread {
@@ -15,6 +19,7 @@ public class SessionThread extends Thread {
 	private Socket user;
 	private BufferedReader is;
 	private PrintWriter os;
+	private String nickname;
 	
 	public SessionThread(Socket user) {		
 		this.user = user;
@@ -29,42 +34,100 @@ public class SessionThread extends Thread {
 	public void run() {
 
 		try {
-			os.println("Batalha Naval: Introduza o seu nickname: ");
-			String nickname = is.readLine();
-						
-			login(nickname, user);
-			
-			// Verifica se existe dois utilizadores registados e activos para começar um jogo
-			startGame();
-			
+			if (login()) // Inicia sessão, fazendo login ou criando uma conta
+				menu();  // Espera pela escolha do jogador (Iniciar novo jogo ou editar perfil)
+
 		} catch (Exception e) {
 			e.printStackTrace();
+		}			
+	}
+
+	// TODO PROTOCOLO
+	private synchronized void menu() throws IOException, ParserConfigurationException {
+		
+		String option = is.readLine();
+		
+		switch(option) {
+		
+		case "1":		
+			activeUsers.put(nickname, user);  // Utilizar ativo e à espera para jogar
+			startGame();					  // Iniciar jogo
+			break;
+			
+		case "2":
+			editProfile();
+			menu();
+			break;		
 		}
-				
+	}
+
+	private synchronized void editProfile() throws IOException, ParserConfigurationException {
+		
+		String request = MessageProcessor.process((is.readLine().replaceAll("\r", "\6")).replaceAll("\n", "\7"));
+		String contentType = request.split(",")[1];
+		String nickname    = request.split(",")[2];
+		String value 	   = request.split(",")[3];
+
+		if (contentType.equals("picture")) {
+			Profile.uploadProfilePicture(nickname, value);
+			String result = "Foto de perfil atualizada com sucesso.";
+			os.println(MessageCreator.messageUpload(contentType, nickname, value, result));
+		}	
 	}
 	
-	private synchronized void login(String nickname, Socket user) throws Exception {
+	private synchronized boolean login() throws IOException, ParserConfigurationException {
 
-		// Se a conta já existir, pede para iniciar sessão
-		if (!Session.availableNickname(nickname)) {
-					
-			os.println("Bem-vindo de volta " + nickname + "! Introduza a sua palavra-passe:");
-			String password = is.readLine();
-			if (!Session.login(nickname, password)) {
-				os.println("Palavra-passe incorreta!");
-				return;
+		String message = MessageProcessor.process(is.readLine());
+		String option  = message.split(",")[0];
+		
+		// Registar
+		if (option.equals("true")) {
+
+			String nick = message.split(",")[1];
+			String pass = message.split(",")[2];
+			String pic  = message.split(",")[3];
+			
+			if (Session.availableNickname(nick)) {
+				
+				Session.register(nick, pass, pic);
+				os.println(MessageCreator.messageSession(nick, pass, pic, true, "Sucesso!"));
+				System.out.println("O utilizador " + nick + " entrou no jogo.");
+				nickname = nick;
+				return true;
+			} 
+			else {
+				os.println(MessageCreator.messageSession(nick, pass, pic, true, "Erro: Nickname em uso."));
+				return false;
 			}
-			os.println("Sucesso!");
 		}
-		// Caso contrário, o novo utilizador é registado
-		else { 		
-			os.println("Bem-vindo " + nickname + "! Escolha uma palavra-passe:");
-			String password = is.readLine();
-			Session.register(nickname, password, "");
-			os.println("Inscrito com sucesso!");
-		}		
-		System.out.println("O utilizador " + nickname + " entrou no jogo.");
-		activeUsers.put(nickname, user);
+		// Iniciar sessão
+		else if (option.equals("false")) {
+
+			String nick = message.split(",")[1];
+			String pass = message.split(",")[2];
+			String pic  = message.split(",")[3];
+			
+			if (!Session.availableNickname(nick)) {
+				
+				if (Session.login(nick, pass)) {
+					
+					Session.login(nick, pass);
+					os.println(MessageCreator.messageSession(nick, pass, pic, false, "Sucesso!"));
+					System.out.println("O utilizador " + nick + " entrou no jogo.");
+					nickname = nick;
+					return true;
+					
+				} else {
+					os.println(MessageCreator.messageSession(nick, pass, pic, false, "Erro: Palavra-passe incorreta!"));
+					return false;
+				}
+			}
+			else {
+				os.println(MessageCreator.messageSession(nick, pass, pic, false, "Erro: O utilizador nao esta registado."));
+				return false;
+			}
+		}
+		return false;
 	}
 
 	public synchronized void startGame() {
@@ -82,6 +145,8 @@ public class SessionThread extends Thread {
 			System.out.println("A iniciar jogo: " + nickname1 + " vs " + nickname2 + ".");
 			
 			new GameThread(player1, player2).start(); // Iniciar o jogo
+			
+			startGame();
 		}
 	}
 }
