@@ -30,14 +30,14 @@ public class GameView {
 	 */
 	public static String printBoard(String player, String view, String pointsPlayer1, String pointsPlayer2, int[][] board) {
 
-		String intro = "", end = "";
+		String intro = "";
 		if (view.equals("true")) {
 			intro = "\nTodos os navios foram posicionados aleatoriamente!\nTabuleiro do Jogador " + player + ":\n\n";	
 		}
 		else {
 			intro = "\nPontuacao atual - Jogador 1: " + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos." +
 					"\nTabuleiro do jogador " + (player.equals("1") ? 2 : 1) + ":\n\n";
-			end = "\nO adversário está a escolher a sua jogada...\n";
+			//end = "\nO adversário está a escolher a sua jogada...\n";
 		}
 		
 		
@@ -74,6 +74,6 @@ public class GameView {
 		strBoard.append("   X ");
 		for (int i = 0; i <= 28; i++) strBoard.append((i != 28) ? "-" : " X\n");
 		
-		return intro + strBoard.toString() + end;
+		return intro + strBoard.toString();
 	}
 }

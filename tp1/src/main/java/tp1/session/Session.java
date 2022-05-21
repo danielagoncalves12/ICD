@@ -2,6 +2,11 @@ package tp1.session;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -43,16 +48,16 @@ public class Session {
 		}
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-		String queryRead   = "//Nickname";
+		String queryRead   = "//Player";
         NodeList nicknames = null;          
         
 		try {
 			nicknames = (NodeList) (xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET));
 
 		    for (int i = 0; i < nicknames.getLength(); i++) {
-		        Element nickn = (Element) nicknames.item(i);
+		        String nickn = ((Element) nicknames.item(i)).getAttribute("Nickname");
 		        
-		        if (nickn.getTextContent().equals(nickname)) return false;
+		        if (nickn.equals(nickname)) return false;
 		    }
 		} catch (XPathExpressionException e) { e.printStackTrace(); }		
 		return true;
@@ -79,17 +84,29 @@ public class Session {
 		root.appendChild(player);
 		
 		// Guardar as suas informações
-		Element playerNickname = doc.createElement("Nickname");
+		
+		// Nickname
+		player.setAttribute("Nickname", nickname);
+	
+		// Nome público
+		Element playerNickname = doc.createElement("Name");
 		playerNickname.setTextContent(nickname);
 		player.appendChild(playerNickname);
 		
+		// Palavra-passe
 		Element playerPassword = doc.createElement("Password");
 		playerPassword.setTextContent(password);
 		player.appendChild(playerPassword);
 		
+		// Imagem
 		Element playerPicture = doc.createElement("Picture");
 		playerPicture.setTextContent(picture);
 		player.appendChild(playerPicture);
+		
+		// Número de vitórias
+		Element playerWinsNumber = doc.createElement("WinsNumber");
+		playerWinsNumber.setTextContent("0");
+		player.appendChild(playerWinsNumber);
 		
 		// Validação
 		try {
@@ -128,14 +145,31 @@ public class Session {
 		}
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-		String queryPassword = "//Player[Nickname='" + nickname + "']/Password";
+		String queryPassword = "//Player[@Nickname='" + nickname + "']/Password";
         Node pass; 
 		
 		try {
-			pass = ((NodeList) (xPath.compile(queryPassword).evaluate(doc, XPathConstants.NODESET))).item(0);
-			if (password.equals(pass.getTextContent())) return true;
-		    
+			// Desencriptação da palavra-passe
+			pass = ((Node) (xPath.compile(queryPassword).evaluate(doc, XPathConstants.NODE)));
+			
+			if (MD5(password).equals(pass.getTextContent())) return true;
+
 		} catch (XPathExpressionException e) { e.printStackTrace(); }	
 		return false;
 	}
+	
+    public static String MD5(String password) {
+
+    	String hashPassword = null;
+		try {
+		    MessageDigest md = MessageDigest.getInstance("MD5");
+		    md.update(password.getBytes());
+		    byte[] digest = md.digest();
+		    hashPassword = DatatypeConverter.printHexBinary(digest).toUpperCase();
+
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		return hashPassword;   
+     }
 }

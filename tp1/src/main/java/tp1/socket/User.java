@@ -18,8 +18,7 @@ public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 1001;        // Porto onde o Servidor aceita conexões
-    private static String nickname = "";
-    private static String picture = "";
+    private static String nickname, name, picture;
     
     public static void main(String[] args) throws ParserConfigurationException {
         
@@ -35,8 +34,7 @@ public class User {
             scan   = new Scanner(System.in);											 // Scanner para a introdução de dados
             
             // Sessão do utilizador 
-            if (!sessionState(os, is, scan)) System.exit(0);
-            System.out.println("Bem-vindo " + nickname + "!!");
+            if (!sessionState(os, is, scan)) System.exit(0);  
             
             // Menu principal
             mainMenu(os, is, scan);
@@ -60,8 +58,7 @@ public class User {
     }	
  
     private static void playGame(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
-    	
-		System.out.println("A espera da conexao de outro jogador...");
+
 		String playerNum = "0";
 		
         // Início do jogo    
@@ -78,27 +75,69 @@ public class User {
         	if (info.substring(0, 7).equals("Vitoria")) break;
         	
         	// Enviar Request com a jogada escolhida
-        	System.out.println(User.sendRequestPlay(os, is, playerNum, scan.nextLine()));
+        	String position;
+        	do {
+        		position = scan.nextLine();
+        		if (!checkValid(position)) System.out.println("Posição inválida! Insira uma posição novamente:");
+        	}
+        	while(!checkValid(position));	
+        	System.out.println(User.sendRequestPlay(os, is, playerNum, position));
 			
 			// Enviar Request a pedir o tabuleiro do adversário atualizado
 			System.out.println(User.sendRequestBoard(os, is, playerNum, "false"));
 		}
     }
+
+    private static boolean checkValid(String position) {
+
+    	if (position.length() == 2) {
+    		
+    		char number = position.charAt(0);
+    		char letter = position.charAt(1);
+    		
+    		if ((letter >= 'a' && letter <= 'j') || (letter >= 'A' && letter <= 'J'))
+    			if (number >= '0' && number <= '9')
+    				return true;
+    	}
+    		
+    	if (position.length() == 3) {
+    		
+    		char firstNumber  = position.charAt(0);
+    		char secondNumber = position.charAt(1);
+    		char firstLetter  = position.charAt(2);
+    		
+			if ((firstLetter >= 'a' && firstLetter <= 'j') || (firstLetter >= 'A' && firstLetter <= 'J'))
+				if (firstNumber == '1' && secondNumber == '0')
+					return true;
+    	}
+    	return false;
+    }
     
+    // TODO PROTOCOLO
     private static void mainMenu(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
-		
+    	
+    	System.out.println("--------------------------------");
+    	System.out.println("Bem-vindo " + nickname + "!!");
+    	System.out.println("--------------------------------");
+    	System.out.println("Seu Perfil: ");
+    	System.out.println("Nickname:     " + nickname);
+    	System.out.println("Nome publico: " + name);
+    	System.out.println("Fotografia:   " + picture);
+    	System.out.println("--------------------------------");
+    	
     	System.out.println("\nMenu principal:");
     	System.out.println("1 - Novo jogo");
     	System.out.println("2 - Editar o perfil");
     	
     	System.out.print("Escolha: ");
     	String option = scan.nextLine();  
-    	os.println(option);
+    	String response = sendRequestInfo(os, is, option);
+    	System.out.println(response);
     	
         // Menu principal          
         switch(option) {
         
-        case "1":
+        case "1":     	
         	playGame(os, is, scan);
         	break;
         	
@@ -116,7 +155,6 @@ public class User {
     	mainMenu(os, is, scan);
     }
 
-    // TODO PROTOCOLO
 	public static boolean sessionState(PrintWriter os, BufferedReader is, Scanner scan) throws IOException, ParserConfigurationException {
   
     	System.out.println("Inicio de sessao:");
@@ -127,52 +165,97 @@ public class User {
     	String option = scan.nextLine();
     	System.out.println();
     	
+    	String nickname = "", name = "", password = "", picture = "", reply = "";
+    	
     	switch (option) {
     	
     	// Registo
     	case "1":
-    		
+    			
     		// Nickname
-    		System.out.print("Escolha o seu nickname: ");
-    		String nickname1 = scan.nextLine();				
-
-    		// Password
-    		System.out.print("Escolha uma palavra-passe: ");
-    		String password1 = scan.nextLine();
+    		do {
+	    		System.out.print("Escolha o seu nickname: ");
+	    		nickname = scan.nextLine();	
+	    		if (nickname.isEmpty()) System.out.println("Erro: Campo do nickname nao pode estar vazio.");
+    		} while(nickname.isEmpty());
+    		
+    		// Nome
+    		do {
+	    		System.out.print("Escolha o seu nome publico: ");
+	    		name = scan.nextLine();		
+	    		if (name.isEmpty()) System.out.println("Erro: Campo do nome publico nao pode estar vazio.");
+    		} while(name.isEmpty());
+    		
+    		// Palavra-passe
+    		do {
+	    		System.out.print("Escolha a sua palavra-passe: ");
+	    		password = scan.nextLine();
+	    		if (password.isEmpty()) System.out.println("Erro: Campo da palavra-passe nao pode estar vazia.");
+    		} while(name.isEmpty());
     		
     		// Imagem
-    		System.out.print("Escolha uma foto de perfil: ");
-    		String imagePath1 = scan.nextLine();	
-
-    		nickname = nickname1;
-    		picture  = imagePath1;
-    		os.println(MessageCreator.messageSession(nickname1, password1, imagePath1, true));	  		
+    		System.out.print("Escolha a sua foto de perfil: ");
+    		picture = scan.nextLine();	
+    		if (picture.isEmpty()) System.out.println("Aviso: Foto de perfil pre-predefinida atribuida.");
+    		
+    		// Envio do pedido e recepção da resposta
+        	reply = User.sendRequestLogin(os, is, nickname, name, password, picture, true);  	
     		break;
     		
     	// Login
     	case "2":  		
-    		
+
     		// Nickname
-    		System.out.print("Introduza o seu nickname: ");
-    		String nickname2 = scan.nextLine();				
-
-    		// Password
-    		System.out.print("Introduza a sua palavra-passe: ");
-    		String password2 = scan.nextLine();				
+    		do {
+	    		System.out.print("Introduza o seu nickname: ");
+	    		nickname = scan.nextLine();	
+	    		if (nickname.isEmpty()) System.out.println("Erro: Campo do nickname nao pode estar vazio.");
+    		} while(nickname.isEmpty());
     		
-    		nickname = nickname2;
-    		picture  = "";
-    		os.println(MessageCreator.messageSession(nickname2, password2, "", false));		
-    		break;
-    	}
+    		// Password
+    		do {
+	    		System.out.print("Introduza a sua palavra-passe: ");
+	    		password = scan.nextLine();
+	    		if (password.isEmpty()) System.out.println("Erro: Campo da palavra-passe nao pode estar vazio.");
+    		} while(password.isEmpty());
 
-		// Estado da sessão
-		String state = MessageProcessor.process(is.readLine());
+    		// Envio do pedido e recepção da resposta
+        	reply = User.sendRequestLogin(os, is, nickname, name, password, picture, false);  		
+    	}
+    	
+    	// Atualização dos dados do utilizador, dados vindo do servidor
+    	String state  = reply.split(",")[0];
+		User.nickname = reply.split(",")[1];
+		User.name     = reply.split(",")[2];
+		User.picture  = reply.split(",")[3];
+    	
 		System.out.println("Sessao -> " + state + "\n");
 		if (state.substring(0, 4).equals("Erro")) return false;
 		return true;
     }
 	
+	/**
+     * Envia uma Request ao servidor, a pedir para iniciar sessão, a partir de login ou inscrevendo-se.
+     * Para iniciar sessão o utilizador deve inserir o seu nickname (chave primária) e palavra-passe,
+     * para inscrever-se o utilizador deve introduzir todos os dados, nomeadamente, nickname, nome publico,
+     * palavra-passe e fotografia (caso queira). É retornado o resultado da sessão e os dados atualizados
+     * de acordo com a base de dados do servidor.
+     */
+	public static String sendRequestLogin(PrintWriter os, BufferedReader is, String nickname, String name, String password, String picture, boolean register) throws ParserConfigurationException, IOException {
+	
+		os.println(MessageCreator.messageSession(nickname, name, password, picture, register));
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
+		if (reply == null) return null;
+		return MessageProcessor.process(reply); 
+	}
+	
+	/**
+     * Envia uma Request ao servidor, a pedir para atualizar um certo dado e recebe a resposta do mesmo. 
+     * Os dados a ser atualizados, podem ser a palavra-passe, fotografia, nome publico do jogador, etc...
+     * O argumento contenttype destina-se a identificar o tipo de dado a ser atualizado. O argumento
+     * nickname é utilizado como chave primária e o argumento value transforma os dados atualizados,
+     * que vão substituir os antigos.
+     */
 	public static String sendRequestUpload(PrintWriter os, BufferedReader is, String contentType, String nickname, String value) throws ParserConfigurationException, IOException {
 		
 		os.println(MessageCreator.messageUpload(contentType, nickname, value));

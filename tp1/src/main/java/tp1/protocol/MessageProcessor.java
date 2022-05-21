@@ -6,15 +6,15 @@ import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
-
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
 import tp1.battleship.GameView;
 import tp1.battleship.ShipType;
+import tp1.session.Profile;
+import tp1.session.Session;
 
 public class MessageProcessor {
 
@@ -59,9 +59,9 @@ public class MessageProcessor {
 			nodeNickname    = (Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE);
 			nodeContentType = (Node) xPath.compile("//Request/ContentType").evaluate(doc, XPathConstants.NODE);
 			nodeValue 		= (Node) xPath.compile("//Request/Value").evaluate(doc, XPathConstants.NODE);
-			nodeResult      = (Node) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODE);
+			nodeResult      = (Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE);
 			
-			isReply    = (boolean) xPath.compile("boolean(//Reply/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
 		if (isReply) return nodeResult.getTextContent();
@@ -77,8 +77,8 @@ public class MessageProcessor {
 		try {
 			nodePlayer = (Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE);
 			nodeChoice = ((Node) xPath.compile("//Request/Position").evaluate(doc, XPathConstants.NODE));
-			nodeResult = ((Node) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODE));
-			isReply    = (boolean) xPath.compile("boolean(//Reply/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			nodeResult = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
+			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
 		if (isReply) return nodeResult.getTextContent();
@@ -95,7 +95,7 @@ public class MessageProcessor {
 		try {
 			nodePlayer = ((Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE));
 			nodeView   = ((Node) xPath.compile("//Request/View").evaluate(doc, XPathConstants.NODE));
-			isReply    = (boolean) xPath.compile("boolean(//Reply/Board)").evaluate(doc, XPathConstants.BOOLEAN);
+			isReply    = (boolean) xPath.compile("boolean(//Response/Board)").evaluate(doc, XPathConstants.BOOLEAN);
 
 			if (isReply) {
 				
@@ -142,8 +142,8 @@ public class MessageProcessor {
 	    
 		try {
 			nodePlayer = ((Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE));
-			nodeInfo   = ((Node) xPath.compile("//Reply/Info").evaluate(doc, XPathConstants.NODE));
-			isReply    = (boolean) xPath.compile("boolean(//Reply/Info/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			nodeInfo   = ((Node) xPath.compile("//Response/Info").evaluate(doc, XPathConstants.NODE));
+			isReply    = (boolean) xPath.compile("boolean(//Response/Info/text())").evaluate(doc, XPathConstants.BOOLEAN);
 			} catch (XPathExpressionException e) { e.printStackTrace(); }
 	 
 			if (isReply) return nodeInfo.getTextContent();
@@ -153,24 +153,43 @@ public class MessageProcessor {
 	private static String session(Document doc) throws DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodeRegister = null, nodeNickname = null, nodePassword = null, nodePicture = null, nodeResult = null;
+        Node nodeRegister = null, nodeNickname = null, nodeName = null, nodePassword = null,
+        nodePicture = null, nodeResult = null;
         boolean isReply = false;
         
 		try {
 			nodeRegister = ((Node) xPath.compile("//Login/@register").evaluate(doc, XPathConstants.NODE));			
 			nodeNickname = ((Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE));
+			nodeName     = ((Node) xPath.compile("//Request/Name").evaluate(doc, XPathConstants.NODE));
 			nodePassword = ((Node) xPath.compile("//Request/Password").evaluate(doc, XPathConstants.NODE));
 			nodePicture  = ((Node) xPath.compile("//Request/Picture").evaluate(doc, XPathConstants.NODE));
 			
-			nodeResult   = ((Node) xPath.compile("//Reply/Result").evaluate(doc, XPathConstants.NODE));
-			isReply    = (boolean) xPath.compile("boolean(//Reply/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			nodeResult   = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
+			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
-		String picturePath = nodePicture.getTextContent();
+		String nickname = nodeNickname.getTextContent();
+		String name     = nodeName.getTextContent(); 
+		String password = nodePassword.getTextContent();
+		String picture  = nodePicture.getTextContent();
 		
-		if (picturePath.equals("")) picturePath = "default/photo.png";
+		// Caso o utilizador não tenha introduzido uma foto durante a inscrição, é atribuido uma foto pre-definida	
+		if (nodeRegister.getNodeValue().equals("true")) { 
+			if (picture.equals(""))
+				picture = "default/photo.png"; 
+		}		
+		// Caso o utilizador esteja a iniciar sessão (login), obtem o nome publico e foto de perfil
+		else {
+			if (!Session.availableNickname(nickname)) {
+				name 	= Profile.getName(nodeNickname.getTextContent());
+				picture = Profile.getPicture(nodeNickname.getTextContent());
+			} else {
+				name = "null";
+				picture = "null";
+			}
+		}
 		
-		if (isReply) return nodeResult.getTextContent();
-		else return nodeRegister.getNodeValue() + "," + nodeNickname.getTextContent() + "," + nodePassword.getTextContent() + "," + picturePath;
+		if (isReply) return nodeResult.getTextContent() + "," + nickname + "," + name + "," + picture;
+		else return nodeRegister.getNodeValue() + "," + nickname + "," + name + "," + password + "," + picture;
 	}
 }

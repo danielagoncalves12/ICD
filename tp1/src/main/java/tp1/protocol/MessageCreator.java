@@ -50,7 +50,7 @@ public class MessageCreator {
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
-        Element elementReply = document.createElement("Reply");
+        Element elementReply = document.createElement("Response");
         
         // Elemento Result
         if (!result.equals("")) {
@@ -102,7 +102,7 @@ public class MessageCreator {
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
-        Element elementReply = document.createElement("Reply");
+        Element elementReply = document.createElement("Response");
         
         // Elemento Points
         if (!points1.equals("") && !points2.equals("")) {
@@ -192,7 +192,7 @@ public class MessageCreator {
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
-        Element elementReply = document.createElement("Reply");
+        Element elementReply = document.createElement("Response");
         
         // Elemento Result
         if (!result.equals("")) {
@@ -236,7 +236,7 @@ public class MessageCreator {
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
-        Element elementReply = document.createElement("Reply");
+        Element elementReply = document.createElement("Response");
         
         // Elemento Info
         if (!info.equals("")) {
@@ -249,12 +249,12 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);
 	}
 
-	public static String messageSession(String nickname, String password, String picture, boolean type) throws ParserConfigurationException {
+	public static String messageSession(String nickname, String name, String password, String picture, boolean register) throws ParserConfigurationException {
 		
-		return messageSession(nickname, password, picture, type, "");
+		return messageSession(nickname, name, password, picture, register, "");
 	}
 	
-	public static String messageSession(String nickname, String password, String picture, boolean register, String result) throws ParserConfigurationException {
+	public static String messageSession(String nickname, String name, String password, String picture, boolean register, String result) throws ParserConfigurationException {
 	
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -278,6 +278,11 @@ public class MessageCreator {
         elementNickname.setTextContent(nickname);
         elementRequest.appendChild(elementNickname);
         
+        // Elemento Name
+        Element elementName = document.createElement("Name");
+        elementName.setTextContent(name);
+        elementRequest.appendChild(elementName);
+        
         // Element Password
         Element elementPassword = document.createElement("Password");
         elementPassword.setTextContent(password);
@@ -289,7 +294,7 @@ public class MessageCreator {
     	elementRequest.appendChild(elementPicture);
         
         // Element Reply
-        Element elementReply = document.createElement("Reply");
+        Element elementReply = document.createElement("Response");
         elementSession.appendChild(elementReply);
         
         // Element Result

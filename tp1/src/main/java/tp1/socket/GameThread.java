@@ -12,16 +12,20 @@ import javax.xml.parsers.ParserConfigurationException;
 import tp1.battleship.GameModel;
 import tp1.protocol.MessageCreator;
 import tp1.protocol.MessageProcessor;
+import tp1.session.Profile;
 
 public class GameThread extends Thread {
 
 	private Socket player1, player2;
 	private BufferedReader is1, is2;
 	private PrintWriter os1, os2;
+	private String nickname1, nickname2;
 
-	public GameThread(Socket player1, Socket player2) {		
+	public GameThread(Socket player1, Socket player2, String nickname1, String nickname2) {		
 		this.player1 = player1;
 		this.player2 = player2;
+		this.nickname1 = nickname1;
+		this.nickname2 = nickname2;
 			
 		try {
 			// BufferedReader e PrintWriter do jogador 1
@@ -38,81 +42,72 @@ public class GameThread extends Thread {
 	public void run() {
 
 		try { 
-			System.out.println("Jogo iniciado!");
+			System.out.println("Jogo iniciado entre " + Profile.getName(nickname1) + " e " + Profile.getName(nickname2) + "!");
 			
 			// Instância do jogo Batalha Naval
 			GameModel game = new GameModel();
-			GameThread.sendReply(game, os1, is1, "1"); // Indicar ao jogador que é o jogador número 1
-			GameThread.sendReply(game, os2, is2, "2"); // Indicar ao jogador que é o jogador número 2
+			sendReply(game, os1, is1, "1");  // Indicar ao jogador que é o jogador número 1
+			sendReply(game, os2, is2, "2");  // Indicar ao jogador que é o jogador número 2
 
-			GameThread.sendReply(game, os1, is1);      // Enviar o próprio tabuleiro ao jogador 1	
-			GameThread.sendReply(game, os1, is1);      // Enviar tabuleiro do adversário ao jogador 1
+			sendReply(game, os1, is1);  // Enviar o próprio tabuleiro ao jogador 1	
+			sendReply(game, os1, is1);  // Enviar tabuleiro do adversário ao jogador 1
 					
-			GameThread.sendReply(game, os2, is2);      // Enviar o próprio tabuleiro ao jogador 2	
-			GameThread.sendReply(game, os2, is2);      // Enviar tabuleiro do adversário ao jogador 2		
+			sendReply(game, os2, is2);  // Enviar o próprio tabuleiro ao jogador 2	
+			sendReply(game, os2, is2);  // Enviar tabuleiro do adversário ao jogador 2		
 			
 			for(;;) {			
 				// --------- Jogador 1 --------- //
-				GameThread.sendReply(game, os1, is1, "Sua vez -> Introduza uma jogada: ");
-				GameThread.sendReply(game, os1, is1);  // Responde ao pedido da jogada do jogador 1
+				sendReply(game, os1, is1, "Sua vez -> Introduza uma jogada: ");
+				sendReply(game, os1, is1);  // Responde ao pedido da jogada do jogador 1
 				
 				// Verificar se o jogador 1 ganhou		
 				if (game.checkWin("1")) {
-					GameThread.sendReply(game, os1, is1, "");
-					GameThread.sendReply(game, os1, is1, winMessage(game, "1"));
-					GameThread.sendReply(game, os2, is2, winMessage(game, "1"));
+					sendReply(game, os1, is1, "");
+					sendReply(game, os1, is1, winMessage(game, "1"));
+					sendReply(game, os2, is2, winMessage(game, "1"));
+					Profile.uploadWinsNumber(nickname1);
 					break;
-				}			
-				GameThread.sendReply(game, os1, is1);  // Responde ao pedido do tabuleiro adversário do jogador 1
+				}	
+				sendReply(game, os1, is1);  // Responde ao pedido do tabuleiro adversário do jogador 1
 
 				// --------- Jogador 2 --------- //			
-				GameThread.sendReply(game, os2, is2, "Sua vez -> Introduza uma jogada: ");
-				GameThread.sendReply(game, os2, is2);  // Responde ao pedido da jogada do jogador 2
+				sendReply(game, os2, is2, "Sua vez -> Introduza uma jogada: ");
+				sendReply(game, os2, is2);  // Responde ao pedido da jogada do jogador 2
 				
 				// Verificar se o jogador 2 ganhou	
 				if (game.checkWin("2")) {
-					GameThread.sendReply(game, os1, is1, winMessage(game, "2"));
-					GameThread.sendReply(game, os2, is2, "");
-					GameThread.sendReply(game, os2, is2, winMessage(game, "2"));
+					sendReply(game, os1, is1, winMessage(game, "2"));
+					sendReply(game, os2, is2, "");
+					sendReply(game, os2, is2, winMessage(game, "2"));
+					Profile.uploadWinsNumber(nickname2);
 					break;
 				}				
-				GameThread.sendReply(game, os2, is2);  // Responde ao pedido do tabuleiro adversário do jogador 2					
+				sendReply(game, os2, is2);  // Responde ao pedido do tabuleiro adversário do jogador 2				
 			}					
 			
 		} catch (IOException | ParserConfigurationException e) {
 			System.err.println("Erro na ligaçao : " + e.getMessage());
-		} finally {
-			// Garantir que o socket é fechado
+		} 
+		finally {
 			try {
-				if (is1 != null)     is1.close();
-				if (os1 != null)     os1.close();
+				if (os1 != null) os1.close();
+				if (os2 != null) os2.close();
+				if (is1 != null) is1.close();	
+				if (is2 != null) is2.close();
 				if (player1 != null) player1.close();
-				if (is2 != null)     is2.close();
-				if (os2 != null)     os2.close();
 				if (player2 != null) player2.close();
 			} catch (IOException e) {
-				System.err.print(e.getStackTrace());
+				e.printStackTrace();
 			}
 		}
-		try {
-			if (is1 != null)     is1.close();
-			if (os1 != null)     os1.close();
-			if (player1 != null) player1.close();
-			if (is2 != null)     is2.close();
-			if (os2 != null)     os2.close();
-			if (player2 != null) player2.close();
-		} catch (IOException e) {
-			System.err.print(e.getStackTrace());
-		}
-		
-		System.out.println("Terminou a Thread " + this.getId() + ", " + player1.getRemoteSocketAddress()+ ", " + player2.getRemoteSocketAddress());
+		System.out.println("O jogo entre " + Profile.getName(nickname1) + " e " + Profile.getName(nickname2) + " terminou.");
 	}
 	
-	public static void sendReply(GameModel game, PrintWriter os, BufferedReader is) throws ParserConfigurationException, IOException {
+	public void sendReply(GameModel game, PrintWriter os, BufferedReader is) throws ParserConfigurationException, IOException {
 		sendReply(game, os, is, "");
 	}
 	
-	public static void sendReply(GameModel game, PrintWriter os, BufferedReader is, String info) throws ParserConfigurationException, IOException {
+	public void sendReply(GameModel game, PrintWriter os, BufferedReader is, String info) throws ParserConfigurationException, IOException {
 		
 		String request = is.readLine();									   // Lê a mensagem de Request do jogador
 		String method  = MessageProcessor.process(request).split(",")[0];  // Primeiro argumento representa o tipo de pedido
@@ -151,7 +146,7 @@ public class GameThread extends Thread {
 	
 	public String winMessage(GameModel game, String player) {
 				
-		if (game.checkWin("1")) return "Vitoria do Jogador 1! Localizou os 30 navios.";
-		else return "Vitoria do Jogador 2! Localizou os 30 navios.";		
+		if (game.checkWin("1")) return "Vitoria do Jogador 1! Localizou os 30 navios.\n";
+		else return "Vitoria do Jogador 2! Localizou os 30 navios.\n";		
 	}
 }
