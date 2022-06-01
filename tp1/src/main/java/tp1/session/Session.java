@@ -2,10 +2,8 @@ package tp1.session;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -63,7 +61,7 @@ public class Session {
 		return true;
 	}
 
-	public static void register(String nickname, String password, String picture) {
+	public static void register(String nickname, String name, String password, String picture) {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -89,9 +87,9 @@ public class Session {
 		player.setAttribute("Nickname", nickname);
 	
 		// Nome público
-		Element playerNickname = doc.createElement("Name");
-		playerNickname.setTextContent(nickname);
-		player.appendChild(playerNickname);
+		Element playerName = doc.createElement("Name");
+		playerName.setTextContent(name);
+		player.appendChild(playerName);
 		
 		// Palavra-passe
 		Element playerPassword = doc.createElement("Password");

@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.Hashtable;
 import java.security.*;
-
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
 import tp1.protocol.MessageCreator;
@@ -16,7 +15,7 @@ import tp1.socket.GameThread;
 
 public class SessionThread extends Thread {
 
-	public static Hashtable<String, Socket> activeUsers = new Hashtable<String, Socket>();
+	public static Hashtable<String, Socket> activeUsers = new Hashtable<>();
 	private Socket user;
 	private BufferedReader is;
 	private PrintWriter os;
@@ -43,7 +42,6 @@ public class SessionThread extends Thread {
 		}
 	}
 
-	// TODO PROTOCOLO
 	private synchronized void menu() throws IOException, ParserConfigurationException, InterruptedException {
 
 		String message = MessageProcessor.process(is.readLine());
@@ -62,7 +60,7 @@ public class SessionThread extends Thread {
 			editProfile();
 			menu();
 			break;		
-		}
+		}	
 	}
 
 	private void editProfile() throws IOException, ParserConfigurationException {
@@ -101,7 +99,7 @@ public class SessionThread extends Thread {
 
 			if (Session.availableNickname(nick)) {
 				
-				Session.register(nick, hashPassword, pic);
+				Session.register(nick, name, hashPassword, pic);
 				os.println(MessageCreator.messageSession(nick, name, pass, pic, true, "Sucesso!"));
 				System.out.println("O utilizador " + name + " entrou no jogo.");
 				nickname = nick;
@@ -158,10 +156,6 @@ public class SessionThread extends Thread {
 			// Inicia um jogo, para os dois jogadores
 			Thread game = new GameThread(player1, player2, nickname1, nickname2); // Iniciar o jogo
 			game.start();
-			
-			// Espera que o jogo termine, para abrir novamente a tela do menu
-			//game.join();
-			//menu();
 		}
 	}
 }

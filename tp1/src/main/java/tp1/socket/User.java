@@ -12,13 +12,14 @@ import tp1.protocol.MessageProcessor;
 
 /**
  * @author Daniela Gonçalves A48579 42D
+ * Classe User
  */
 
 public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
-    private final static int    PORT = 1001;        // Porto onde o Servidor aceita conexões
-    private static String nickname, name, picture;
+    private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexões
+    private static String nickname, name, picture;  // Dados da conta do utilizador
     
     public static void main(String[] args) throws ParserConfigurationException {
         
@@ -72,7 +73,7 @@ public class User {
         	// Enviar Request a pedir por informação
         	String info = User.sendRequestInfo(os, is, playerNum);
         	System.out.println(info);
-        	if (info.substring(0, 7).equals("Vitoria")) break;
+        	if (win(info)) break;
         	
         	// Enviar Request com a jogada escolhida
         	String position;
@@ -88,6 +89,11 @@ public class User {
 		}
     }
 
+    /**
+     * Verificar se uma posição está no formato correto.
+     * @param position
+     * @return validade (boolean)
+     */
     private static boolean checkValid(String position) {
 
     	if (position.length() == 2) {
@@ -113,9 +119,24 @@ public class User {
     	return false;
     }
     
-    // TODO PROTOCOLO
+    /**
+     * Verifica se o jogador ganhou o jogo.
+     * @param info
+     * @return boolean
+     */
+    private static boolean win(String info) {
+    	return (info.substring(0, 7).equals("Vitoria"));
+    }
+    
+    /**
+     * Menu inicial que apresenta o perfil do utilizador e 
+     * permite o jogador iniciar um novo jogo ou editar o perfil.
+     * @param os, is, scan
+     * @throws ParserConfigurationException, IOException
+     */
     private static void mainMenu(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
     	
+    	// Apresentação do perfil
     	System.out.println("--------------------------------");
     	System.out.println("Bem-vindo " + nickname + "!!");
     	System.out.println("--------------------------------");
@@ -125,19 +146,20 @@ public class User {
     	System.out.println("Fotografia:   " + picture);
     	System.out.println("--------------------------------");
     	
+    	// Menu principal   
     	System.out.println("\nMenu principal:");
     	System.out.println("1 - Novo jogo");
     	System.out.println("2 - Editar o perfil");
     	
     	System.out.print("Escolha: ");
-    	String option = scan.nextLine();  
+ 
+    	String option = scan.nextLine();    	
     	String response = sendRequestInfo(os, is, option);
-    	System.out.println(response);
-    	
-        // Menu principal          
+    	System.out.println(response); 	
+               
         switch(option) {
         
-        case "1":     	
+        case "1":  
         	playGame(os, is, scan);
         	break;
         	
@@ -147,6 +169,11 @@ public class User {
         }
 	}
 
+    /**
+     * Edição da foto de perfil.
+     * @param os, is, scan
+     * @throws ParserConfigurationException, IOException
+     */
     public static void editProfilePicture(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
     	
     	System.out.println("\nAtualize a sua foto de perfil: ");
@@ -155,6 +182,10 @@ public class User {
     	mainMenu(os, is, scan);
     }
 
+    /**
+     * Inicia sessão, a partir da inscrição no servidor
+     * ou a partir de uma conta existente.
+     */
 	public static boolean sessionState(PrintWriter os, BufferedReader is, Scanner scan) throws IOException, ParserConfigurationException {
   
     	System.out.println("Inicio de sessao:");
@@ -212,7 +243,7 @@ public class User {
 	    		if (nickname.isEmpty()) System.out.println("Erro: Campo do nickname nao pode estar vazio.");
     		} while(nickname.isEmpty());
     		
-    		// Password
+    		// Palavra-passe
     		do {
 	    		System.out.print("Introduza a sua palavra-passe: ");
 	    		password = scan.nextLine();
@@ -285,7 +316,7 @@ public class User {
      */
     public static String sendRequestPlay(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {	
 		
-    	os.println(MessageCreator.messagePlay(player, position));	
+    	os.println(MessageCreator.messagePlay(player, position));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 

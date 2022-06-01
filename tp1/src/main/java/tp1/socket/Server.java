@@ -9,13 +9,14 @@ import tp1.session.SessionThread;
 /**
  * @author Daniela Gonçalves A48579 42D
  * 
- * A classe Server, inicia uma conexão TCP no porto x 
- * e espera pela conexão de clientes.
+ * A classe Server, servidor concorrente, inicia uma conexão TCP no 
+ * porto 49152 e espera pela conexão de clientes. Inicia uma tarefa
+ * SessionThread para que cada utilizador possa iniciar sessão no servidor.
  */
 
 public class Server {
 	
-	public final static int PORT = 1001;  // Porto onde a conexão TCP permitirá entrada
+	public final static int PORT = 49152;  // Porto onde a conexão TCP permitirá entrada
 
 	public static void main(String[] args) {
 

@@ -49,9 +49,9 @@ public class GameModel {
 	}
 	
 	/**
-	 * Receber o array do tabuleiro do adversário, as posições dos navios que ainda não foram descobertos
-	 * não são reveladas. Esta função é usada unicamente para apresentar o tabuleiro do adversário
-	 * ao jogador.
+	 * Receber o array do tabuleiro do adversário, as posições dos navios que ainda não foram
+	 * descobertos não são reveladas. Esta função é usada unicamente para retornar o array - 
+	 * tabuleiro do adversário ao jogador.
 	 * 
 	 * @param values1 - Jogador 1 ou 2
 	 * @return Dicionário com as posições do respetivo tipo de navio.
@@ -138,27 +138,6 @@ public class GameModel {
 
 		return (player.equals("1")) ? String.valueOf(pointsPlayer1) : String.valueOf(pointsPlayer2);
 	}
-
-	/*public String getBoardView(String player) {
-
-		String board = "Seu tabuleiro: Todos os navios foram posicionados aleatoriamente\n\n";
-		
-		int[][] originalBoard = (player.equals("1")) ? boardPlayer1 : boardPlayer2; 
-		int[][] copiedBoard   = new int[10][10];
-		int[] newLine;
-
-		for(int i = 0; i < originalBoard.length; i++) {
-			newLine = Arrays.stream(originalBoard[i].clone()).map(j -> 
-			
-					(j == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW : 
-					(j == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW : 
-					(j == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW : 
-					(j == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW : j).toArray();	
-			
-		    copiedBoard[i] = newLine;
-		}
-		return board + view.printBoard(copiedBoard);
-	}*/
 
 	/**
 	 * @param player - Jogador 1 ou 2
@@ -302,8 +281,6 @@ public class GameModel {
 		return false;
 	}
 
-	
-	
 	private boolean checkContiguous(int[][] board, int lin, int col) {
 
 		if (col != 0) {

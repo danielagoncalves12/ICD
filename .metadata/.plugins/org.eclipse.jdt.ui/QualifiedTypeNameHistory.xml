@@ -1,19 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="tp1.protocol.Message"/>
-    <fullyQualifiedTypeName name="javax.swing.text.Document"/>
-    <fullyQualifiedTypeName name="java.io.StringWriter"/>
-    <fullyQualifiedTypeName name="javax.xml.transform.TransformerException"/>
-    <fullyQualifiedTypeName name="tp1.protocol.MessageProcess"/>
-    <fullyQualifiedTypeName name="java.security.KeyStore.Entry.Attribute"/>
-    <fullyQualifiedTypeName name="java.lang.System"/>
-    <fullyQualifiedTypeName name="tp1.battleship.GameModel"/>
-    <fullyQualifiedTypeName name="javax.xml.validation.SchemaFactory"/>
     <fullyQualifiedTypeName name="javax.xml.validation.Schema"/>
     <fullyQualifiedTypeName name="javax.xml.XMLConstants"/>
     <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="org.xml.sax.SAXException"/>
-    <fullyQualifiedTypeName name="java.io.IOException"/>
     <fullyQualifiedTypeName name="javax.xml.transform.stream.StreamSource"/>
     <fullyQualifiedTypeName name="javax.xml.bind.Validator"/>
     <fullyQualifiedTypeName name="javax.xml.validation.Validator"/>
@@ -29,13 +19,9 @@
     <fullyQualifiedTypeName name="javax.xml.transform.Transformer"/>
     <fullyQualifiedTypeName name="javax.xml.transform.dom.DOMSource"/>
     <fullyQualifiedTypeName name="javax.xml.transform.stream.StreamResult"/>
-    <fullyQualifiedTypeName name="org.w3c.dom.Node"/>
     <fullyQualifiedTypeName name="java.lang.Exception"/>
     <fullyQualifiedTypeName name="tp1.socket.GameThread"/>
     <fullyQualifiedTypeName name="java.lang.InterruptedException"/>
-    <fullyQualifiedTypeName name="java.io.PrintWriter"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
-    <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="org.w3c.dom.Document"/>
     <fullyQualifiedTypeName name="org.w3c.dom.NodeList"/>
     <fullyQualifiedTypeName name="java.util.Arrays"/>
@@ -60,4 +46,18 @@
     <fullyQualifiedTypeName name="tp1.session.Session"/>
     <fullyQualifiedTypeName name="tp1.protocol.MessageProcessor"/>
     <fullyQualifiedTypeName name="tp1.protocol.MessageCreator"/>
+    <fullyQualifiedTypeName name="javax.xml.soap.Node"/>
+    <fullyQualifiedTypeName name="org.w3c.dom.Node"/>
+    <fullyQualifiedTypeName name="tp1.protocol.Message"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="java.util.List"/>
+    <fullyQualifiedTypeName name="java.util.Map"/>
+    <fullyQualifiedTypeName name="tp1.session.SessionThread"/>
+    <fullyQualifiedTypeName name="javax.servlet.annotation.WebServlet"/>
+    <fullyQualifiedTypeName name="javax.servlet.http.HttpServlet"/>
+    <fullyQualifiedTypeName name="java.io.IOException"/>
+    <fullyQualifiedTypeName name="javax.servlet.ServletException"/>
+    <fullyQualifiedTypeName name="javax.servlet.http.HttpServletResponse"/>
+    <fullyQualifiedTypeName name="javax.servlet.http.HttpServletRequest"/>
+    <fullyQualifiedTypeName name="java.io.PrintWriter"/>
 </qualifiedTypeNameHistroy>

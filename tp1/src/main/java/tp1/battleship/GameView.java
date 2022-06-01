@@ -37,10 +37,8 @@ public class GameView {
 		else {
 			intro = "\nPontuacao atual - Jogador 1: " + pointsPlayer1 + " pontos, Jogador 2: " + pointsPlayer2 + " pontos." +
 					"\nTabuleiro do jogador " + (player.equals("1") ? 2 : 1) + ":\n\n";
-			//end = "\nO adversário está a escolher a sua jogada...\n";
 		}
-		
-		
+			
 		convertSymbols();
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 		StringBuilder strBoard = new StringBuilder();
@@ -55,8 +53,7 @@ public class GameView {
 		// Apresentação da borda do tabuleiro
 		strBoard.append("   X ");
 		for (int i = 0; i <= 28; i++) strBoard.append((i != 28) ? "-" : " X\n");
-		
-		
+			
 		// Apresentação do conteúdo do tabuleiro
 		for (int i = 0; i < 10; i++) {
 			

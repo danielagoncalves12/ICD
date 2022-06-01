@@ -8,14 +8,14 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="&lt;serv"/>
+			<item value="&lt;servlet"/>
+			<item value="&lt;serve"/>
 			<item value="reply"/>
 			<item value="&quot;reply&quot;"/>
 			<item value="pic "/>
 			<item value="bem-vind"/>
 			<item value="bem-"/>
-			<item value="registered"/>
-			<item value="jogada"/>
-			<item value="columns"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>

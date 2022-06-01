@@ -1,0 +1,46 @@
+<html>
+
+<head>
+  <meta http-equiv="Cache-Control" content="no-store,no-cache,must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+<title>Exemplo de Login</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+	<style>
+		body {background-color:powderblue;}
+		label, input {font-size:2em; font-family: 'Tangerine', serif; margin: 5px;}
+		div#geral {
+    				position: absolute;
+    				top: 35%;
+    				left: 35%;
+    				height: auto;
+    				width: auto;
+    				border: 3px solid cyan;	
+    				text-align: right;
+    				padding: 20px;
+		}
+	</style>
+  </head>
+   <body>
+   <div id="geral">
+   <!-- //https://www.tutorialspoint.com/jsp/jsp_security.htm -->
+      <form method = "POST" action ="j_security_check">
+        <label for="j_username">Utilizador: </label>
+        <input type = "text" name="j_username" id="j_username"><br>
+        <label for="j_password">Senha: </label>
+        <input type = "password" name="j_password" id="j_password"><br>
+        <input type = "submit" value = "Login!"><input type = "reset" value = "Clear">
+      </form>
+    </div>
+    
+    <b>tomcat-users.xml</b> <br/><br/>
+  		 &lt;role rolename=&quot;cliente&quot;/&gt;<br/>
+&lt;role rolename=&quot;funcionario&quot;/&gt;<br/>
+ &lt;user username=&quot;tomcat&quot; password=&quot;tomcat&quot; roles=&quot;admin-gui,manager-gui&quot; /&gt;<br/>
+ &lt;user username=&quot;ucliente&quot; password=&quot;tomcat&quot; roles=&quot;cliente&quot; /&gt;<br/>
+ &lt;user username=&quot;ufuncionario&quot; password=&quot;tomcat&quot; roles=&quot;funcionario&quot; /&gt;<br/>
+ 
+   </body>
+</html>
