@@ -11,6 +11,6 @@
   </welcome-file-list>
   <servlet>
 	<servlet-name>Teste</servlet-name>
-	<servlet-class>/Teste</servlet-class>
+	<servlet-class>Teste</servlet-class>
   </servlet>
 </web-app>

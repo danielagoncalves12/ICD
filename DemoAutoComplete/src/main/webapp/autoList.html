@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+ <html>
+ <head>
+ <meta charset="ISO-8859-1">
+ <title>Exemplo AutoComplete com Datalist</title>  
+ <script>
+	function getXHR() {
+		var invocation = null;
+		try {
+			// Opera 8.0+, Firefox, Chrome, Safari
+			invocation = new XMLHttpRequest();
+		} catch (e) {
+			// Internet Explorer Browsers
+			try {
+				invocation = new ActiveXObject("Msxml2.XMLHTTP");
+
+			} catch (e) {
+
+				try {
+					invocation = new ActiveXObject("Microsoft.XMLHTTP");
+				} catch (e) {
+					// Something went wrong
+					alert("Your browser broke!");
+					return null;
+				}
+			}
+		}
+		return invocation;
+	}
+ 
+		var xmlHttp = getXHR();
+		
+		function showState(str) {
+			if (event.key === 'Enter') {
+				document.getElementById("country").value = document
+						.getElementById("countries").options[0].value;
+				return;
+			}
+			var url="GetHTML";
+			url += "?query=" +str+"&tag=option&nlt=0&nit=10";
+			url = encodeURI(url);
+			xmlHttp.onreadystatechange = function() {
+				if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+					document.getElementById("countries").innerHTML=xmlHttp.responseText;
+					document.getElementById("country").placeholder = "e.g. datalist";
+				} else
+					document.getElementById("country").placeholder = "Couldn't load datalist options :(";
+			}
+			xmlHttp.open("GET", url, true);
+			xmlHttp.send(null);
+		}
+	</script>  
+ </head>  
+ <body> 
+ <label>Indique o item: <br>
+ <!--Make sure the form has the autocomplete function switched off:-->
+ <input autocomplete="off" list="countries" id="country" type="search" name="country" onkeyup="showState(this.value);" placeholder = "e.g. datalist" style="width: 450px; ">
+ </label>
+ <br>  
+<datalist id="countries"> 
+<option>Loading... </option>
+</datalist>
+ </body> 
+ </html>

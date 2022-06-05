@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="Cache-Control" content="no-store,no-cache,must-revalidate"/>
+  <meta http-equiv="Pragma" content="no-cache"/>
+  <meta http-equiv="Expires" content="-1"/>
+<title>Exemplo de Login</title>
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Tangerine">
+	<style>
+		body {background-color:powderblue;}
+		label, input {font-size:2em; font-family: 'Tangerine', serif; margin: 5px;}
+		div#geral {
+    				position: absolute;
+    				top: 35%;
+    				left: 35%;
+    				height: auto;
+    				width: auto;
+    				border: 3px solid cyan;	
+    				text-align: right;
+    				padding: 20px;
+		}
+	</style>
+  </head>
+   <body>
+   <div id="geral">
+      <form method = "POST" action ="LoginServlet">
+        <label for="j_username">Utilizador: </label>
+        <input type = "text" name="j_username" id="j_username" required><br>
+        <label for="j_password">Senha: </label>
+        <input type = "password" name="j_password" id="j_password" required><br>
+        <input type = "submit" value = "Entrar!">
+        <input type = "reset" value = "Limpar">
+      </form>
+    </div>
+    
+   	<h3>Utilizadores válidos: root, admin, user1, user2, tomcat (senha igual)</h3>
+ 
+   </body>
+</html>

@@ -1,0 +1,21 @@
+<html>
+<h1>Lançamento da applet HelloWorld</h1>
+
+<h2>Com a tag APPLET...</h2>
+
+<applet code="HelloWorld.class" archive="HelloWorld.jar" width="500" height="150">
+		<param name="texto" value="TAG APPLET: Mensagem de texto!!" />
+        	O seu browser não suporta a tag &lt;applet&gt;
+</applet>
+
+<h2>Com a tag OBJECT...</h2>
+<object type="application/x-java-applet"
+    name="nescimento" width="500" height="150">
+    <param name="codebase" value="." />
+    <param name="code" value="HelloWorld.class" />
+    <param name="archive" value="HelloWorld.jar" />
+    <param name="texto" value="TAG OBJECT: Mensagem de texto enviada!!" />
+    O Seu browser não suporta a tag &lt;objectt&gt;
+</object>
+    
+</html>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+	<Player Nickname="Dannie">
+		<Name>Daniela</Name>
+		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
+		<Picture>dannie.png</Picture>
+		<WinsNumber>6</WinsNumber>
+	</Player>
+	<Player Nickname="Nick">
+		<Name>Nick</Name>
+		<Password>9CFA7AEFCC61936B70AAEC6729329EDA</Password>
+		<Picture>alex.jpeg</Picture>
+		<WinsNumber>17</WinsNumber>
+	</Player>
+</Data>

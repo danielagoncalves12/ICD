@@ -1,0 +1,46 @@
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Exemplo AutoComplete com Div</title>
+<script>  
+ var xmlHttp;
+ function showState(str){ 
+		if (event.key === 'Enter') {
+			ihtml =  document.getElementById("countries").innerHTML;
+			document.getElementById("country").value = ihtml.substring(0, ihtml.indexOf('<br>'));
+			return;
+		}
+	if (typeof XMLHttpRequest != "undefined")
+   		xmlHttp= new XMLHttpRequest();
+    else if (window.ActiveXObject)
+  		 		xmlHttp= new ActiveXObject("Microsoft.XMLHTTP");
+	if (xmlHttp==null){
+    		alert ("Browser does not support XMLHTTP Request");
+			return;
+	} 
+		var url="GetHTML";
+		url += "?query=" +str+"&tag=br&nlt=0&nit=10";
+		url = encodeURI(url);
+		xmlHttp.onreadystatechange = function() {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+				document.getElementById("countries").innerHTML=xmlHttp.responseText; 
+				document.getElementById("country").placeholder = "e.g. div";
+			}
+			else
+				document.getElementById("country").placeholder = "Couldn't load div :(";
+		}
+		xmlHttp.open("GET", url, true);
+		xmlHttp.send();
+}
+  
+ </script>
+</head>
+<body>
+	<label>Indique o item:<br> 
+	<!--Make sure the form has the autocomplete function switched off:-->
+	<input autocomplete="off" id="country" type="text" name="country"
+		onkeyup="showState(this.value);" placeholder="e.g. div" style="width: 450px; ">
+	</label>
+	<div id='countries'>Loading...</div>
+</body>
+</html>

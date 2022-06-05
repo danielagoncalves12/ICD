@@ -62,4 +62,9 @@
 	<section name="ClasspathContainerSelectionPage">
 		<item key="index" value="7"/>
 	</section>
+	<section name="JavaBuildConfigurationBlock">
+		<item key="expanded0" value="true"/>
+		<item key="expanded1" value="false"/>
+		<item key="expanded2" value="false"/>
+	</section>
 </section>

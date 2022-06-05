@@ -19,59 +19,59 @@ public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexões
-    private static String nickname, name, picture;  // Dados da conta do utilizador
+    private String nickname, name, picture;  		// Dados da conta do utilizador
+    private Socket socket;
+    private BufferedReader is;
+    private PrintWriter os;
+    private Scanner scan;
     
-    public static void main(String[] args) throws ParserConfigurationException {
-        
-        Socket     socket = null; 
-        BufferedReader is = null;
-        PrintWriter    os = null;
-        Scanner      scan = null;        
-        
+    public User() {
+    	
         try {
             socket = new Socket(HOST, PORT); 										     // Ligação ao Socket servidor
             is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para a leitura do socket
-            os     = new PrintWriter(socket.getOutputStream(), true); 					 // Stream para a escrita no socket 
-            scan   = new Scanner(System.in);											 // Scanner para a introdução de dados
-            
+			os     = new PrintWriter(socket.getOutputStream(), true);					 // Stream para a escrita no socket 
+			scan   = new Scanner(System.in);											 // Scanner para a introdução de dados	
+		} 
+        catch (IOException e) {
+			e.printStackTrace();
+		} 					      
+    }
+    
+    
+    public static void main(String[] args) throws ParserConfigurationException {
+
+		User player = new User();
+    	
+        try {
             // Sessão do utilizador 
-            if (!sessionState(os, is, scan)) System.exit(0);  
+            if (!player.sessionState()) System.exit(0);  
             
             // Menu principal
-            mainMenu(os, is, scan);
+            player.mainMenu();
         } 
         catch (IOException e) {
            System.err.println(e.getMessage());   
         }
         finally {
-            try {
-            	scan.close();
-                if (os != null) os.close();
-                if (is != null) is.close();
-                if (socket != null) socket.close();
-                
-                System.exit(0);
-            }
-            catch (IOException e) { 
-            	System.err.println("Erro I/O -> " + e.getMessage());   
-            }
+        	player.close();
         }
     }	
  
-    private static void playGame(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
+    private void playGame() throws ParserConfigurationException, IOException {
 
 		String playerNum = "0";
 		
         // Início do jogo    
-		playerNum = User.sendRequestInfo(os, is, playerNum);				 // Pede o número do jogador
-		System.out.println("Es o jogador numero " + playerNum + "!!");  	 // Demonstra ao jogador
-        System.out.print(User.sendRequestBoard(os, is, playerNum, "true"));  // Receber o próprio tabuleiro
-        System.out.print(User.sendRequestBoard(os, is, playerNum, "false")); // Receber tabuleiro do adversário
+		playerNum = sendRequestInfo(playerNum);							// Pede o número do jogador
+		System.out.println("Es o jogador numero " + playerNum + "!!");  // Demonstra ao jogador
+        System.out.print(sendRequestBoard(playerNum, "true"));  		// Receber o próprio tabuleiro
+        System.out.print(sendRequestBoard(playerNum, "false"));			// Receber tabuleiro do adversário
            
         while (true) {        	
         	
         	// Enviar Request a pedir por informação
-        	String info = User.sendRequestInfo(os, is, playerNum);
+        	String info = sendRequestInfo(playerNum);
         	System.out.println(info);
         	if (win(info)) break;
         	
@@ -82,10 +82,10 @@ public class User {
         		if (!checkValid(position)) System.out.println("Posição inválida! Insira uma posição novamente:");
         	}
         	while(!checkValid(position));	
-        	System.out.println(User.sendRequestPlay(os, is, playerNum, position));
+        	System.out.println(sendRequestPlay(playerNum, position));
 			
 			// Enviar Request a pedir o tabuleiro do adversário atualizado
-			System.out.println(User.sendRequestBoard(os, is, playerNum, "false"));
+			System.out.println(sendRequestBoard(playerNum, "false"));
 		}
     }
 
@@ -94,7 +94,7 @@ public class User {
      * @param position
      * @return validade (boolean)
      */
-    private static boolean checkValid(String position) {
+    private boolean checkValid(String position) {
 
     	if (position.length() == 2) {
     		
@@ -119,12 +119,26 @@ public class User {
     	return false;
     }
     
+    private void close() {
+
+		try {
+			scan.close();
+			if (os != null) os.close();
+			if (is != null) is.close();
+			if (socket != null) socket.close();
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+        System.exit(0);
+    }
+    
     /**
      * Verifica se o jogador ganhou o jogo.
      * @param info
      * @return boolean
      */
-    private static boolean win(String info) {
+    private boolean win(String info) {
     	return (info.substring(0, 7).equals("Vitoria"));
     }
     
@@ -134,7 +148,7 @@ public class User {
      * @param os, is, scan
      * @throws ParserConfigurationException, IOException
      */
-    private static void mainMenu(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
+    private void mainMenu() throws ParserConfigurationException, IOException {
     	
     	// Apresentação do perfil
     	System.out.println("--------------------------------");
@@ -154,17 +168,17 @@ public class User {
     	System.out.print("Escolha: ");
  
     	String option = scan.nextLine();    	
-    	String response = sendRequestInfo(os, is, option);
+    	String response = sendRequestInfo(option);
     	System.out.println(response); 	
                
         switch(option) {
         
         case "1":  
-        	playGame(os, is, scan);
+        	playGame();
         	break;
         	
         case "2":
-        	editProfilePicture(os, is, scan);
+        	editProfilePicture();
         	break;        
         }
 	}
@@ -174,19 +188,19 @@ public class User {
      * @param os, is, scan
      * @throws ParserConfigurationException, IOException
      */
-    public static void editProfilePicture(PrintWriter os, BufferedReader is, Scanner scan) throws ParserConfigurationException, IOException {
+    public void editProfilePicture() throws ParserConfigurationException, IOException {
     	
     	System.out.println("\nAtualize a sua foto de perfil: ");
     	System.out.print("Imagem: ");
-    	System.out.println(sendRequestUpload(os, is, "picture", nickname, scan.nextLine()));
-    	mainMenu(os, is, scan);
+    	System.out.println(sendRequestUpload("picture", nickname, scan.nextLine()));
+    	mainMenu();
     }
 
     /**
      * Inicia sessão, a partir da inscrição no servidor
      * ou a partir de uma conta existente.
      */
-	public static boolean sessionState(PrintWriter os, BufferedReader is, Scanner scan) throws IOException, ParserConfigurationException {
+	public boolean sessionState() throws IOException, ParserConfigurationException {
   
     	System.out.println("Inicio de sessao:");
     	System.out.println("1 - Registar");
@@ -230,7 +244,7 @@ public class User {
     		if (picture.isEmpty()) System.out.println("Aviso: Foto de perfil pre-predefinida atribuida.");
     		
     		// Envio do pedido e recepção da resposta
-        	reply = User.sendRequestLogin(os, is, nickname, name, password, picture, true);  	
+        	reply = sendRequestLogin(nickname, name, password, picture, true);  	
     		break;
     		
     	// Login
@@ -251,14 +265,14 @@ public class User {
     		} while(password.isEmpty());
 
     		// Envio do pedido e recepção da resposta
-        	reply = User.sendRequestLogin(os, is, nickname, name, password, picture, false);  		
+        	reply = sendRequestLogin(nickname, name, password, picture, false);  		
     	}
     	
     	// Atualização dos dados do utilizador, dados vindo do servidor
     	String state  = reply.split(",")[0];
-		User.nickname = reply.split(",")[1];
-		User.name     = reply.split(",")[2];
-		User.picture  = reply.split(",")[3];
+		this.nickname = reply.split(",")[1];
+		this.name     = reply.split(",")[2];
+		this.picture  = reply.split(",")[3];
     	
 		System.out.println("Sessao -> " + state + "\n");
 		if (state.substring(0, 4).equals("Erro")) return false;
@@ -272,7 +286,7 @@ public class User {
      * palavra-passe e fotografia (caso queira). É retornado o resultado da sessão e os dados atualizados
      * de acordo com a base de dados do servidor.
      */
-	public static String sendRequestLogin(PrintWriter os, BufferedReader is, String nickname, String name, String password, String picture, boolean register) throws ParserConfigurationException, IOException {
+	public String sendRequestLogin(String nickname, String name, String password, String picture, boolean register) throws ParserConfigurationException, IOException {
 	
 		os.println(MessageCreator.messageSession(nickname, name, password, picture, register));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
@@ -287,7 +301,7 @@ public class User {
      * nickname é utilizado como chave primária e o argumento value transforma os dados atualizados,
      * que vão substituir os antigos.
      */
-	public static String sendRequestUpload(PrintWriter os, BufferedReader is, String contentType, String nickname, String value) throws ParserConfigurationException, IOException {
+	public String sendRequestUpload(String contentType, String nickname, String value) throws ParserConfigurationException, IOException {
 		
 		os.println(MessageCreator.messageUpload(contentType, nickname, value));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
@@ -301,7 +315,7 @@ public class User {
      * utilizador quer receber o próprio tabuleiro, com todos os navios visíveis, caso seja falso, indica
      * que quer receber o tabuleiro do adversário, com os navios que ainda não foram encontrados ocultos.
      */
-    public static String sendRequestBoard(PrintWriter os, BufferedReader is, String player, String view) throws ParserConfigurationException, IOException {
+    public String sendRequestBoard(String player, String view) throws ParserConfigurationException, IOException {
 		
 		os.println(MessageCreator.messageBoard(player, view));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
@@ -314,7 +328,7 @@ public class User {
      * recebe uma resposta do mesmo, que contem o resultado da jogada. O argumento player indica qual o 
      * jogador a enviar a jogada. O argumento position contem a posição do tiro escolhida pelo jogador.
      */
-    public static String sendRequestPlay(PrintWriter os, BufferedReader is, String player, String position) throws ParserConfigurationException, IOException {	
+    public String sendRequestPlay(String player, String position) throws ParserConfigurationException, IOException {	
 		
     	os.println(MessageCreator.messagePlay(player, position));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
@@ -327,7 +341,7 @@ public class User {
      * jogo, por exemplo, uma resposta a este tipo de pedido poderá ser um aviso a um jogador que é a sua 
      * vez de jogar, ou então, avisar os jogadores que o jogo terminou porque um dos jogadores ganhou.
      */
-    public static String sendRequestInfo(PrintWriter os, BufferedReader is, String player) throws ParserConfigurationException, IOException {		
+    public String sendRequestInfo(String player) throws ParserConfigurationException, IOException {		
     	
     	os.println(MessageCreator.messageInfo(player));  	
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");

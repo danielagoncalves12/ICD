@@ -1,0 +1,221 @@
+package socket;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.concurrent.Semaphore;
+
+import javax.xml.bind.DatatypeConverter;
+import javax.xml.parsers.ParserConfigurationException;
+
+import battleship.GameModel;
+import protocol.MessageCreator;
+import protocol.MessageProcessor;
+import session.Profile;
+import session.Session;
+
+public class MenuThread extends Thread {
+
+	public static Hashtable<String, ThreadReader> activeUsers = new Hashtable<>();
+	private ThreadReader reader;
+	private Socket user;
+	private BufferedReader is;
+	private PrintWriter os;
+	private boolean reading;
+
+	public MenuThread(Socket user) {
+
+		this.reading = true;
+		this.reader = null;
+		this.user = user;
+		try {
+			this.is = new BufferedReader(new InputStreamReader(user.getInputStream()));
+			this.os = new PrintWriter(user.getOutputStream(), true);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void run() {
+
+		Semaphore semaphore = new Semaphore(0);
+		reader = new ThreadReader(user, is, os, semaphore);
+		reader.start();
+		
+		String request = "";
+
+		while (reading) {
+
+			try {
+				semaphore.acquire();
+				request = reader.getRequest();
+				sendResponse((request.replaceAll("\r", "\6")).replaceAll("\n", "\7"));
+
+			} catch (InterruptedException | ParserConfigurationException | IOException e) {
+				e.printStackTrace();
+			}	
+		}
+	}
+
+	public void sendResponse(String request) throws ParserConfigurationException, IOException {
+
+		// Primeiro argumento representa o tipo de pedido
+		String method = MessageProcessor.process(request).split(",")[0]; 
+
+		// - Login - //
+		if (method.equals("Login"))
+			login(request);
+
+		// - Register - //
+		else if (method.equals("Register"))
+			register(request);
+
+		// - Find Game - //
+		else if (method.equals("FindGame"))
+			findGame(request);
+
+		// - Upload Profile - //
+		else if (method.equals("Upload"))
+			upload(request);
+	}
+
+	private void login(String request) throws ParserConfigurationException {
+
+		String username = MessageProcessor.process(request).split(",")[1];
+		String name = MessageProcessor.process(request).split(",")[2];
+		String password = MessageProcessor.process(request).split(",")[3];
+		String picture = MessageProcessor.process(request).split(",")[4];
+
+		String result = "";
+
+		if (!Session.availableNickname(username)) {
+			if (Session.login(username, password)) {
+
+				name = Profile.getName(username);
+				picture = Profile.getPicture(username);
+				result = "Sucesso!";
+				System.out.println("O utilizador " + name + " entrou no jogo.");
+
+			} else
+				result = "Erro: Palavra-passe incorreta!";
+		} else
+			result = "Erro: Nome de utilizador não está disponível";
+
+		os.println(MessageCreator.messageSession(username, name, password, picture, false, result));
+	}
+
+	private void register(String request) throws ParserConfigurationException {
+
+		String username = MessageProcessor.process(request).split(",")[1];
+		String name = MessageProcessor.process(request).split(",")[2];
+		String password = MessageProcessor.process(request).split(",")[3];
+		String picture = MessageProcessor.process(request).split(",")[4];
+
+		String result = "";
+
+		// Encriptação da palavra-passe
+		MessageDigest md = null;
+		try {
+			md = MessageDigest.getInstance("MD5");
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		md.update(password.getBytes());
+		byte[] digest = md.digest();
+		String hashPassword = DatatypeConverter.printHexBinary(digest).toUpperCase();
+
+		if (Session.availableNickname(username)) {
+			Session.register(username, name, hashPassword, picture);
+			result = "Sucesso!";
+			System.out.println("O utilizador " + name + " entrou no jogo.");
+		} else
+			result = "Erro: Nickname em uso.";
+
+		os.println(MessageCreator.messageSession(username, name, hashPassword, picture, true, result));
+	}
+
+	private void findGame(String request) throws ParserConfigurationException, IOException {
+
+		this.reading = false;
+		String username = MessageProcessor.process(request).split(",")[1];
+		activeUsers.put(username, this.reader);
+		os.println(MessageCreator.messageFind(username, "À espera de outro jogador..."));
+	}
+
+	// TODO
+	private void upload(String request) throws ParserConfigurationException {
+
+		String contentType = MessageProcessor.process(request).split(",")[1];
+		String username = MessageProcessor.process(request).split(",")[2];
+		String value = MessageProcessor.process(request).split(",")[3];
+
+		if (contentType.equals("picture")) {
+			Profile.uploadProfilePicture(username, value);
+			String result = "Foto de perfil atualizada com sucesso. Por favor reinicie a aplicacao.";
+			os.println(MessageCreator.messageUpload(contentType, username, value, result));
+		}
+	}
+
+	class ThreadReader extends Thread {
+
+		private Socket user;
+		private PrintWriter os;
+		private BufferedReader is;
+		private String request;
+		private Semaphore semaphore;
+
+		public ThreadReader(Socket user, BufferedReader is, PrintWriter os, Semaphore semaphore) {
+			
+			this.user = user;
+			this.semaphore = semaphore;
+			this.request = "";
+			this.is = is;
+			this.os = os;
+		}
+
+		public String getRequest() {
+			return this.request;
+		}
+		
+		public BufferedReader getBufferedReader() {
+			return this.is;
+		}
+		
+		public PrintWriter getPrintWriter() {
+			return this.os;
+		}
+
+		public Socket getSocket() {
+			return this.user;
+		}
+		
+		public Semaphore getSemaphore() {
+			return semaphore;
+		}
+
+		public void run() {
+
+			try {
+				for (;;) {
+
+					String line = (String) is.readLine();
+					if (line == null)
+						break;
+					
+					this.request = line;
+					semaphore.release();
+				}
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

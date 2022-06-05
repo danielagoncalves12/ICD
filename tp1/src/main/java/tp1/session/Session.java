@@ -28,7 +28,7 @@ import tp1.protocol.XMLUtils;
 
 public class Session {
 
-	public static String dataBasePath = "src//main//webapp//xml//PlayerInfo.xml";
+	public static String dataBasePath = "src/main/webapp/xml/PlayerInfo.xml";
 	
 	public static boolean availableNickname(String nickname) {
 		
