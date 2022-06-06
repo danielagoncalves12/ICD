@@ -20,7 +20,7 @@ public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexões
-    private String nickname, name, picture;  		// Dados da conta do utilizador
+    private String username, name, picture;  		// Dados da conta do utilizador
     private Socket socket;
     private BufferedReader is;
     private PrintWriter os;
@@ -52,34 +52,25 @@ public class User {
            System.err.println(e.getMessage());   
         }
     }	
- 
-    public String enterQueue(String username) {
-    	try {
-			return sendRequestGame(username);
-		} catch (ParserConfigurationException | IOException e) {
-			e.printStackTrace();
-		}
-    	return null;
-    }
-    
+
     private void playGame() throws ParserConfigurationException, IOException {
-    	System.out.println(enterQueue(nickname));
+   
+    	sendRequestGame(username);
     	
-		String playerNum = "0";
-		
         // Início do jogo    
-		playerNum = sendRequestInfo(playerNum);							// Pede o número do jogador
-		System.out.println("Es o jogador numero " + playerNum + "!!");  // Demonstra ao jogador
-		sendRequestInfo(playerNum);  	
-        System.out.print(sendRequestBoard(playerNum, "true"));  		// Receber o próprio tabuleiro
-        System.out.print(sendRequestBoard(playerNum, "false"));			// Receber tabuleiro do adversário
+		//playerNum = sendRequestInfo(playerNum);						  // Pede o número do jogador
+		//System.out.println("Es o jogador numero " + playerNum + "!!");  // Demonstra ao jogador
+		//sendRequestInfo(playerNum); 
+		
+        System.out.print(sendRequestBoard(username, "true"));  	// Receber o próprio tabuleiro
+        System.out.print(sendRequestBoard(username, "false"));	// Receber tabuleiro do adversário
            
-        while (true) {        	
+        while (true) {
         	
         	// Enviar Request a pedir por informação
-        	String info = sendRequestInfo(playerNum);
-        	System.out.println(info);
-        	if (win(info)) break;
+        	//String info = sendRequestInfo(playerNum);
+        	//System.out.println(info);
+        	//if (win(info)) break;
         	
         	// Enviar Request com a jogada escolhida
         	String position;
@@ -88,11 +79,11 @@ public class User {
         		if (!checkValid(position)) System.out.println("Posição inválida! Insira uma posição novamente:");
         	}
         	while(!checkValid(position));	
-        	System.out.println(sendRequestPlay(playerNum, position));
+        	System.out.println(sendRequestPlay(username, position));
 			
 			// Enviar Request a pedir o tabuleiro do adversário atualizado
-        	System.out.println(sendRequestBoard(playerNum, "true"));
-			System.out.println(sendRequestBoard(playerNum, "false"));
+        	System.out.println(sendRequestBoard(username, "true"));
+			System.out.println(sendRequestBoard(username, "false"));
 		}
     }
 
@@ -159,10 +150,10 @@ public class User {
     	
     	// Apresentação do perfil
     	System.out.println("--------------------------------");
-    	System.out.println("Bem-vindo " + nickname + "!!");
+    	System.out.println("Bem-vindo " + username + "!!");
     	System.out.println("--------------------------------");
     	System.out.println("Seu Perfil: ");
-    	System.out.println("Nickname:     " + nickname);
+    	System.out.println("Nickname:     " + username);
     	System.out.println("Nome publico: " + name);
     	System.out.println("Fotografia:   " + picture);
     	System.out.println("--------------------------------");
@@ -196,7 +187,7 @@ public class User {
     	
     	System.out.println("\nAtualize a sua foto de perfil: ");
     	System.out.print("Imagem: ");
-    	System.out.println(sendRequestUpload("picture", nickname, scan.nextLine()));
+    	System.out.println(sendRequestUpload("picture", username, scan.nextLine()));
     	mainMenu();
     }
 
@@ -274,7 +265,7 @@ public class User {
     	
     	// Atualização dos dados do utilizador, dados vindo do servidor
     	String state  = reply.split(",")[0];
-		this.nickname = reply.split(",")[1];
+		this.username = reply.split(",")[1];
 		this.name     = reply.split(",")[2];
 		this.picture  = reply.split(",")[3];
     	

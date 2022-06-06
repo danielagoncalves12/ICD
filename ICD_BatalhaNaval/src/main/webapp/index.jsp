@@ -64,12 +64,7 @@ String picture  = Check.picture(request);
 			    </div>
 			    
 	         	<div style="padding:50px; text-align: center; width: 100%; display: table-cell;">
-	         		
-	         		 <form action="FindServlet" method="POST">
-	         		 	<input type="hidden" id="username" name="username" value="<%=session.getAttribute("username") %>">
-	         		 	<input type="submit" value="Play"/>
-	         		 </form>
-	         		<!-- <a href="game.jsp"><button type="button" class="btn btn-outline-primary">Play</button></a> -->
+	         		<a href="game.jsp"><button type="button" class="btn btn-outline-primary">Play</button></a>
 	         	</div>
 		     
 		     </div>

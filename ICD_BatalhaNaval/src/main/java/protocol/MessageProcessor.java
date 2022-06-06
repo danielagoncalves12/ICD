@@ -133,7 +133,7 @@ public class MessageProcessor {
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 		
 		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), nodePoints1.getTextContent(), nodePoints2.getTextContent(), board);
-		else return "Board" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
+		else return "GetBoard" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 	}
 	
 	private static String info(Document doc) throws DOMException, SAXException, IOException {

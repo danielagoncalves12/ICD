@@ -1,6 +1,7 @@
 package bean;
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -9,16 +10,27 @@ public class Check {
 
 	public static String username(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		// Obter o username guardado na sessao
 		HttpSession session = request.getSession(true);
-		String nickname = (String) session.getAttribute("username");
+		String username = (String) session.getAttribute("username");
 
-		if(session != null) {
-	
-			if (nickname != null) return nickname;
-			else session.invalidate();
+		// Se nao houver username guardado na sessao,
+		// é procurado pelo username guardado em cookie
+		if (username == null) {
+			Cookie[] cookies = request.getCookies();
+			
+			if (cookies != null) 
+				for (Cookie cookie : cookies) 
+				   if (cookie.getName().equals("username")) 
+					   username = cookie.getValue();
 		}
-		request.getRequestDispatcher("/login.html").forward(request, response);
-		return "????";
+		
+		if (username != null) return username;
+		else {
+			session.invalidate();
+			request.getRequestDispatcher("/login.html").forward(request, response);
+			return "";
+		}
 	}
 	
 	public static String name(HttpServletRequest request) throws ServletException, IOException {

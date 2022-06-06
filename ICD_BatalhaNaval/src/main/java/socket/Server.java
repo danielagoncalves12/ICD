@@ -3,14 +3,14 @@ package socket;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Hashtable;
+import java.util.concurrent.Semaphore;
 
 /**
- * @author Daniela Gonçalves A48579 42D
+ * @author Daniela Gon�alves A48579 42D
  * 
- * A classe Server, servidor concorrente, inicia uma conexão TCP no 
- * porto 49152 e espera pela conexão de clientes. Inicia uma tarefa
- * SessionThread para que cada utilizador possa iniciar sessão no servidor.
+ * A classe Server, servidor concorrente, inicia uma conexao TCP no 
+ * porto 49152 e espera pela conexao de clientes. Inicia uma tarefa
+ * SessionThread para que cada utilizador possa iniciar sessao no servidor.
  */
 
 public class Server {
@@ -19,23 +19,19 @@ public class Server {
 	
 	public static void main(String[] args) {
 
+		Semaphore semaphore = new Semaphore(0);
 		ServerSocket serverSocket = null;  // Socket do servidor
-		GameQueueThread manager = null;	   // Gestor/Iniciador de jogos
+		new GameQueueThread(semaphore).start();
 		
 		try {
 			serverSocket = new ServerSocket(PORT);  // Socket de servidor		
-			Socket player;							// Socket de um utilizador
-			manager = new GameQueueThread();
-			manager.start();
+			Socket user;							// Socket de um utilizador
 
 			System.out.println("> Servidor, conexao TCP no porto " + PORT + " ...");
 			while (true) {
-				
-				// Enviar o pedido para o utilizador se registar
-				player = serverSocket.accept();
 
-				new MenuThread(player).start();
-				System.out.println("Um utilizador acedeu ao site.");
+				user = serverSocket.accept();
+				new MenuThread(user, semaphore).start();
 			}
 		} catch (IOException e) {
 			System.err.println("Erro: " + e);

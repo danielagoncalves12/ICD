@@ -8,17 +8,6 @@
   <meta http-equiv="Pragma" content="no-cache"/>
   <meta http-equiv="Expires" content="-1"/>
 
-<% 
-User user = (User) session.getAttribute("user");
-
-System.out.println(user);
-if (user == null) {
-
-	session.setAttribute("user", new User());
-	System.out.println("User criado");
-}
-
- %>
 <title>Iniciar sessão</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">

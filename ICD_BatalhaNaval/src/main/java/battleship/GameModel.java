@@ -16,9 +16,19 @@ public class GameModel {
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
 	private int[][] boardPlayer2 = new int[10][10]; // Tabuleiro do jogador 2
 	private int pointsPlayer1, pointsPlayer2; 		// Pontuação dos jogadores
-	private HashMap<String, Integer> columnValue = new HashMap<>();
+	private HashMap<String, Integer> columnValue  = new HashMap<>();
+	private HashMap<String, Integer> playerNumber = new HashMap<>();
 	
-	public GameModel() {
+	private String username1, username2;
+	
+	public GameModel(String username1, String username2) {
+		
+		this.username1 = username1;
+		this.username2 = username2;
+		
+		// Associar um numero a cada jogador
+		playerNumber.put(username1, 1);
+		playerNumber.put(username2, 2);
 		
 		// Preencher o tabuleiro inicial com zeros [Por explorar (Sem navio)]
 		Arrays.stream(boardPlayer1).forEach(a -> Arrays.fill(a, 0));
@@ -39,13 +49,27 @@ public class GameModel {
 		pointsPlayer2 = 0; 
 		
 		// Pergunta ao jogador, pelas posições dos navios
-		randomShipPosition("1");
-		randomShipPosition("2");
+		randomShipPosition(username1);
+		randomShipPosition(username2);
 	}
-
-	public int[][] getBoard(String player) {
+	
+	public ArrayList<String> getUsernames() {
 		
-		return (player.equals("1")) ? boardPlayer1 : boardPlayer2;
+		ArrayList<String> usernames = new ArrayList<>();
+		usernames.add(this.username1);
+		usernames.add(this.username2);
+		
+		return usernames;
+	}
+	
+	public int getPlayerNumber(String username) {
+		
+		return playerNumber.get(username);
+	}
+	
+	public int[][] getBoard(int player) {		
+		
+		return (player == 1) ? boardPlayer1 : boardPlayer2;
 	}
 	
 	/**
@@ -56,9 +80,10 @@ public class GameModel {
 	 * @param values1 - Jogador 1 ou 2
 	 * @return Dicionário com as posições do respetivo tipo de navio.
 	 */
-	public HashMap<String, List<List<Integer>>> getBoardPositions(String player) {
+	public HashMap<String, List<List<Integer>>> getBoardPositions(String username) {
 
-		int[][] board = (player.equals("1")) ? boardPlayer2 : boardPlayer1;
+		int player = getPlayerNumber(username);
+		int[][] board = (player == 1) ? boardPlayer2 : boardPlayer1;
 		
 		List<List<Integer>> positionEmpty = new ArrayList<>();
 		List<List<Integer>> positionType1 = new ArrayList<>(), positionType2 = new ArrayList<>();
@@ -100,9 +125,10 @@ public class GameModel {
 	 * @param player
 	 * @return Dicionário com as posições de cada tipo de navio
 	 */
-	public HashMap<String, List<List<Integer>>> getBoardPositionsView(String player) {
+	public HashMap<String, List<List<Integer>>> getBoardPositionsView(String username) {
 
-		int[][] board = (player.equals("1")) ? boardPlayer1 : boardPlayer2;
+		int player = getPlayerNumber(username);
+		int[][] board = (player == 1) ? boardPlayer1 : boardPlayer2;
 		
 		List<List<Integer>> positionEmpty = new ArrayList<>();
 		List<List<Integer>> positionType1 = new ArrayList<>(), positionType2 = new ArrayList<>();
@@ -134,18 +160,21 @@ public class GameModel {
 		return dic;
 	}
 	
-	public String getPoints(String player) {
+	public String getPoints(String username) {
 
-		return (player.equals("1")) ? String.valueOf(pointsPlayer1) : String.valueOf(pointsPlayer2);
+		int player = getPlayerNumber(username);	
+		return (player == 1) ? String.valueOf(pointsPlayer1) : String.valueOf(pointsPlayer2);
 	}
 
 	/**
 	 * @param player - Jogador 1 ou 2
 	 * @return
 	 */
-	public boolean checkWin(String player) {
+	public boolean checkWin(String username) {
 		
-		if (player.equals("1")) return pointsPlayer1 == MAXPOINTS;
+		int player = getPlayerNumber(username);
+		
+		if (player == 1) return pointsPlayer1 == MAXPOINTS;
 		else return pointsPlayer2 == MAXPOINTS;
 	}
 	
@@ -154,8 +183,9 @@ public class GameModel {
 	 * @param choice - Jogada, linha e coluna (Exemplo: 1A, 5F, etc)
 	 * @return String que contém o estado do jogo.
 	 */
-	public String play(String player, String choice) {
+	public String play(String username, String choice) {
 		
+		int player = getPlayerNumber(username);
 		int line, column;
 		
 		if (choice.length() == 2) {
@@ -170,10 +200,10 @@ public class GameModel {
 		}
 
 		int state;
-		int[][] board = (player.equals("1")) ? boardPlayer2 : boardPlayer1;
+		int[][] board = (player == 1) ? boardPlayer2 : boardPlayer1;
 
 		state = board[line][column];
-		if (state >= 6 && state <= 9) if (player.equals("1")) pointsPlayer1++; else pointsPlayer2++;
+		if (state >= 6 && state <= 9) if (player == 1) pointsPlayer1++; else pointsPlayer2++;
 			
 		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY :      // Não encontrou navio
 							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-aviões
@@ -191,14 +221,15 @@ public class GameModel {
 			 : "Espaco ja explorado.");		 
 	}
 
-	public void randomShipPosition(String player) {
+	public void randomShipPosition(String username) {
 		
+		int player = getPlayerNumber(username);
 		String letters = "ABCDEFGHIJ";
 		int[] shipSizes  = {5, 4, 3, 2};  // Dimensão de cada navio
 		int[] shipNumber = {1, 2, 3, 4};  // Número de navios a posicionar de cada tipo
 		int[] shipSymbol = {ShipType.TYPE1HIDDEN, ShipType.TYPE2HIDDEN, ShipType.TYPE3HIDDEN, ShipType.TYPE4HIDDEN};
 
-		int[][] board = player.equals("1") ? boardPlayer1 : boardPlayer2;
+		int[][] board = player == 1 ? boardPlayer1 : boardPlayer2;
 		
 		for (int i = 0; i < 4; i++) {
 
@@ -238,9 +269,9 @@ public class GameModel {
 		}
 	}	
 
-	public boolean checkValidPosition(String player, String position, int shipSize, boolean vertical) {
+	public boolean checkValidPosition(int player, String position, int shipSize, boolean vertical) {
 
-		int[][] board = (player.equals("1")) ? boardPlayer1 : boardPlayer2;
+		int[][] board = player == 1 ? boardPlayer1 : boardPlayer2;
 		
 		char line1  = position.charAt(0);
 		char line2  = position.charAt(1);
@@ -299,5 +330,13 @@ public class GameModel {
 		if (lin != 9) if (board[lin+1][col] != 0) return false;
 		
 		return true;
+	}
+
+	public String getOpponentPoints(String username) {
+		
+		int player = getPlayerNumber(username);
+		
+		if (player == 1) return String.valueOf(pointsPlayer2);
+		else return String.valueOf(pointsPlayer1);		
 	}
 }

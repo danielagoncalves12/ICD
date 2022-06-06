@@ -1,6 +1,7 @@
 import java.io.IOException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,9 +23,10 @@ public class LoginServlet extends HttpServlet {
 		HttpSession session = request.getSession();
 		User user = (User) session.getAttribute("user");
 		String result = "";
-		
 		if (user == null) user = new User();
 		
+		System.out.println("aqui no login -> " + user);
+
 		try {
 			result = user.sendRequestLogin(username, "", password, "", false);
 		} catch (ParserConfigurationException | IOException e) {
@@ -37,6 +39,8 @@ public class LoginServlet extends HttpServlet {
 			session.setAttribute("name", Profile.getName(username));
 			session.setAttribute("picture", Profile.getPicture(username));
 
+			Cookie cookie = new Cookie("username", username);
+			response.addCookie(cookie);
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		else {

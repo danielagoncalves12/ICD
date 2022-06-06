@@ -10,4 +10,12 @@
     <welcome-file>default.htm</welcome-file>
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
+
+   <servlet>
+	<servlet-name>PlayServlet</servlet-name>
+	<servlet-class>PlayServlet</servlet-class>
+  </servlet>
+  <session-config>
+	<session-timeout>30</session-timeout>
+  </session-config>
 </web-app>

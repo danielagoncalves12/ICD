@@ -3,54 +3,95 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Batalha Naval</title>
-</head>
-<body>
-<h2>JOGO</h2>
 
-<h2>Bem vindo <%=session.getAttribute("username")%> !!</h2>
-
-<%
-User player      = (User) session.getAttribute("player");
-String playerNum = (String) session.getAttribute("player_num");
-String info = "", result = "";
-
-if (playerNum == null) {
-	
-	//player = new User();
-
-	//System.out.println("Criou o Jogador!");
-	//session.setAttribute("player", player);
-
-	playerNum = player.sendRequestInfo("0");
-	session.setAttribute("player_num", playerNum);
-	System.out.println("cheguei");
+<style>
+.center {
+  margin: auto;
+  width: 80%;
+  border: 1px solid black;
+  padding: 10px;
 }
 
-info = player.sendRequestInfo(playerNum);
-String position = request.getParameter("position");
-if (position != null) result = player.sendRequestPlay(playerNum, position);
+.container {
+  width: 100%;
+  height: 450px;
+  background: aqua;
+  margin: auto;
+}
+
+.one {
+  width: 50%;
+  height: 450px;
+  float: left;
+}
+
+.two {
+  margin-left: 15%;
+  height: 480px;
+  float: right;
+}
+</style>
+
+</head>
+<body>
+<% String username = Check.username(request, response); %>
+
+<%
+// Atributos
+String result = (String) session.getAttribute("result");
+String state  = (String) session.getAttribute("state");
+User user     = (User) session.getAttribute("user");
+
+if (user == null) user = new User();
+if (result == null) result = "";
+String myBoard = "", anotherBoard = "";
+
+System.out.println("Username -> " + session.getAttribute("username"));
+System.out.println("User aqui no jogo -> " + user);
+
+// Primeira vez
+if (state == null) {
+	
+	user.sendRequestGame(username);
+	myBoard = user.sendRequestBoard(username, "true");
+	anotherBoard = user.sendRequestBoard(username, "false");
+}
+else {	
+	myBoard = user.sendRequestBoard(username, "true");
+	anotherBoard = user.sendRequestBoard(username, "false");
+	//String position = request.getParameter("position");
+	//if(position != null)
+	//	user.sendRequestPlay(username, position);
+}
 %>
+<div class="center">
 
-<div style="width: 100%; display: table;">
-    <div style="display: table-row">
-        <div style="width: 600px; display: table-cell;"> 
-        	<%=GameView.viewBoard(player.sendRequestBoard(playerNum, "true"))%>
-        </div>
-        
-        <div style="display: table-cell;">
-        	<%=GameView.viewBoard(player.sendRequestBoard(playerNum, "false"))%>
-        </div>
-    </div>
+	<div style="text-align: center" class="center">
+	
+		<h2>JOGO</h2>
+		<h2> Bem vindo <%=username%> !! </h2>
+
+		<form method="POST" action="PlayServlet">
+			<input type="hidden" name="username" id="username" value="<%=username%>">
+			<input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
+			<input type="submit" value="Jogar">
+		</form>
+
+		<br>
+		<p><%=result%></p>
+
+	</div>
+
+	<section class="container">
+	  	<div class="one" style="font-size: 0">
+	  		<%=GameView.viewBoard(myBoard)%>
+	  	</div>
+	  	<div class="two" style="font-size: 0">
+	  		<%=GameView.viewBoard(anotherBoard)%>  
+ 		</div>
+	</section>
+
 </div>
-
-<p><%=info%></p>
-<br>
-<p><%=result%></p>
-
-<form method="POST">
-    <input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
-    <input type="submit" value="Jogar">
-</form>
 
 </body>
 </html>

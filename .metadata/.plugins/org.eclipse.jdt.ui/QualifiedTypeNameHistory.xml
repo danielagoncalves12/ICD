@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <qualifiedTypeNameHistroy>
-    <fullyQualifiedTypeName name="tp1.protocol.Profile"/>
-    <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.io.ObjectOutputStream"/>
     <fullyQualifiedTypeName name="java.io.ByteArrayOutputStream"/>
     <fullyQualifiedTypeName name="java.io.ByteArrayInputStream"/>
@@ -11,7 +9,6 @@
     <fullyQualifiedTypeName name="tp1.protocol.MessageCreator"/>
     <fullyQualifiedTypeName name="javax.xml.soap.Node"/>
     <fullyQualifiedTypeName name="tp1.protocol.Message"/>
-    <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="java.util.List"/>
     <fullyQualifiedTypeName name="java.util.Map"/>
     <fullyQualifiedTypeName name="tp1.session.SessionThread"/>
@@ -46,7 +43,6 @@
     <fullyQualifiedTypeName name="tp1.socket.GameThread"/>
     <fullyQualifiedTypeName name="tp1.socket.User"/>
     <fullyQualifiedTypeName name="java.net.URLEncoder"/>
-    <fullyQualifiedTypeName name="javax.servlet.http.Cookie"/>
     <fullyQualifiedTypeName name="com.google.gson.Gson"/>
     <fullyQualifiedTypeName name="java.io.File"/>
     <fullyQualifiedTypeName name="org.omg.CORBA.portable.OutputStream"/>
@@ -56,8 +52,12 @@
     <fullyQualifiedTypeName name="java.net.Socket"/>
     <fullyQualifiedTypeName name="java.io.PrintWriter"/>
     <fullyQualifiedTypeName name="java.io.BufferedReader"/>
-    <fullyQualifiedTypeName name="socket.GameQueueThread"/>
-    <fullyQualifiedTypeName name="java.util.concurrent.Semaphore"/>
     <fullyQualifiedTypeName name="socket.MenuThread.ThreadReader"/>
     <fullyQualifiedTypeName name="socket.User"/>
+    <fullyQualifiedTypeName name="javax.servlet.http.Cookie"/>
+    <fullyQualifiedTypeName name="battleship.GameModel"/>
+    <fullyQualifiedTypeName name="java.util.HashMap"/>
+    <fullyQualifiedTypeName name="java.util.ArrayList"/>
+    <fullyQualifiedTypeName name="socket.GameQueueThread"/>
+    <fullyQualifiedTypeName name="java.util.concurrent.Semaphore"/>
 </qualifiedTypeNameHistroy>

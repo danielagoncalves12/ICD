@@ -67,4 +67,6 @@
 		<item key="expanded1" value="false"/>
 		<item key="expanded2" value="false"/>
 	</section>
+	<section name="RenameInformationPopup">
+	</section>
 </section>

@@ -7,6 +7,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -23,15 +24,18 @@ import session.Session;
 
 public class MenuThread extends Thread {
 
+	public static ArrayList<GameModel> activeGames = new ArrayList<>();
 	public static Hashtable<String, ThreadReader> activeUsers = new Hashtable<>();
 	private ThreadReader reader;
 	private Socket user;
 	private BufferedReader is;
 	private PrintWriter os;
 	private boolean reading;
+	private Semaphore semaphore;
 
-	public MenuThread(Socket user) {
+	public MenuThread(Socket user, Semaphore semaphore) {
 
+		this.semaphore = semaphore;
 		this.reading = true;
 		this.reader = null;
 		this.user = user;
@@ -69,6 +73,8 @@ public class MenuThread extends Thread {
 		// Primeiro argumento representa o tipo de pedido
 		String method = MessageProcessor.process(request).split(",")[0]; 
 
+		//System.out.println("Metodo -> " + method);
+		
 		// - Login - //
 		if (method.equals("Login"))
 			login(request);
@@ -84,8 +90,63 @@ public class MenuThread extends Thread {
 		// - Upload Profile - //
 		else if (method.equals("Upload"))
 			upload(request);
+		
+		// - Play - //
+		else if (method.equals("Play"))
+			play(request);
+		
+		// - Get Board - //
+		else if (method.equals("GetBoard"))
+			board(request);
 	}
 
+	private void play(String request) throws ParserConfigurationException {
+		
+		String player   = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
+		String position = MessageProcessor.process(request).split(",")[2]; // Posição
+		
+		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;
+		GameModel game = null;
+		
+		for (GameModel g : activeGames) {
+			String username1 = g.getUsernames().get(0);
+			String username2 = g.getUsernames().get(1);
+			
+			if (player.equals(username1) || player.equals(username2)) {
+				game = g;
+				break;
+			}
+		}
+		
+		String result = game.play(player, position);  // Aplicação da jogada			
+		os.println(MessageCreator.messagePlay(player, position, result));
+	}
+	
+	private void board(String request) throws ParserConfigurationException {
+		
+		String player = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
+		String view   = MessageProcessor.process(request).split(",")[2]; // Tipo de visualização		
+		
+		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;	
+		GameModel game = null;
+		
+		for (GameModel g : activeGames) {
+			
+			String username1 = g.getUsernames().get(0);
+			String username2 = g.getUsernames().get(1);
+
+			if (player.equals(username1) || player.equals(username2)) {
+				game = g;
+				break;
+			}
+		}
+		
+		HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
+																		  : game.getBoardPositions(player));
+	
+		os.println(MessageCreator.messageBoard(player, view, game.getPoints(player), game.getOpponentPoints(player), board));
+	}
+	
 	private void login(String request) throws ParserConfigurationException {
 
 		String username = MessageProcessor.process(request).split(",")[1];
@@ -143,10 +204,18 @@ public class MenuThread extends Thread {
 
 	private void findGame(String request) throws ParserConfigurationException, IOException {
 
-		this.reading = false;
 		String username = MessageProcessor.process(request).split(",")[1];
-		activeUsers.put(username, this.reader);
-		os.println(MessageCreator.messageFind(username, "À espera de outro jogador..."));
+		
+		if (!activeUsers.containsKey(username)) {
+			activeUsers.put(username, this.reader);
+		}
+
+		try {
+			semaphore.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		os.println(MessageCreator.messageFind(username, "DONE"));
 	}
 
 	// TODO
@@ -209,6 +278,7 @@ public class MenuThread extends Thread {
 					if (line == null)
 						break;
 					
+					//System.out.println("Pedido: " + line);
 					this.request = line;
 					semaphore.release();
 				}

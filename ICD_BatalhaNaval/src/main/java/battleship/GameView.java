@@ -11,7 +11,7 @@ public class GameView {
 	public static void convertSymbols() {
 		
 		symbols.put(ShipType.EMPTYHIDDEN, new String(" ")); // Por explorar (Sem navio)
-		symbols.put(ShipType.EMPTY, new String("."));       // Pressionado (Sem Sucesso)
+		symbols.put(ShipType.EMPTY, new String("x"));       // Pressionado (Sem Sucesso)
 	    
 		symbols.put(ShipType.TYPE1SHOW, new String("P"));   // Porta-aviões encontrado
 		symbols.put(ShipType.TYPE2SHOW, new String("N"));   // Navio-tanque encontrado
@@ -27,14 +27,18 @@ public class GameView {
 	public static String viewBoard(String board) {
 		
 		board = board.replaceAll("A  B  C  D  E  F  G  H  I  J", "<img src='resources/letters.png'/>");
-		board = board.replaceAll("|", "");
-		board = board.replaceAll("-", "");
-		board = board.replaceAll("X", "");
 		board = board.replaceAll("(\r\n|\n)", "<br>");
+		board = board.replaceAll("x", "<img src='resources/found_empty.png'/>");
 		board = board.replaceAll(" ", "<img src='resources/empty.png'/>");
 		board = board.replaceAll("(C|S|P|N)", "<img src='resources/ship.png'/>");
-		//board = board.replaceAll(".", "<img src='resources/empty_found.png'/>");
 		
+		/*int idxFirstImage = board.indexOf("<img");
+		String firstHalf = board.substring(0, idxFirstImage);
+		String lastHalf  = board.substring(idxFirstImage);
+		
+		lastHalf = lastHalf.replaceAll("> <", "");
+		board = firstHalf + lastHalf;
+		*/
 		return board;
 	}
 	
@@ -46,7 +50,7 @@ public class GameView {
 
 		String intro = "";
 		if (view.equals("true")) {
-			intro = "\nTodos os navios foram posicionados aleatoriamente!\nSeu tabuleiro:\n\n";	
+			intro = "\nTodos os navios foram posicionados aleatoriamente!\nTabuleiro:\n\n";	
 		}
 		else {
 			intro = "\nJogador 1: " + pointsPlayer1 + " pontos \nJogador 2: " + pointsPlayer2 + " pontos" +
