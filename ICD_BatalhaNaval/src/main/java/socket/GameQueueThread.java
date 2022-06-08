@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.concurrent.Semaphore;
 
-import socket.MenuThread.ThreadReader;
+import socket.HandleConnectionThread.ThreadReader;
 
 public class GameQueueThread extends Thread {
 
@@ -21,7 +21,7 @@ public class GameQueueThread extends Thread {
 	public void run() {
 		
 		// Utilizadores ativos, prontos a jogar
-		Hashtable<String, ThreadReader> activeUsers = MenuThread.activeUsers;
+		Hashtable<String, ThreadReader> activeUsers = HandleConnectionThread.activeUsers;
 		
 		while (true) {
 
@@ -41,7 +41,7 @@ public class GameQueueThread extends Thread {
 				//GameThread game = new GameThread(player1, player2, nickname1, nickname2); // Iniciar o jogo
 				//game.start();
 
-				activeGames.add(new GameModel(username1, username2));
+				activeGames.add(new GameModel(username1, username2, new Semaphore(0)));
 				semaphore.release(2);
 			}
 		}

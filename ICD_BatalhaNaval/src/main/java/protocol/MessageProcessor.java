@@ -82,7 +82,7 @@ public class MessageProcessor {
 			nodeResult = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
 			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
-		
+
 		if (isReply) return nodeResult.getTextContent();
 		else return "Play" + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
 	}
@@ -195,7 +195,7 @@ public class MessageProcessor {
 		// Caso o utilizador não tenha introduzido uma foto durante a inscrição, é atribuido uma foto pre-definida	
 		if (nodeRegister.getNodeValue().equals("true")) { 
 			if (picture.equals(""))
-				picture = "default/photo.png"; 
+				picture = "default.png"; 
 		}		
 		// Caso o utilizador esteja a iniciar sessão (login), obtem o nome publico e foto de perfil
 		else {

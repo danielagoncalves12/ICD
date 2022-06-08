@@ -26,19 +26,34 @@ public class GameView {
 	
 	public static String viewBoard(String board) {
 		
-		board = board.replaceAll("A  B  C  D  E  F  G  H  I  J", "<img src='resources/letters.png'/>");
+		String path = "<img src='resources/dez.png' />";
+		board = board.replaceFirst("10", path);
+		
+		String[] valuesToChange1 = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
+		
+		for (String str : valuesToChange1) {
+			path = "<img src='resources/" + str + ".png' />";
+			board = board.replaceAll(str, path);
+		}
+		
+		path = "<img src='resources/corner.png' />";
+		board = board.replaceFirst("0", path);
+		
+		String[] valuesToChange2 = {"A", "B", "D", "E", "F", "G", "H", "I", "J"};
+		
+		for (String str : valuesToChange2) {
+			path = "<img src='resources/" + str + ".png' />";
+			board = board.replaceAll(str, path);		
+		}
+		
+		path = "<img src='resources/num.png'/>";
+		board = board.replaceFirst("C", path); 
+		
 		board = board.replaceAll("(\r\n|\n)", "<br>");
 		board = board.replaceAll("x", "<img src='resources/found_empty.png'/>");
-		board = board.replaceAll(" ", "<img src='resources/empty.png'/>");
+		board = board.replaceAll(" ", "<img src='resources/not_found.png'/>");
 		board = board.replaceAll("(C|S|P|N)", "<img src='resources/ship.png'/>");
-		
-		/*int idxFirstImage = board.indexOf("<img");
-		String firstHalf = board.substring(0, idxFirstImage);
-		String lastHalf  = board.substring(idxFirstImage);
-		
-		lastHalf = lastHalf.replaceAll("> <", "");
-		board = firstHalf + lastHalf;
-		*/
+
 		return board;
 	}
 	
@@ -47,22 +62,13 @@ public class GameView {
 	 * Apresenta o tabuleiro do jogo.
 	 */
 	public static String printBoard(String player, String view, String pointsPlayer1, String pointsPlayer2, int[][] board) {
-
-		String intro = "";
-		if (view.equals("true")) {
-			intro = "\nTodos os navios foram posicionados aleatoriamente!\nTabuleiro:\n\n";	
-		}
-		else {
-			intro = "\nJogador 1: " + pointsPlayer1 + " pontos \nJogador 2: " + pointsPlayer2 + " pontos" +
-					"\nTabuleiro do jogador " + (player.equals("1") ? 2 : 1) + ":\n\n";
-		}
 			
 		convertSymbols();
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 		StringBuilder strBoard = new StringBuilder();
 
 		// Apresentação das letras
-		strBoard.append("    ");
+		strBoard.append("0 ");
 		for (int i = 0; i < 10; i++) {
 			strBoard.append(" " + letters[i] + " ");
 		}
@@ -89,6 +95,6 @@ public class GameView {
 		//strBoard.append("   X ");
 		//for (int i = 0; i <= 28; i++) strBoard.append((i != 28) ? "-" : " X\n");
 		
-		return intro + strBoard.toString();
+		return strBoard.toString();
 	}
 }

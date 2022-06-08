@@ -22,7 +22,7 @@ import protocol.MessageProcessor;
 import session.Profile;
 import session.Session;
 
-public class MenuThread extends Thread {
+public class HandleConnectionThread extends Thread {
 
 	public static ArrayList<GameModel> activeGames = new ArrayList<>();
 	public static Hashtable<String, ThreadReader> activeUsers = new Hashtable<>();
@@ -33,7 +33,7 @@ public class MenuThread extends Thread {
 	private boolean reading;
 	private Semaphore semaphore;
 
-	public MenuThread(Socket user, Semaphore semaphore) {
+	public HandleConnectionThread(Socket user, Semaphore semaphore) {
 
 		this.semaphore = semaphore;
 		this.reading = true;
@@ -118,7 +118,7 @@ public class MenuThread extends Thread {
 			}
 		}
 		
-		String result = game.play(player, position);  // Aplicação da jogada			
+		String result = game.play(player, position);  // Aplicação da jogada		
 		os.println(MessageCreator.messagePlay(player, position, result));
 	}
 	
@@ -141,10 +141,10 @@ public class MenuThread extends Thread {
 			}
 		}
 		
-		HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
-																		  : game.getBoardPositions(player));
-	
-		os.println(MessageCreator.messageBoard(player, view, game.getPoints(player), game.getOpponentPoints(player), board));
+			HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
+					  														  : game.getBoardPositions(player));
+
+			os.println(MessageCreator.messageBoard(player, view, game.getPoints(player), game.getOpponentPoints(player), board));
 	}
 	
 	private void login(String request) throws ParserConfigurationException {

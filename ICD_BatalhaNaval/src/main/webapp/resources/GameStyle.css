@@ -1,0 +1,56 @@
+@charset "ISO-8859-1";
+
+html {
+	height: 100%;
+	margin: 0px;
+}
+
+body {
+	background: url('background.png') no-repeat;
+	background-size: 100% 100%;
+	background-attachment: fixed;
+	width: 100vw;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+}
+
+.bg {
+	background-image: url("background.png");
+	background-repeat: no-repeat;
+	background-size: cover;
+	background-attachment: fixed;
+	height: 100%;
+}
+
+.center {
+	margin: auto;
+	width: 80%;
+	border: 1px solid black;
+}
+
+.container {
+	width: 100%;
+	height: 450px;
+	background: aqua;
+	margin: auto;
+}
+
+.one {
+	width: 50%;
+	height: 450px;
+	float: left;
+}
+
+.two {
+	margin-left: 15%;
+	height: 480px;
+	float: right;
+}
+
+img {
+	flex: 1;
+	max-width: 100%;
+	height: auto;
+	max-height: 310px;
+}

@@ -31,7 +31,7 @@ public class Server {
 			while (true) {
 
 				user = serverSocket.accept();
-				new MenuThread(user, semaphore).start();
+				new HandleConnectionThread(user, semaphore).start();
 			}
 		} catch (IOException e) {
 			System.err.println("Erro: " + e);

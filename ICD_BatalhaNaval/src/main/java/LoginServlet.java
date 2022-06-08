@@ -20,12 +20,12 @@ public class LoginServlet extends HttpServlet {
 		String username = request.getParameter("input_username");
 		String password = request.getParameter("input_password");
 
-		HttpSession session = request.getSession();
+		// Verificar se existe alguma entrada nos cookies
+		
+		HttpSession session = request.getSession(true);
 		User user = (User) session.getAttribute("user");
 		String result = "";
 		if (user == null) user = new User();
-		
-		System.out.println("aqui no login -> " + user);
 
 		try {
 			result = user.sendRequestLogin(username, "", password, "", false);

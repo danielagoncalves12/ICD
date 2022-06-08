@@ -55,35 +55,32 @@ public class User {
 
     private void playGame() throws ParserConfigurationException, IOException {
    
-    	sendRequestGame(username);
-    	
-        // Início do jogo    
-		//playerNum = sendRequestInfo(playerNum);						  // Pede o número do jogador
-		//System.out.println("Es o jogador numero " + playerNum + "!!");  // Demonstra ao jogador
-		//sendRequestInfo(playerNum); 
-		
-        System.out.print(sendRequestBoard(username, "true"));  	// Receber o próprio tabuleiro
-        System.out.print(sendRequestBoard(username, "false"));	// Receber tabuleiro do adversário
+    	sendRequestGame(username); // Pedido para procurar e iniciar uma partida 
+
+    	System.out.println("\nSeu tabuleiro: ");
+        System.out.print(sendRequestBoard(username, "true") + "\n");  	// Receber o próprio tabuleiro
+        
+        System.out.println("Tabuleiro do adversario: ");
+        System.out.print(sendRequestBoard(username, "false") + "\n");	// Receber tabuleiro do adversário
            
         while (true) {
-        	
-        	// Enviar Request a pedir por informação
-        	//String info = sendRequestInfo(playerNum);
-        	//System.out.println(info);
-        	//if (win(info)) break;
-        	
+
         	// Enviar Request com a jogada escolhida
         	String position;
         	do {
+        		System.out.print("Opcao: ");
         		position = scan.nextLine();
-        		if (!checkValid(position)) System.out.println("Posição inválida! Insira uma posição novamente:");
+        		if (!checkValid(position)) System.out.println("Posição inválida! Insira uma posição novamente:\n");
         	}
         	while(!checkValid(position));	
-        	System.out.println(sendRequestPlay(username, position));
+        	System.out.println(sendRequestPlay(username, position) + "\n");
 			
 			// Enviar Request a pedir o tabuleiro do adversário atualizado
-        	System.out.println(sendRequestBoard(username, "true"));
-			System.out.println(sendRequestBoard(username, "false"));
+        	System.out.println("Seu tabuleiro: ");
+        	System.out.println(sendRequestBoard(username, "true") + "\n");
+        	
+        	System.out.println("Tabuleiro do adversario: ");
+			System.out.println(sendRequestBoard(username, "false") + "\n");
 		}
     }
 

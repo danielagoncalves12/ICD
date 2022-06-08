@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
 	<Player Nickname="Dannie">
 		<Name>Daniela</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
@@ -12,4 +11,16 @@
 		<Picture>alex.jpeg</Picture>
 		<WinsNumber>17</WinsNumber>
 	</Player>
-</Data>
+	<Player Nickname="aaaa">
+		<Name>asdasd</Name>
+		<Password>66526FBC9691BFA753B9D86516D0D2B1</Password>
+		<Picture>default.png</Picture>
+		<WinsNumber>0</WinsNumber>
+	</Player>
+	<Player Nickname="teste">
+		<Name>aaaa</Name>
+		<Password>47BCE5C74F589F4867DBD57E9CA9F808</Password>
+		<Picture>default.png</Picture>
+		<WinsNumber>0</WinsNumber>
+	</Player>
+<Player Nickname="Ola"><Name>ola</Name><Password>A2E63EE01401AAECA78BE023DFBB8C59</Password><Picture>default.png</Picture><WinsNumber>0</WinsNumber></Player><Player Nickname="teste123"><Name>teste123</Name><Password>AA1BF4646DE67FD9086CF6C79007026C</Password><Picture>default.png</Picture><WinsNumber>0</WinsNumber></Player></Data>

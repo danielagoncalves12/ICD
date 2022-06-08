@@ -39,7 +39,6 @@
     <fullyQualifiedTypeName name="bean.UserDataStore"/>
     <fullyQualifiedTypeName name="tp1.protocol.XMLUtils"/>
     <fullyQualifiedTypeName name="tp1.session.Profile"/>
-    <fullyQualifiedTypeName name="bean.Check"/>
     <fullyQualifiedTypeName name="tp1.socket.GameThread"/>
     <fullyQualifiedTypeName name="tp1.socket.User"/>
     <fullyQualifiedTypeName name="java.net.URLEncoder"/>
@@ -54,10 +53,11 @@
     <fullyQualifiedTypeName name="java.io.BufferedReader"/>
     <fullyQualifiedTypeName name="socket.MenuThread.ThreadReader"/>
     <fullyQualifiedTypeName name="socket.User"/>
-    <fullyQualifiedTypeName name="javax.servlet.http.Cookie"/>
     <fullyQualifiedTypeName name="battleship.GameModel"/>
     <fullyQualifiedTypeName name="java.util.HashMap"/>
     <fullyQualifiedTypeName name="java.util.ArrayList"/>
     <fullyQualifiedTypeName name="socket.GameQueueThread"/>
     <fullyQualifiedTypeName name="java.util.concurrent.Semaphore"/>
+    <fullyQualifiedTypeName name="bean.Check"/>
+    <fullyQualifiedTypeName name="javax.servlet.http.Cookie"/>
 </qualifiedTypeNameHistroy>

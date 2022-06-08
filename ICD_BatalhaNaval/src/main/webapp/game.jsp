@@ -2,39 +2,22 @@
 <html>
 <head>
 <meta charset="ISO-8859-1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="resources/GameStyle.css">
 <title>Batalha Naval</title>
 
-<style>
-.center {
-  margin: auto;
-  width: 80%;
-  border: 1px solid black;
-  padding: 10px;
-}
+<script type="text/javascript">
 
-.container {
-  width: 100%;
-  height: 450px;
-  background: aqua;
-  margin: auto;
-}
 
-.one {
-  width: 50%;
-  height: 450px;
-  float: left;
-}
 
-.two {
-  margin-left: 15%;
-  height: 480px;
-  float: right;
-}
-</style>
+</script>
 
 </head>
 <body>
-<% String username = Check.username(request, response); %>
+<% 
+String username = Check.username(request, response);
+String name = Check.name(request);
+%>
 
 <%
 // Atributos
@@ -51,7 +34,7 @@ System.out.println("User aqui no jogo -> " + user);
 
 // Primeira vez
 if (state == null) {
-	
+	System.out.println("Primeira vez");
 	user.sendRequestGame(username);
 	myBoard = user.sendRequestBoard(username, "true");
 	anotherBoard = user.sendRequestBoard(username, "false");
@@ -59,17 +42,15 @@ if (state == null) {
 else {	
 	myBoard = user.sendRequestBoard(username, "true");
 	anotherBoard = user.sendRequestBoard(username, "false");
-	//String position = request.getParameter("position");
-	//if(position != null)
-	//	user.sendRequestPlay(username, position);
 }
 %>
+
 <div class="center">
 
 	<div style="text-align: center" class="center">
 	
 		<h2>JOGO</h2>
-		<h2> Bem vindo <%=username%> !! </h2>
+		<h2> Bem vindo <%=name%> !! </h2>
 
 		<form method="POST" action="PlayServlet">
 			<input type="hidden" name="username" id="username" value="<%=username%>">
@@ -81,17 +62,18 @@ else {
 		<p><%=result%></p>
 
 	</div>
-
-	<section class="container">
-	  	<div class="one" style="font-size: 0">
-	  		<%=GameView.viewBoard(myBoard)%>
-	  	</div>
-	  	<div class="two" style="font-size: 0">
-	  		<%=GameView.viewBoard(anotherBoard)%>  
- 		</div>
-	</section>
-
 </div>
+
+<div style="text-align:center; width: 100%;">
+       <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
+           <%=GameView.viewBoard(myBoard)%>
+       </div>
+       <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
+           <%=GameView.viewBoard(anotherBoard)%>  
+       </div>
+   </div>
+
+
 
 </body>
 </html>

@@ -11,7 +11,7 @@ public class Check {
 	public static String username(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// Obter o username guardado na sessao
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
 		String username = (String) session.getAttribute("username");
 
 		// Se nao houver username guardado na sessao,

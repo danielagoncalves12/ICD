@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.Semaphore;
 
 
 public class GameModel {
@@ -18,11 +19,17 @@ public class GameModel {
 	private int pointsPlayer1, pointsPlayer2; 		// Pontuação dos jogadores
 	private HashMap<String, Integer> columnValue  = new HashMap<>();
 	private HashMap<String, Integer> playerNumber = new HashMap<>();
-	
 	private String username1, username2;
 	
-	public GameModel(String username1, String username2) {
+	// Sincronizacao
+	private Semaphore wait;
+	private static boolean play1 = false, play2 = false;
+	
+	public GameModel(String username1, String username2, Semaphore wait) {
 		
+		this.wait = wait;
+		
+		// Identificacao dos jogadores
 		this.username1 = username1;
 		this.username2 = username2;
 		
@@ -52,7 +59,7 @@ public class GameModel {
 		randomShipPosition(username1);
 		randomShipPosition(username2);
 	}
-	
+
 	public ArrayList<String> getUsernames() {
 		
 		ArrayList<String> usernames = new ArrayList<>();
@@ -62,13 +69,11 @@ public class GameModel {
 		return usernames;
 	}
 	
-	public int getPlayerNumber(String username) {
-		
+	public int getPlayerNumber(String username) {	
 		return playerNumber.get(username);
 	}
 	
-	public int[][] getBoard(int player) {		
-		
+	public int[][] getBoard(int player) {			
 		return (player == 1) ? boardPlayer1 : boardPlayer2;
 	}
 	
@@ -187,6 +192,14 @@ public class GameModel {
 		
 		int player = getPlayerNumber(username);
 		int line, column;
+	
+		if (player == 1) play1 = true;
+		if (player == 2) play2 = true;
+			
+		// Se os dois jogadores já enviaram jogada
+		if (play1 && play2) wait.release(2);
+
+		System.out.println("O jogador num " + player + " vai jogar.");
 		
 		if (choice.length() == 2) {
 			line   = Character.getNumericValue(choice.charAt(0)) - 1;
@@ -211,7 +224,17 @@ public class GameModel {
 							  (state == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW :  // Encontrou Contratorpedeiro
 							  (state == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW :  // Encontrou Submarino
 							  board[line][column];
+
+		try {
+			wait.acquire(1);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		play1 = false;
+		play2 = false;
 		
+		System.out.println("Jogada do player " + player + " aplicada.");
+			
 		return "Resultado: " + (
 			   (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 
 			 : (state == ShipType.TYPE1HIDDEN) ? "Porta-avioes atingido!"
@@ -219,6 +242,7 @@ public class GameModel {
 			 : (state == ShipType.TYPE3HIDDEN) ? "Contratorpedeiro atingido!"
 			 : (state == ShipType.TYPE4HIDDEN) ? "Submarino atingido!"
 			 : "Espaco ja explorado.");		 
+	
 	}
 
 	public void randomShipPosition(String username) {
@@ -330,6 +354,11 @@ public class GameModel {
 		if (lin != 9) if (board[lin+1][col] != 0) return false;
 		
 		return true;
+	}
+	
+	public int getOpponentNumber(int player) {
+		
+		return (player == 1) ? 2 : 1;
 	}
 
 	public String getOpponentPoints(String username) {
