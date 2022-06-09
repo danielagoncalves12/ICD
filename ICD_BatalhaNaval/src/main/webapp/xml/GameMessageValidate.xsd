@@ -109,6 +109,8 @@
                     <xs:element name="Nickname" type="xs:string"/>
 					<xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="Password" type="xs:string"/>
+					<xs:element name="Color" type="xs:string" minOccurs="0" maxOccurs="1"/>
+				    <xs:element name="Date" type="xs:string" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="Picture" type="xs:string" minOccurs="0" maxOccurs="1"/>
                   </xs:sequence>
                 </xs:complexType>

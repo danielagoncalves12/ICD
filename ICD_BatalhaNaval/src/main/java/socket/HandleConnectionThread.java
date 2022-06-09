@@ -150,34 +150,38 @@ public class HandleConnectionThread extends Thread {
 	private void login(String request) throws ParserConfigurationException {
 
 		String username = MessageProcessor.process(request).split(",")[1];
-		String name = MessageProcessor.process(request).split(",")[2];
-		String password = MessageProcessor.process(request).split(",")[3];
-		String picture = MessageProcessor.process(request).split(",")[4];
+		String password = MessageProcessor.process(request).split(",")[2];
+		String name = "", picture = "", color = "", date = "";
 
 		String result = "";
 
 		if (!Session.availableNickname(username)) {
 			if (Session.login(username, password)) {
 
-				name = Profile.getName(username);
+				name	= Profile.getName(username);
 				picture = Profile.getPicture(username);
+				color   = Profile.getColor(username);
+				date 	= Profile.getDate(username);
+				
 				result = "Sucesso!";
-				System.out.println("O utilizador " + name + " entrou no jogo.");
+				System.out.println("O utilizador " + Profile.getName(username) + " entrou no jogo.");
 
 			} else
 				result = "Erro: Palavra-passe incorreta!";
 		} else
 			result = "Erro: Nome de utilizador não está disponível";
 
-		os.println(MessageCreator.messageSession(username, name, password, picture, false, result));
+		os.println(MessageCreator.messageSession(username, name, password, picture, color, date, false, result));
 	}
 
 	private void register(String request) throws ParserConfigurationException {
 
 		String username = MessageProcessor.process(request).split(",")[1];
-		String name = MessageProcessor.process(request).split(",")[2];
+		String name 	= MessageProcessor.process(request).split(",")[2];
 		String password = MessageProcessor.process(request).split(",")[3];
-		String picture = MessageProcessor.process(request).split(",")[4];
+		String color	= MessageProcessor.process(request).split(",")[4];
+		String date		= MessageProcessor.process(request).split(",")[5];
+		String picture  = MessageProcessor.process(request).split(",")[6];
 
 		String result = "";
 
@@ -193,13 +197,13 @@ public class HandleConnectionThread extends Thread {
 		String hashPassword = DatatypeConverter.printHexBinary(digest).toUpperCase();
 
 		if (Session.availableNickname(username)) {
-			Session.register(username, name, hashPassword, picture);
+			Session.register(username, name, hashPassword, color, date, picture);
 			result = "Sucesso!";
 			System.out.println("O utilizador " + name + " entrou no jogo.");
 		} else
 			result = "Erro: Nickname em uso.";
 
-		os.println(MessageCreator.messageSession(username, name, hashPassword, picture, true, result));
+		os.println(MessageCreator.messageSession(username, name, hashPassword, color, date, picture, true, result));
 	}
 
 	private void findGame(String request) throws ParserConfigurationException, IOException {

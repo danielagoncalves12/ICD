@@ -69,7 +69,7 @@ public class XMLUtils {
 			validator.validate(source);
 		} 
 		catch (SAXException e) {
-			System.err.println("XML Invalido.");
+			System.err.println("XML Invalido. -> " + inputXml);
 			isValid = false;
 		}		
 		return isValid;

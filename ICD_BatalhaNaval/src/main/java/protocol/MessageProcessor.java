@@ -173,7 +173,7 @@ public class MessageProcessor {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
         Node nodeRegister = null, nodeNickname = null, nodeName = null, nodePassword = null,
-        nodePicture = null, nodeResult = null;
+        nodeColor = null, nodeDate = null, nodePicture = null, nodeResult = null;
         boolean isReply = false;
         
 		try {
@@ -181,6 +181,8 @@ public class MessageProcessor {
 			nodeNickname = ((Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE));
 			nodeName     = ((Node) xPath.compile("//Request/Name").evaluate(doc, XPathConstants.NODE));
 			nodePassword = ((Node) xPath.compile("//Request/Password").evaluate(doc, XPathConstants.NODE));
+			nodeColor	 = ((Node) xPath.compile("//Request/Color").evaluate(doc, XPathConstants.NODE));
+			nodeDate 	 = ((Node) xPath.compile("//Request/Date").evaluate(doc, XPathConstants.NODE));
 			nodePicture  = ((Node) xPath.compile("//Request/Picture").evaluate(doc, XPathConstants.NODE));
 			
 			nodeResult   = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
@@ -190,6 +192,8 @@ public class MessageProcessor {
 		String nickname = nodeNickname.getTextContent();
 		String name     = nodeName.getTextContent(); 
 		String password = nodePassword.getTextContent();
+		String color	= nodeColor.getTextContent();
+		String date		= nodeDate.getTextContent();
 		String picture  = nodePicture.getTextContent();
 		
 		// Caso o utilizador não tenha introduzido uma foto durante a inscrição, é atribuido uma foto pre-definida	
@@ -201,19 +205,23 @@ public class MessageProcessor {
 		else {
 			if (!Session.availableNickname(nickname)) {
 				name 	= Profile.getName(nodeNickname.getTextContent());
+				date	= Profile.getDate(nodeNickname.getTextContent());
+				color	= Profile.getColor(nodeNickname.getTextContent());
 				picture = Profile.getPicture(nodeNickname.getTextContent());
 			} else {
 				name = "null";
+				date = "null";
+				color = "null";
 				picture = "null";
 			}
 		}
 		
-		if (isReply) return nodeResult.getTextContent() + "," + nickname + "," + name + "," + picture;
+		if (isReply) return nodeResult.getTextContent() + "," + nickname + "," + name + "," + color + "," + date + "," + picture;
 		else {
 			if (nodeRegister.getNodeValue().equals("true"))
-				return "Register," + nickname + "," + name + "," + password + "," + picture;
+				return "Register," + nickname + "," + name + "," + password + "," + color + "," + date + "," + picture;
 			else
-				return "Login," + nickname + "," + name + "," + password + "," + picture;
+				return "Login," + nickname + "," + password;
 		}
 	}
 }

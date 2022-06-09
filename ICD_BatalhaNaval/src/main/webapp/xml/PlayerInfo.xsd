@@ -8,6 +8,8 @@
             <xs:sequence>
               <xs:element name="Name" type="xs:string" />
               <xs:element name="Password" type="xs:string" />
+			  <xs:element name="Color" type="xs:string"/>
+			  <xs:element name="Date" type="xs:string"/>
               <xs:element name="Picture" type="xs:string"/>
 			  <xs:element name="WinsNumber" type="xs:int"/>
             </xs:sequence>

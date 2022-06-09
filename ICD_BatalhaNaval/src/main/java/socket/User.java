@@ -20,7 +20,7 @@ public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexões
-    private String username, name, picture;  		// Dados da conta do utilizador
+    private String username, name, color, date, picture;   // Dados da conta do utilizador
     private Socket socket;
     private BufferedReader is;
     private PrintWriter os;
@@ -202,7 +202,9 @@ public class User {
     	String option = scan.nextLine();
     	System.out.println();
     	
-    	String nickname = "", name = "", password = "", picture = "", reply = "";
+    	// TODO
+    	String nickname = "", name = "", password = "", picture = "", color = "#FFFFFF", date = "01/01/1900";
+    	String reply = "";
     	
     	switch (option) {
     	
@@ -236,7 +238,7 @@ public class User {
     		if (picture.isEmpty()) System.out.println("Aviso: Foto de perfil pre-predefinida atribuida.");
     		
     		// Envio do pedido e recepção da resposta
-        	reply = sendRequestLogin(nickname, name, password, picture, true);  	
+        	reply = sendRequestLogin(nickname, name, password, color, date, picture, true);  	
     		break;
     		
     	// Login
@@ -257,14 +259,16 @@ public class User {
     		} while(password.isEmpty());
 
     		// Envio do pedido e recepção da resposta
-        	reply = sendRequestLogin(nickname, name, password, picture, false);  		
+        	reply = sendRequestLogin(nickname, name, password, color, date, picture, false);  		
     	}
     	
     	// Atualização dos dados do utilizador, dados vindo do servidor
     	String state  = reply.split(",")[0];
 		this.username = reply.split(",")[1];
 		this.name     = reply.split(",")[2];
-		this.picture  = reply.split(",")[3];
+		this.color    = reply.split(",")[3];
+		this.date 	  = reply.split(",")[4];
+		this.picture  = reply.split(",")[5];
     	
 		System.out.println("Sessao -> " + state + "\n");
 		if (state.substring(0, 4).equals("Erro")) return false;
@@ -286,9 +290,9 @@ public class User {
      * palavra-passe e fotografia (caso queira). É retornado o resultado da sessão e os dados atualizados
      * de acordo com a base de dados do servidor.
      */
-	public String sendRequestLogin(String nickname, String name, String password, String picture, boolean register) throws ParserConfigurationException, IOException {
+	public String sendRequestLogin(String nickname, String name, String password, String color, String date, String picture, boolean register) throws ParserConfigurationException, IOException {
 	
-		os.println(MessageCreator.messageSession(nickname, name, password, picture, register));
+		os.println(MessageCreator.messageSession(nickname, name, password, color, date, picture, register));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply);

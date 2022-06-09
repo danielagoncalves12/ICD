@@ -250,12 +250,12 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);
 	}
 
-	public static String messageSession(String nickname, String name, String password, String picture, boolean register) throws ParserConfigurationException {
+	public static String messageSession(String nickname, String name, String password, String color, String date, String picture, boolean register) throws ParserConfigurationException {
 		
-		return messageSession(nickname, name, password, picture, register, "");
+		return messageSession(nickname, name, password, color, date, picture, register, "");
 	}
 	
-	public static String messageSession(String nickname, String name, String password, String picture, boolean register, String result) throws ParserConfigurationException {
+	public static String messageSession(String nickname, String name, String password, String color, String date, String picture, boolean register, String result) throws ParserConfigurationException {
 	
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -288,6 +288,16 @@ public class MessageCreator {
         Element elementPassword = document.createElement("Password");
         elementPassword.setTextContent(password);
         elementRequest.appendChild(elementPassword);
+        
+        // Element Color
+    	Element elementColor = document.createElement("Color");
+    	elementColor.setTextContent(color);
+    	elementRequest.appendChild(elementColor);
+        
+        // Element Date
+    	Element elementDate = document.createElement("Date");
+    	elementDate.setTextContent(date);
+    	elementRequest.appendChild(elementDate);
         
         // Element Picture
     	Element elementPicture = document.createElement("Picture");

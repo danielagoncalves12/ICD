@@ -56,4 +56,16 @@ public class Check {
 		}
 		return "";
 	}
+	
+	public static String color(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession(true);
+		
+		if (session != null) {
+			
+			String color = (String) session.getAttribute("color");
+			if (color != null) return color;		
+		}
+		return "";
+	}
 }

@@ -2,25 +2,17 @@
 	<Player Nickname="Dannie">
 		<Name>Daniela</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
+		<Color>#ed8cc5</Color>
+		<Date>12/06/2000</Date>
 		<Picture>dannie.png</Picture>
 		<WinsNumber>6</WinsNumber>
 	</Player>
 	<Player Nickname="Nick">
 		<Name>Nick</Name>
 		<Password>9CFA7AEFCC61936B70AAEC6729329EDA</Password>
+		<Color>#94bfe3</Color>
+		<Date>01/01/2010</Date>
 		<Picture>alex.jpeg</Picture>
 		<WinsNumber>17</WinsNumber>
 	</Player>
-	<Player Nickname="aaaa">
-		<Name>asdasd</Name>
-		<Password>66526FBC9691BFA753B9D86516D0D2B1</Password>
-		<Picture>default.png</Picture>
-		<WinsNumber>0</WinsNumber>
-	</Player>
-	<Player Nickname="teste">
-		<Name>aaaa</Name>
-		<Password>47BCE5C74F589F4867DBD57E9CA9F808</Password>
-		<Picture>default.png</Picture>
-		<WinsNumber>0</WinsNumber>
-	</Player>
-<Player Nickname="Ola"><Name>ola</Name><Password>A2E63EE01401AAECA78BE023DFBB8C59</Password><Picture>default.png</Picture><WinsNumber>0</WinsNumber></Player><Player Nickname="teste123"><Name>teste123</Name><Password>AA1BF4646DE67FD9086CF6C79007026C</Password><Picture>default.png</Picture><WinsNumber>0</WinsNumber></Player></Data>
+<Player Nickname="teste"><Name>teste</Name><Password>698DC19D489C4E4DB73E28A713EAB07B</Password><Color>#8892ea</Color><Date>2022-05-29</Date><Picture>default.png</Picture><WinsNumber>0</WinsNumber></Player></Data>

@@ -27,10 +27,10 @@
 	
 	<div class="limiter">
 		<div class="container-login100">
-			<div class="wrap-login100">
+			<div class="wrap-login100" style="padding-top: 100px">
 				<div class="login100-pic js-tilt" data-tilt>
 				<br><br>
-					<img src="images/img-01.png" alt="IMG">
+					<img style="padding-top: 30%" src="images/img-01.png" alt="IMG">
 				</div>
 
 				<!-- FORM de inicio de sessao -->
@@ -63,16 +63,25 @@
 						</span>
 					</div>
 					
-					<div class="wrap-input100">
-						<input class="inputimage" type="file" id="new_picture" name="new_picture" accept="image/png, image/jpeg" value="" placeholder="Foto de Perfil"><br>
-						<span class="focus-input100"></span>
+					<div>
+						<hr>
+						<p>Selecione a sua cor favorita: <span style="color: red">*</span></p>
+						<input style="width: 100%; height:38px; border: 8px solid #E6E6E6; border-radius: 10px" type="color" id="new_color" name="new_color" placeholder="Cor Favorita" required><br>
+						<p style="line-height: 10px; font-size: 10px"> </p>
+						
+						<p>Selecione a sua data de nascimento: <span style="color: red">*</span></p>
+						<input style="width: 100%; height:38px; border: 8px solid #E6E6E6; border-radius: 10px" type="date" id="new_date" name="new_date" placeholder="Data de nascimento" required>
+						<p style="line-height: 10px; font-size: 10px"> </p>
+						
+						<p>Selecione a sua foto de perfil (Opcional):</p>
+						<input style="width: 100%; height:40px; border: 8px solid #E6E6E6; border-radius: 10px" type="file" id="new_picture" name="new_picture" accept="image/png, image/jpeg" value="" placeholder="Foto de Perfil"><br>
 					</div>
 					
 					<div class="container-login100-form-btn">
 						<input class="login100-form-btn" type = "submit" value = "Registar!"/>
 					</div>
 
-					<div class="text-center p-t-80">
+					<div class="text-center p-t-30">
 						<a class="txt2" href="login.jsp">
 							Já tem uma conta? Inicie sessão!
 							<i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>

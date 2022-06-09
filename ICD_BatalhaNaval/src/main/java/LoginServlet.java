@@ -28,7 +28,7 @@ public class LoginServlet extends HttpServlet {
 		if (user == null) user = new User();
 
 		try {
-			result = user.sendRequestLogin(username, "", password, "", false);
+			result = user.sendRequestLogin(username, "", password, "", "", "", false);
 		} catch (ParserConfigurationException | IOException e) {
 			e.printStackTrace();
 		}
@@ -37,6 +37,8 @@ public class LoginServlet extends HttpServlet {
 			
 			session.setAttribute("username", username);
 			session.setAttribute("name", Profile.getName(username));
+			session.setAttribute("color", Profile.getColor(username));
+			session.setAttribute("date", Profile.getDate(username));
 			session.setAttribute("picture", Profile.getPicture(username));
 
 			Cookie cookie = new Cookie("username", username);

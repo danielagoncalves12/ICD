@@ -43,7 +43,12 @@ public class RegisterServlet extends HttpServlet {
 			if (!username.equals("")) {
 				session.setAttribute("username", username);		
 				session.setAttribute("name", Profile.getName(username));
+				session.setAttribute("color", Profile.getColor(username));
+				session.setAttribute("date", Profile.getDate(username));
 				session.setAttribute("picture", Profile.getPicture(username));
+				
+				// TODO
+				
 				request.getRequestDispatcher("/index.jsp").forward(request, response);
 				return;
 			}
@@ -53,6 +58,8 @@ public class RegisterServlet extends HttpServlet {
 		String newUsername = request.getParameter("new_username");
 		String newName     = request.getParameter("new_name");
 		String newPassword = request.getParameter("new_password");
+		String newColor    = request.getParameter("new_color");
+		String newDate     = request.getParameter("new_date");
 		String newPicture  = request.getParameter("new_picture");
 	
 		// TODO UPLOAD de imagens
@@ -63,7 +70,7 @@ public class RegisterServlet extends HttpServlet {
 		String result = "";
 		
 		try {
-			result = user.sendRequestLogin(newUsername, newName, newPassword, newPicture, true);
+			result = user.sendRequestLogin(newUsername, newName, newPassword, newColor, newDate, newPicture, true);
 		} catch (ParserConfigurationException | IOException e) {
 			e.printStackTrace();
 		}
@@ -72,6 +79,8 @@ public class RegisterServlet extends HttpServlet {
 			
 			session.setAttribute("username", newUsername);		
 			session.setAttribute("name", Profile.getName(newUsername));
+			session.setAttribute("color", Profile.getColor(newUsername));
+			session.setAttribute("date", Profile.getDate(newUsername));
 			session.setAttribute("picture", Profile.getPicture(newUsername));
 			
 			Cookie cookie = new Cookie("username", username);

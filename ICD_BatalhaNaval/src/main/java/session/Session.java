@@ -61,7 +61,7 @@ public class Session {
 		return true;
 	}
 
-	public static void register(String nickname, String name, String password, String picture) {
+	public static void register(String nickname, String name, String password, String color, String date, String picture) {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -95,6 +95,16 @@ public class Session {
 		Element playerPassword = doc.createElement("Password");
 		playerPassword.setTextContent(password);
 		player.appendChild(playerPassword);
+		
+		// Cor favorita
+		Element playerColor = doc.createElement("Color");
+		playerColor.setTextContent(color);
+		player.appendChild(playerColor);
+		
+		// Data de nascimento
+		Element playerDate = doc.createElement("Date");
+		playerDate.setTextContent(date);
+		player.appendChild(playerDate);
 		
 		// Imagem
 		Element playerPicture = doc.createElement("Picture");

@@ -8,6 +8,7 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="XML invali"/>
 			<item value="f"/>
 			<item value="reading"/>
 			<item value="system.ou"/>
@@ -15,7 +16,6 @@
 			<item value="request"/>
 			<item value="nickname1"/>
 			<item value="LoginServlet"/>
-			<item value="userdata"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>
