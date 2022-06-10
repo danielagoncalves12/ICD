@@ -1,6 +1,5 @@
 package session;
 
-import java.awt.Color;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import javax.xml.parsers.DocumentBuilder;
@@ -23,7 +22,10 @@ public class Profile {
 
 	public static String dataBasePath = "src//main//webapp//xml//PlayerInfo.xml";
 	
-	public static void uploadProfilePicture(String nickname, String imagePath) {
+	public static String upload(String contentType, String username, String value) {
+		 
+		if (!(contentType.equals("Picture") || contentType.equals("Name") || contentType.equals("Color") || contentType.equals("Date")))
+			return "";
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -39,12 +41,12 @@ public class Profile {
 		}
 		
 		XPath xPath = XPathFactory.newInstance().newXPath();
-        Node nodePicture = null;    
+        Node node = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + nickname + "']/Picture";
-			nodePicture = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);		
-			nodePicture.setTextContent(imagePath); 
+			String query = "//Player[@Nickname='" + username + "']/" + contentType;
+			node = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);		
+			node.setTextContent(value); 
 				
 		} catch (XPathExpressionException e) { 
 			e.printStackTrace(); 
@@ -62,6 +64,8 @@ public class Profile {
 		} catch (IOException | TransformerException e) {
 			e.printStackTrace();
 		}
+		
+		return value;
 	}
 	
 	public static void uploadWinsNumber(String nickname) {

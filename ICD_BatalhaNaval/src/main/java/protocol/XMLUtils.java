@@ -42,7 +42,7 @@ public class XMLUtils {
 		
 	    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance(); // Parser that produces DOM object trees from XML content	       
 	    DocumentBuilder builder = null; 									   // API to obtain DOM Document instance
-	    
+
 	    try {
 	      builder = factory.newDocumentBuilder(); 	                           // Create DocumentBuilder with default configuration
 	      return builder.parse(new InputSource(new StringReader(xmlString)));  // Parse the content to Document object

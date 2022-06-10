@@ -208,12 +208,9 @@ public class HandleConnectionThread extends Thread {
 
 	private void findGame(String request) throws ParserConfigurationException, IOException {
 
-		String username = MessageProcessor.process(request).split(",")[1];
+		String username = MessageProcessor.process(request).split(",")[1];	
+		if (!activeUsers.containsKey(username)) activeUsers.put(username, this.reader);
 		
-		if (!activeUsers.containsKey(username)) {
-			activeUsers.put(username, this.reader);
-		}
-
 		try {
 			semaphore.acquire();
 		} catch (InterruptedException e) {
@@ -222,18 +219,14 @@ public class HandleConnectionThread extends Thread {
 		os.println(MessageCreator.messageFind(username, "DONE"));
 	}
 
-	// TODO
 	private void upload(String request) throws ParserConfigurationException {
 
 		String contentType = MessageProcessor.process(request).split(",")[1];
-		String username = MessageProcessor.process(request).split(",")[2];
-		String value = MessageProcessor.process(request).split(",")[3];
-
-		if (contentType.equals("picture")) {
-			Profile.uploadProfilePicture(username, value);
-			String result = "Foto de perfil atualizada com sucesso. Por favor reinicie a aplicacao.";
-			os.println(MessageCreator.messageUpload(contentType, username, value, result));
-		}
+		String username    = MessageProcessor.process(request).split(",")[2];
+		String value 	   = MessageProcessor.process(request).split(",")[3];
+		
+		String result = Profile.upload(contentType, username, value);
+		os.println(MessageCreator.messageUpload(contentType, username, value, result));
 	}
 
 	class ThreadReader extends Thread {

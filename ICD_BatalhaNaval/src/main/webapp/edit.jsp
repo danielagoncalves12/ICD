@@ -45,41 +45,33 @@ String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 		<div class="container-login100">
 			<div class="wrap-login100" style="padding-top:50px">
 			
-				<div style="width:50%; text-align:center; border-radius:20px; padding:10px; padding-left:100px; padding-right:100px; line-height: 20px;
+				<div style="width:100%; text-align:center; border-radius:20px; padding:10px; padding-left:100px; padding-right:100px; line-height: 20px;
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
-					<h5 style="padding: 10px">Perfil de <%=username%></h5><br>
-					
+					<h5 style="padding: 10px">Edição do perfil de <b><%=username%></b></h5><br>				
 					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=picture%>" width="140px" height="140px" /><br>
 					
 					<hr style="width: 80%; margin-left:10% !important; margin-right:10% !important;">
+							
+					<form method="POST" action="EditServlet">
 					
-					<p><b>Nome público:</b> <%=name%></p>
-					<p><b>Idade:</b> <%=age%> anos</p>
-					<p><b>Cor favorita:</b> <%=color%></p>
-					<p><b>Total de vitórias:</b> <%%></p>
+						<div style="display: inline-block; text-align: left;">	
+							<input type="hidden" name="username" id="username" value="<%=username%>" />					
+							<span>Nome público:  </span> <input style="width:200px; border: 2px solid #9e9e9e" type="text" name="new_name" id="new_name" value="<%=name%>" required/><br>
+							<span>Cor favorita:       </span> <input style="width:200px; border: 2px solid #9e9e9e" type="color" name="new_color" id="new_color" value="<%=color%>" required/> <br>
+							<span>Fotografia:         </span> <input style="width:200px; border: 2px solid #9e9e9e" type="file" accept="" name="new_picture" id="new_picture" value="<%=picture%>"/> <br> 
+							<span>Data de nascimento:      </span> <input style="border: 2px solid #9e9e9e" type="date" name="new_date" id="new_date" value="<%=date%>" required/> <br>							
+					    </div>								
+		
+						<div class="container-login100-form-btn">
+							<input style="width:50%; font-size: 13px; background-color:#8b989e" class="login100-form-btn" title="Editar" type="submit" value="Atualizar"/>
+						</div>
+					</form>
 					
-					<div class="container-login100-form-btn">
-						<a style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" title="Editar" aria-current="page" href="edit.jsp">Editar perfil</a>
-					</div>
-					
-					<div class="container-login100-form-btn" style="padding-top:8px">
-						<a style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" title="Saída" aria-current="page" href="LogoutServlet">Sair</a>
+					<div style="padding-top: 10px;" class="container-login100-form-btn">
+						<a style="width:50%; font-size: 13px; background-color:#8b989e" class="login100-form-btn" title="Cancelar" aria-current="page" href="index.jsp">Cancelar</a>
 					</div>
 				
-				</div>
-
-				<!-- Procurar Jogo -->
-				<div style="padding: 10px; padding-left: 20px">
-					<span class="login100-form-title" style="padding:12px">
-						Batalha Naval!
-					</span>
-
-	
-					<div class="container-login100-form-btn" style="margin: auto; width: 80%">
-						<a href="game.jsp"><button type="button" class="btn btn-outline-primary">Play</button></a>
-						<!--<input href="game.jsp" class="login100-form-btn" type = "submit" value = "Jogar!"/>  -->
-					</div>
 				</div>
 			</div>
 		</div>

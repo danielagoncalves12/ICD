@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="System.out.p"/>
+		<item key="selection" value="hover"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="hover"/>
+			<item value="login100-form-btnlogin100-form-btn"/>
+			<item value="login100-form-btn"/>
 			<item value="XML invali"/>
 			<item value="f"/>
 			<item value="reading"/>
 			<item value="system.ou"/>
 			<item value="System.o"/>
-			<item value="request"/>
-			<item value="nickname1"/>
-			<item value="LoginServlet"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>

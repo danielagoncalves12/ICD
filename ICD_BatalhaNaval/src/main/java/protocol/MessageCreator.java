@@ -59,7 +59,7 @@ public class MessageCreator {
         	elementReply.appendChild(elementResult);
         }
         elementMethod.appendChild(elementReply);
-
+        
         return XMLUtils.documentToString(document);
 	}
 	

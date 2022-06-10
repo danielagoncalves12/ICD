@@ -5,13 +5,17 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.xml.parsers.ParserConfigurationException;
+
+import session.Profile;
+import socket.User;
 
 public class Check {
-
+	
 	public static String username(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		// Obter o username guardado na sessao
-		HttpSession session = request.getSession();
+		HttpSession session = request.getSession(true);
 		String username = (String) session.getAttribute("username");
 
 		// Se nao houver username guardado na sessao,
@@ -35,10 +39,9 @@ public class Check {
 	
 	public static String name(HttpServletRequest request) throws ServletException, IOException {
 		
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
 		
-		if (session != null) {
-			
+		if (session != null) {		
 			String name = (String) session.getAttribute("name");
 			if (name != null) return name;		
 		}
@@ -47,10 +50,9 @@ public class Check {
 	
 	public static String picture(HttpServletRequest request) throws ServletException, IOException {
 		
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
 		
-		if (session != null) {
-			
+		if (session != null) {		
 			String name = (String) session.getAttribute("picture");
 			if (name != null) return name;		
 		}
@@ -59,12 +61,22 @@ public class Check {
 	
 	public static String color(HttpServletRequest request) {
 		
-		HttpSession session = request.getSession(true);
+		HttpSession session = request.getSession();
 		
-		if (session != null) {
-			
+		if (session != null) {			
 			String color = (String) session.getAttribute("color");
 			if (color != null) return color;		
+		}
+		return "";
+	}
+	
+	public static String date(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		if (session != null) {		
+			String date = (String) session.getAttribute("date");
+			if (date != null) return date;		
 		}
 		return "";
 	}

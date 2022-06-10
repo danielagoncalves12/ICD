@@ -306,7 +306,7 @@ public class User {
      * que vão substituir os antigos.
      */
 	public String sendRequestUpload(String contentType, String nickname, String value) throws ParserConfigurationException, IOException {
-		
+
 		os.println(MessageCreator.messageUpload(contentType, nickname, value));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
