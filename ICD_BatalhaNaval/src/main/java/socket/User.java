@@ -340,14 +340,9 @@ public class User {
 		return MessageProcessor.process(reply); 
     }
     
-    /**
-     * Envia uma Request ao servidor, a pedir por informação, que varia de acordo com o estado atual do
-     * jogo, por exemplo, uma resposta a este tipo de pedido poderá ser um aviso a um jogador que é a sua 
-     * vez de jogar, ou então, avisar os jogadores que o jogo terminou porque um dos jogadores ganhou.
-     */
-    public String sendRequestInfo(String player) throws ParserConfigurationException, IOException {		
-
-    	os.println(MessageCreator.messageInfo(player));
+    public String sendRequestHonorBoard() throws ParserConfigurationException, IOException {
+    	
+    	os.println(MessageCreator.messageHonorBoard());
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 

@@ -6,6 +6,30 @@
       <xs:sequence>
 
 		<xs:choice>
+		
+		<xs:element name="GetHonorBoard">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Request"/>
+              <xs:element name="Response">
+                <xs:complexType>
+                  <xs:sequence>
+					<xs:element name="Player" minOccurs="0" maxOccurs="10">
+					  <xs:complexType>
+                        <xs:sequence>
+					      <xs:element name="Name" type="xs:string"/>
+						  <xs:element name="Picture" type="xs:string"/>
+						  <xs:element name="WinsNumber" type="xs:string"/>				
+					    </xs:sequence>
+			          </xs:complexType>
+					</xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+		
         <xs:element name="GetBoard">
           <xs:complexType>
             <xs:sequence>

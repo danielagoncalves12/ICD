@@ -98,6 +98,30 @@ public class HandleConnectionThread extends Thread {
 		// - Get Board - //
 		else if (method.equals("GetBoard"))
 			board(request);
+		
+		// - Get Honor Board - //
+		else if (method.equals("HonorBoard"))
+			honorBoard(request);
+	}
+	
+	private void honorBoard(String request) throws ParserConfigurationException {
+		
+		HashMap<String, Integer> players = Profile.getHonorBoard();
+		
+		String[] names      = new String[10];
+		String[] pictures   = new String[10];
+		String[] winsNumber = new String[10];
+		
+		Object[] usernames = players.keySet().toArray();
+		
+		for (int i = 0; i < usernames.length; i++) {
+			
+			String username = (String) usernames[i];
+			names[i] 	    = Profile.getName(username);
+			pictures[i]     = Profile.getPicture(username);
+			winsNumber[i]   = Profile.getWinNum(username);
+		}
+		os.println(MessageCreator.messageHonorBoard(names, pictures, winsNumber));
 	}
 
 	private void play(String request) throws ParserConfigurationException {

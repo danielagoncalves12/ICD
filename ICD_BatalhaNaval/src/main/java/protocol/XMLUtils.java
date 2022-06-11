@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Arrays;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Source;
@@ -73,5 +75,22 @@ public class XMLUtils {
 			isValid = false;
 		}		
 		return isValid;
+	}
+	
+	public static String[][] stringToArray2D(String str) {
+		
+		String[] rows = str.split("], \\[");
+		for (int i = 0; i < rows.length; i++) {
+		    rows[i] = rows[i].replace("[[", "").replace("]]", "").replaceAll(" ", "");
+		}
+
+		int numberOfColumns = rows[0].split(",").length;
+		String[][] matrix = new String[rows.length][numberOfColumns];
+
+		for (int i = 0; i < rows.length; i++) {
+		    matrix[i] = rows[i].split(",");
+		}
+
+		return matrix;
 	}
 }

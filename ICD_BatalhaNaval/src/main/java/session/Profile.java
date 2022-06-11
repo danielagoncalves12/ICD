@@ -2,6 +2,11 @@ package session;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -16,6 +21,7 @@ import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Profile {
@@ -223,6 +229,87 @@ public class Profile {
 		}
 		
 		return nodeDate.getTextContent();
+	}
+	
+	public static String getWinNum(String username) {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder;
+        Document doc = null;
+		
+		try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(dataBasePath);
+			
+		} catch (SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		
+		XPath xPath = XPathFactory.newInstance().newXPath();
+        Node nodeWin = null;    
+        
+		try {
+			String query = "//Player[@Nickname='" + username + "']/WinsNumber";
+			nodeWin = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);;
+
+		} catch (XPathExpressionException e) { 
+			e.printStackTrace(); 
+		}
+		
+		return nodeWin.getTextContent();
+	}
+	
+	public static HashMap<String, Integer> getHonorBoard() {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder;
+        Document doc = null;
+		
+		try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(dataBasePath);
+			
+		} catch (SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		
+		XPath xPath = XPathFactory.newInstance().newXPath();
+        NodeList nodePlayers = null;    
+        HashMap<String, Integer> players = new HashMap<>();
+        
+		try {
+			String query = "//Player";
+			nodePlayers = (NodeList) xPath.compile(query).evaluate(doc, XPathConstants.NODESET);
+
+			System.out.println(nodePlayers.getLength());
+			
+			for (int i = 0; i < nodePlayers.getLength(); i++) {
+				String username  = nodePlayers.item(i).getAttributes().item(0).getNodeValue();
+				String winNum = ((Node) xPath.compile("//Player[@Nickname='" + username + "']/WinsNumber").evaluate(doc, XPathConstants.NODE)).getTextContent();
+				
+				players.put(username, Integer.valueOf(winNum));
+			}
+			
+		} catch (XPathExpressionException e) { 
+			e.printStackTrace(); 
+		}
+		
+		LinkedHashMap<String, Integer> playersOrder = new LinkedHashMap<>();
+		
+		players.entrySet()
+		  .stream()
+		  .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
+		  .limit(10)
+		  .forEachOrdered(x -> playersOrder.put(x.getKey(), x.getValue()));
+		 
+		return playersOrder;
+	}
+	
+	public static void main(String[] args) {
+		
+		getHonorBoard();
 	}
 	
 	public static String hex2Rgb(String colorStr) {

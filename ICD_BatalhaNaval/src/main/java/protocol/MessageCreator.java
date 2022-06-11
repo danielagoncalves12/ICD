@@ -10,6 +10,60 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
+	public static String messageHonorBoard() throws ParserConfigurationException {
+		
+		return messageHonorBoard(null, null, null);
+	}
+	
+	public static String messageHonorBoard(String[] names, String[] pictures, String[] winsNum) throws ParserConfigurationException {
+		
+		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
+        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+
+        // Elemento Protocol
+        Element elementRoot = document.createElement("Protocol");
+        document.appendChild(elementRoot);
+        
+        // Elemento Method (Position)
+        Element elementMethod = document.createElement("GetHonorBoard");
+        elementRoot.appendChild(elementMethod); 
+
+        // Elemento Request
+        Element elementRequest = document.createElement("Request");
+        elementMethod.appendChild(elementRequest);
+        
+        // Elemento Reply
+        Element elementReply = document.createElement("Response");
+        
+        // Elemento Result
+        if (names != null) {
+        	
+        	for (int i = 0; i < names.length; i++) {
+        		
+        		Element elementPlayer = document.createElement("Player");
+        		
+        		Element elementName = document.createElement("Name");
+        		elementName.setTextContent(names[i]);
+        		elementPlayer.appendChild(elementName);
+        		
+        		Element elementPicture = document.createElement("Picture");
+        		elementPicture.setTextContent(pictures[i]);
+        		elementPlayer.appendChild(elementPicture);
+        		
+        		Element elementWinNum = document.createElement("WinsNumber");
+        		elementWinNum.setTextContent(winsNum[i]);
+        		elementPlayer.appendChild(elementWinNum);
+        		
+            	elementReply.appendChild(elementPlayer);
+        	}
+        }
+        elementMethod.appendChild(elementReply);
+        
+        return XMLUtils.documentToString(document);
+		
+	}
+	
 	public static String messageUpload(String contentType, String nickname, String value) throws ParserConfigurationException {
 		
 		return messageUpload(contentType, nickname, value, "");

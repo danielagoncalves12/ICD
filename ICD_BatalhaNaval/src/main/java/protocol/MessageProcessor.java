@@ -36,12 +36,13 @@ public class MessageProcessor {
 			if (XMLUtils.validate(message, gameProtocolXSD)) {
 				switch(method) {
 				
-				case "GetBoard": return board(doc);
-				case "GetInfo" : return info(doc);
-				case "Play"    : return play(doc);	
-				case "Login"   : return session(doc);
-				case "Upload"  : return upload(doc);
-				case "FindGame": return find(doc);
+				case "GetBoard"  : return board(doc);
+				case "GetInfo"   : return info(doc);
+				case "Play"      : return play(doc);	
+				case "Login"     : return session(doc);
+				case "Upload"    : return upload(doc);
+				case "FindGame"  : return find(doc);
+				case "GetHonorBoard": return honor(doc);
 				}
 			}
 		} catch (SAXException | IOException e) {
@@ -49,6 +50,32 @@ public class MessageProcessor {
 		}
 		System.out.println("Messagem inválida! ->" + message);
 		return null;
+	}
+	
+	private static String honor(Document doc) {
+		
+		XPath xPath  = XPathFactory.newInstance().newXPath();
+		NodeList nodeName = null, nodePicture = null, nodeWins = null; double isReply = 0;          
+        
+		try {
+			nodeName    = (NodeList) xPath.compile("//Response/Player/Name").evaluate(doc, XPathConstants.NODESET);
+			nodePicture = (NodeList) xPath.compile("//Response/Player/Picture").evaluate(doc, XPathConstants.NODESET);
+			nodeWins    = (NodeList) xPath.compile("//Response/Player/WinsNumber").evaluate(doc, XPathConstants.NODESET);
+
+			isReply    = (double) xPath.compile("count(//Response/*/*[text()])").evaluate(doc, XPathConstants.NUMBER);
+		} catch (XPathExpressionException e) { e.printStackTrace(); }
+		
+		String[][] players = new String[10][3];
+		
+		for (int i = 0; i < nodeName.getLength(); i++) {
+			
+			players[i][0] = nodeName.item(i).getTextContent();
+			players[i][1] = nodePicture.item(i).getTextContent();
+			players[i][2] = nodeWins.item(i).getTextContent();
+		}
+
+		if (isReply > 0) return Arrays.deepToString(players);
+		else return "HonorBoard";
 	}
 	
 	private static String upload(Document doc) {

@@ -1,26 +1,91 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
 	<Player Nickname="Dannie">
 		<Name>Dannie</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
 		<Color>#ed8cc5</Color>
 		<Date>2000-06-07</Date>
 		<Picture>dannie.png</Picture>
-		<WinsNumber>6</WinsNumber>
+		<WinsNumber>16</WinsNumber>
 	</Player>
 	<Player Nickname="Nick">
 		<Name>Nick</Name>
 		<Password>9CFA7AEFCC61936B70AAEC6729329EDA</Password>
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
-		<Picture>alex.jpeg</Picture>
-		<WinsNumber>17</WinsNumber>
+		<Picture>panda.png</Picture>
+		<WinsNumber>27</WinsNumber>
 	</Player>
-	<Player Nickname="teste">
-		<Name>teste</Name>
+	<Player Nickname="teste1">
+		<Name>GoingOn</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
 		<Date>2022-05-29</Date>
 		<Picture>default.png</Picture>
-		<WinsNumber>0</WinsNumber>
+		<WinsNumber>21</WinsNumber>
+	</Player>
+	<Player Nickname="teste2">
+		<Name>xXTryHardXx</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2022-05-29</Date>
+		<Picture>icd.png</Picture>
+		<WinsNumber>10</WinsNumber>
+	</Player>
+	<Player Nickname="teste3">
+		<Name>reallu</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2022-05-29</Date>
+		<Picture>dog.jpg</Picture>
+		<WinsNumber>5</WinsNumber>
+	</Player>
+	<Player Nickname="teste4">
+		<Name>Anya</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2022-05-29</Date>
+		<Picture>girl.png</Picture>
+		<WinsNumber>2</WinsNumber>
+	</Player>
+	<Player Nickname="teste5">
+		<Name>Mapped</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2022-05-29</Date>
+		<Picture>mapped.png</Picture>
+		<WinsNumber>12</WinsNumber>
+	</Player>
+	<Player Nickname="teste6">
+		<Name>Pandora</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2022-05-29</Date>
+		<Picture>pandora.png</Picture>
+		<WinsNumber>12</WinsNumber>
+	</Player>
+	<Player Nickname="teste7">
+		<Name>Gamerz19</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2022-05-29</Date>
+		<Picture>logo.png</Picture>
+		<WinsNumber>4</WinsNumber>
+	</Player>
+	<Player Nickname="teste8">
+		<Name>Wazowski</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#8892ea</Color>
+		<Date>2002-05-29</Date>
+		<Picture>mike.png</Picture>
+		<WinsNumber>12</WinsNumber>
+	</Player>
+	<Player Nickname="JohnGames">
+		<Name>JohnGames</Name>
+		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
+		<Color>#52e2d8</Color>
+		<Date>2022-06-14</Date>
+		<Picture>shrek.png</Picture>
+		<WinsNumber>14</WinsNumber>
 	</Player>
 </Data>

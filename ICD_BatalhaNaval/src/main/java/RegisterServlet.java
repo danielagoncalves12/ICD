@@ -67,10 +67,11 @@ public class RegisterServlet extends HttpServlet {
 		User user = (User) session.getAttribute("user");
 		if (user == null) user = new User();
 		
-		String result = "";
+		String result = "", honor = " ";
 		
 		try {
 			result = user.sendRequestLogin(newUsername, newName, newPassword, newColor, newDate, newPicture, true);
+			honor  = user.sendRequestHonorBoard();
 		} catch (ParserConfigurationException | IOException e) {
 			e.printStackTrace();
 		}
@@ -82,6 +83,8 @@ public class RegisterServlet extends HttpServlet {
 			session.setAttribute("color", Profile.getColor(newUsername));
 			session.setAttribute("date", Profile.getDate(newUsername));
 			session.setAttribute("picture", Profile.getPicture(newUsername));
+			session.setAttribute("win_num", Profile.getWinNum(username));
+			session.setAttribute("honor", honor);
 			
 			Cookie cookie = new Cookie("username", username);
 			response.addCookie(cookie);

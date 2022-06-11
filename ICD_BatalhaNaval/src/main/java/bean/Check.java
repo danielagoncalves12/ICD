@@ -80,4 +80,15 @@ public class Check {
 		}
 		return "";
 	}
+	
+	public static String winNum(HttpServletRequest request) {
+		
+		HttpSession session = request.getSession();
+		
+		if (session != null) {		
+			String winNum = (String) session.getAttribute("win_num");
+			if (winNum != null) return winNum;		
+		}
+		return "";
+	}
 }

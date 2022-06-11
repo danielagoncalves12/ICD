@@ -1,18 +1,4 @@
 INDEX VERSION 1.4+C:\Users\Daniela\Desktop\LEIM\4_Semestre\ICD\Trabalhos Práticos\.metadata\.plugins\org.eclipse.wst.jsdt.core\indexes
-2374424134.index
-735705145.index
-760667599.index
-2152406150.index
-3858723271.index
-3135089496.index
-3461463504.index
-4065337983.index
-125405610.index
-1160402408.index
 155899852.index
-149017167.index
-2976758229.index
-2818271008.index
-895808568.index
+3135089496.index
 1095153865.index
-2928859838.index
