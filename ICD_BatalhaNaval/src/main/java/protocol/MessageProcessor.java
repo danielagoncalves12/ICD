@@ -139,8 +139,10 @@ public class MessageProcessor {
 				NodeList positions2 = ((NodeList) xPath.compile("//Tanker/Position").evaluate(doc, XPathConstants.NODESET));
 				NodeList positions3 = ((NodeList) xPath.compile("//Destroyer/Position").evaluate(doc, XPathConstants.NODESET));
 				NodeList positions4 = ((NodeList) xPath.compile("//Submarine/Position").evaluate(doc, XPathConstants.NODESET));
-
-				NodeList[] list = {positions0, positions1, positions2, positions3, positions4};
+				NodeList positions5 = ((NodeList) xPath.compile("//ShootShip/Position").evaluate(doc, XPathConstants.NODESET));
+				NodeList positions6 = ((NodeList) xPath.compile("//ShootEmpty/Position").evaluate(doc, XPathConstants.NODESET));
+				
+				NodeList[] list = {positions0, positions1, positions2, positions3, positions4, positions5, positions6};
 				
 				for (int i = 0; i < list.length; i++) {
 					for (int j = 0; j < list[i].getLength(); j++) {
@@ -153,7 +155,9 @@ public class MessageProcessor {
 										  (i == 1) ? ShipType.TYPE1SHOW :
 										  (i == 2) ? ShipType.TYPE2SHOW :
 										  (i == 3) ? ShipType.TYPE3SHOW :
-										  ShipType.TYPE4SHOW;
+										  (i == 4) ? ShipType.TYPE4SHOW :
+										  (i == 5) ? ShipType.TYPESHOOT :
+										  ShipType.TYPESHOOTEMPTY;										  
 					}
 				}
 			}

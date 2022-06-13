@@ -138,20 +138,31 @@ public class GameModel {
 		List<List<Integer>> positionEmpty = new ArrayList<>();
 		List<List<Integer>> positionType1 = new ArrayList<>(), positionType2 = new ArrayList<>();
 		List<List<Integer>> positionType3 = new ArrayList<>(), positionType4 = new ArrayList<>();
+		List<List<Integer>> shootShip = new ArrayList<>(), shootEmpty = new ArrayList<>();
 		
 		for (int i = 0; i < board.length; i++) {
 			for (int j = 0; j < board[i].length; j++) {
 				
 				int cell = board[i][j];
 
+				// Vazio
+				if (cell == ShipType.EMPTY) shootEmpty.add(Arrays.asList(i, j));
+				
 				// Porta-aviões
-				if (cell == ShipType.TYPE1SHOW || cell == ShipType.TYPE1HIDDEN) positionType1.add(Arrays.asList(i, j));	
+				if (cell == ShipType.TYPE1SHOW)   shootShip.add(Arrays.asList(i, j));
+				if (cell == ShipType.TYPE1HIDDEN) positionType1.add(Arrays.asList(i, j));	
+				
 				// Navio-tanque
-				if (cell == ShipType.TYPE2SHOW || cell == ShipType.TYPE2HIDDEN) positionType2.add(Arrays.asList(i, j));				
+				if (cell == ShipType.TYPE2SHOW)   shootShip.add(Arrays.asList(i, j));
+				if (cell == ShipType.TYPE2HIDDEN) positionType2.add(Arrays.asList(i, j));		
+				
 				// Contratorpedeiro
-				if (cell == ShipType.TYPE3SHOW || cell == ShipType.TYPE3HIDDEN) positionType3.add(Arrays.asList(i, j));						
+				if (cell == ShipType.TYPE3SHOW)   shootShip.add(Arrays.asList(i, j));
+				if (cell == ShipType.TYPE3HIDDEN) positionType3.add(Arrays.asList(i, j));	
+				
 				// Submarino
-				if (cell == ShipType.TYPE4SHOW || cell == ShipType.TYPE4HIDDEN) positionType4.add(Arrays.asList(i, j));			
+				if (cell == ShipType.TYPE4SHOW)   shootShip.add(Arrays.asList(i, j));
+				if (cell == ShipType.TYPE4HIDDEN) positionType4.add(Arrays.asList(i, j));			
 			}
 		}
 			
@@ -161,6 +172,8 @@ public class GameModel {
 		dic.put("Tanker", positionType2);
 		dic.put("Destroyer", positionType3);
 		dic.put("Submarine", positionType4);
+		dic.put("ShootShip", shootShip);
+		dic.put("ShootEmpty", shootEmpty);
 
 		return dic;
 	}
@@ -218,7 +231,7 @@ public class GameModel {
 		state = board[line][column];
 		if (state >= 6 && state <= 9) if (player == 1) pointsPlayer1++; else pointsPlayer2++;
 			
-		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY :      // Não encontrou navio
+		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY : 	  // Não encontrou navio
 							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-aviões
 							  (state == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW :  // Encontrou Navio-tanque
 							  (state == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW :  // Encontrou Contratorpedeiro
@@ -232,8 +245,6 @@ public class GameModel {
 		}
 		play1 = false;
 		play2 = false;
-		
-		System.out.println("Jogada do player " + player + " aplicada.");
 			
 		return "Resultado: " + (
 			   (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 

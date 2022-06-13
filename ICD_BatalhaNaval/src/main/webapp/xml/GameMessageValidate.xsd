@@ -244,6 +244,36 @@
 		  </xs:complexType>
 	    </xs:element>
 
+		<xs:element name="ShootShip" minOccurs="0" maxOccurs="1">
+		  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+
+		<xs:element name="ShootEmpty" minOccurs="0" maxOccurs="1">
+		  <xs:complexType>
+      		<xs:sequence>
+		  	  <xs:element name="Position" minOccurs="0" maxOccurs="unbounded">
+				<xs:complexType>
+      			 <xs:sequence>
+                   <xs:element name="Line" type="IndexPosition" />
+				   <xs:element name="Column" type="IndexPosition" />
+      			 </xs:sequence>
+				</xs:complexType> 	
+		  	  </xs:element>
+			</xs:sequence>
+		  </xs:complexType>
+	    </xs:element>
+
 		<xs:element name="Aircraft">
 		  <xs:complexType>
       		<xs:sequence>

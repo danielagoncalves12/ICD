@@ -70,6 +70,8 @@ public class HandleConnectionThread extends Thread {
 
 	public void sendResponse(String request) throws ParserConfigurationException, IOException {
 
+		System.out.println(request);
+		
 		// Primeiro argumento representa o tipo de pedido
 		String method = MessageProcessor.process(request).split(",")[0]; 
 
@@ -234,12 +236,14 @@ public class HandleConnectionThread extends Thread {
 
 		String username = MessageProcessor.process(request).split(",")[1];	
 		if (!activeUsers.containsKey(username)) activeUsers.put(username, this.reader);
+		else return;
 		
 		try {
 			semaphore.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Enviei reposta para o " + username);
 		os.println(MessageCreator.messageFind(username, "DONE"));
 	}
 

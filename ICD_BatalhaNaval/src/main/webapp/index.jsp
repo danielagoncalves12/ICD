@@ -92,14 +92,10 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 							<a style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Play</a>
 							<!--<input href="game.jsp" class="login100-form-btn" type = "submit" value = "Jogar!"/>  -->
 						</div>
-					</div>
-
-					
+					</div>				
 				</div>
-
 				<br>
-				
-				
+							
 				<div style="width: 100%; text-align: center">
 					<br><hr>
 					<h4 style="text-decoration: underline">Quadro de honra</h4><br>

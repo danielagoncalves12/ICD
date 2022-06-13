@@ -8,7 +8,8 @@
 
 <script type="text/javascript">
 
-
+var state = '<%=session.getAttribute("state")%>';
+if (state === "ended") {}
 
 </script>
 
@@ -36,6 +37,7 @@ System.out.println("User aqui no jogo -> " + user);
 if (state == null) {
 	System.out.println("Primeira vez");
 	user.sendRequestGame(username);
+	System.out.println("Encontrei jogo");
 	myBoard = user.sendRequestBoard(username, "true");
 	anotherBoard = user.sendRequestBoard(username, "false");
 }
@@ -66,7 +68,7 @@ else {
 
 <div style="text-align:center; width: 100%;">
        <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
-           <%=GameView.viewBoard(myBoard)%>
+           <%=GameView.viewBoardView(myBoard)%>
        </div>
        <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
            <%=GameView.viewBoard(anotherBoard)%>  

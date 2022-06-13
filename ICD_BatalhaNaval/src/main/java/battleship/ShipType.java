@@ -16,4 +16,7 @@ public class ShipType {
 	public static int TYPE2HIDDEN = 7;
 	public static int TYPE3HIDDEN = 8;
 	public static int TYPE4HIDDEN = 9;
+	
+	public static int TYPESHOOT = 10;
+	public static int TYPESHOOTEMPTY = 11;
 }
