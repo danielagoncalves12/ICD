@@ -19,7 +19,7 @@ import session.Session;
 
 public class MessageProcessor {
 
-	private static String gameProtocolXSD = "src\\main\\webapp\\xml\\GameMessageValidate.xsd";
+	private static String gameProtocolXSD = "src\\main\\java\\protocol\\GameMessageValidate.xsd";
 	/**
 	 * Processa uma mensagem de formato xml
 	 * @param message
@@ -31,7 +31,7 @@ public class MessageProcessor {
 		Node protocol = doc.getElementsByTagName("Protocol").item(0);
 		String method = protocol.getFirstChild().getNodeName();
 
-		// Validação
+		// Validaï¿½ï¿½o
 		try {		
 			if (XMLUtils.validate(message, gameProtocolXSD)) {
 				switch(method) {
@@ -48,7 +48,7 @@ public class MessageProcessor {
 		} catch (SAXException | IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Messagem inválida! ->" + message);
+		System.out.println("Messagem invï¿½lida! ->" + message);
 		return null;
 	}
 	
@@ -236,7 +236,7 @@ public class MessageProcessor {
 		String date		= nodeDate.getTextContent();
 		String picture  = nodePicture.getTextContent();
 		
-		// Caso o utilizador não tenha introduzido uma foto durante a inscrição, é atribuido uma foto pre-definida	
+		// Caso o utilizador nï¿½o tenha introduzido uma foto durante a inscriï¿½ï¿½o, ï¿½ atribuido uma foto pre-definida	
 		if (nodeRegister.getNodeValue().equals("true")) { 
 			if (picture.equals(""))
 				picture = "default.png"; 

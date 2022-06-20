@@ -28,7 +28,7 @@ import protocol.XMLUtils;
 
 public class Session {
 
-	public static String dataBasePath = "src/main/webapp/xml/PlayerInfo.xml";
+	public static String dataBasePath = "src/main/java/protocol/PlayerInfo.xml";
 	
 	public static boolean availableNickname(String nickname) {
 		
@@ -81,12 +81,12 @@ public class Session {
 		Element player = doc.createElement("Player");
 		root.appendChild(player);
 		
-		// Guardar as suas informações
+		// Guardar as suas informaï¿½ï¿½es
 		
 		// Nickname
 		player.setAttribute("Nickname", nickname);
 	
-		// Nome público
+		// Nome pï¿½blico
 		Element playerName = doc.createElement("Name");
 		playerName.setTextContent(name);
 		player.appendChild(playerName);
@@ -111,12 +111,12 @@ public class Session {
 		playerPicture.setTextContent(picture);
 		player.appendChild(playerPicture);
 		
-		// Número de vitórias
+		// Nï¿½mero de vitï¿½rias
 		Element playerWinsNumber = doc.createElement("WinsNumber");
 		playerWinsNumber.setTextContent("0");
 		player.appendChild(playerWinsNumber);
 		
-		// Validação
+		// Validaï¿½ï¿½o
 		try {
 			if (XMLUtils.validate(XMLUtils.documentToString(doc), "src/main/webapp/xml/PlayerInfo.xsd")) {
 			
@@ -157,7 +157,7 @@ public class Session {
         Node pass; 
 		
 		try {
-			// Desencriptação da palavra-passe
+			// Desencriptaï¿½ï¿½o da palavra-passe
 			pass = ((Node) (xPath.compile(queryPassword).evaluate(doc, XPathConstants.NODE)));
 			
 			if (pass == null) return false;

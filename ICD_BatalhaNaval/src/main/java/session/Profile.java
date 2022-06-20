@@ -26,7 +26,7 @@ import org.xml.sax.SAXException;
 
 public class Profile {
 
-	public static String dataBasePath = "src//main//webapp//xml//PlayerInfo.xml";
+	public static String dataBasePath = "src/main/java/protocol/PlayerInfo.xml";
 	
 	public static String upload(String contentType, String username, String value) {
 		 

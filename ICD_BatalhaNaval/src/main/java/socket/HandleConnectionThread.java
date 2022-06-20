@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
@@ -139,7 +140,7 @@ public class HandleConnectionThread extends Thread {
 	private void play(String request) throws ParserConfigurationException {
 		
 		String player   = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
-		String position = MessageProcessor.process(request).split(",")[2]; // Posição
+		String position = MessageProcessor.process(request).split(",")[2]; // Posiï¿½ï¿½o
 		
 		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;
 		GameModel game = null;
@@ -154,14 +155,14 @@ public class HandleConnectionThread extends Thread {
 			}
 		}
 		
-		String result = game.play(player, position);  // Aplicação da jogada		
+		String result = game.play(player, position);  // Aplicacao da jogada		
 		os.println(MessageCreator.messagePlay(player, position, result));
 	}
 	
 	private void board(String request) throws ParserConfigurationException {
 		
 		String player = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
-		String view   = MessageProcessor.process(request).split(",")[2]; // Tipo de visualização		
+		String view   = MessageProcessor.process(request).split(",")[2]; // Tipo de visualizacao		
 		
 		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;	
 		GameModel game = null;
@@ -177,10 +178,9 @@ public class HandleConnectionThread extends Thread {
 			}
 		}
 		
-			HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
-					  														  : game.getBoardPositions(player));
-
-			os.println(MessageCreator.messageBoard(player, view, board));
+		HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
+				  														  : game.getBoardPositions(player));
+		os.println(MessageCreator.messageBoard(player, view, board));
 	}
 	
 	private void login(String request) throws ParserConfigurationException {
@@ -205,7 +205,7 @@ public class HandleConnectionThread extends Thread {
 			} else
 				result = "Erro: Palavra-passe incorreta!";
 		} else
-			result = "Erro: Nome de utilizador não está disponível";
+			result = "Erro: Nome de utilizador nao esta disponivel";
 
 		os.println(MessageCreator.messageSession(username, name, password, picture, color, date, false, result));
 	}
@@ -221,7 +221,7 @@ public class HandleConnectionThread extends Thread {
 
 		String result = "";
 
-		// Encriptação da palavra-passe
+		// Encriptaï¿½ï¿½o da palavra-passe
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("MD5");
@@ -253,7 +253,6 @@ public class HandleConnectionThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Enviei reposta para o " + username);
 		os.println(MessageCreator.messageFind(username, "DONE"));
 	}
 

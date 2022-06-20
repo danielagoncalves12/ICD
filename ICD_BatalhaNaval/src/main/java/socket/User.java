@@ -16,14 +16,14 @@ import protocol.MessageCreator;
 import protocol.MessageProcessor;
 
 /**
- * @author Daniela Gonçalves A48579 42D
+ * @author Daniela Gonï¿½alves A48579 42D
  * Classe User
  */
 
 public class User {
 
-	private final static String HOST = "localhost"; // Endereço do Servidor
-    private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexões
+	private final static String HOST = "localhost"; // Endereï¿½o do Servidor
+    private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexï¿½es
     private String username, name, color, date, winNum, picture;   // Dados da conta do utilizador
     private Socket socket;
     private BufferedReader is;
@@ -33,10 +33,10 @@ public class User {
     public User() {
     	
         try {
-            socket = new Socket(HOST, PORT); 										     // Ligação ao Socket servidor
+            socket = new Socket(HOST, PORT); 										     // Ligaï¿½ï¿½o ao Socket servidor
             is     = new BufferedReader(new InputStreamReader(socket.getInputStream())); // Stream para a leitura do socket
 			os     = new PrintWriter(socket.getOutputStream(), true);					 // Stream para a escrita no socket 
-			scan   = new Scanner(System.in);											 // Scanner para a introdução de dados	
+			scan   = new Scanner(System.in);											 // Scanner para a introduï¿½ï¿½o de dados	
 		} 
         catch (IOException e) {
 			e.printStackTrace();
@@ -60,36 +60,35 @@ public class User {
     private void playGame() throws ParserConfigurationException, IOException {
    
     	sendRequestGame(username); // Pedido para procurar e iniciar uma partida 
-
-    	System.out.println("\nSeu tabuleiro: ");
-        System.out.print(sendRequestBoard(username, "true") + "\n");  	// Receber o próprio tabuleiro
-        
-        System.out.println("Tabuleiro do adversario: ");
-        System.out.print(sendRequestBoard(username, "false") + "\n");	// Receber tabuleiro do adversário
-           
+        String result = null;   
+    	
         while (true) {
 
-        	// Enviar Request com a jogada escolhida
-        	String position;
-        	do {
-        		System.out.print("Opcao: ");
-        		position = scan.nextLine();
-        		if (!checkValid(position)) System.out.println("Posição inválida! Insira uma posição novamente:\n");
-        	}
-        	while(!checkValid(position));	
-        	System.out.println(sendRequestPlay(username, position) + "\n");
-			
-			// Enviar Request a pedir o tabuleiro do adversário atualizado
+			// Enviar Request a pedir o tabuleiro do adversario atualizado
         	System.out.println("Seu tabuleiro: ");
         	System.out.println(sendRequestBoard(username, "true") + "\n");
         	
         	System.out.println("Tabuleiro do adversario: ");
 			System.out.println(sendRequestBoard(username, "false") + "\n");
+
+			if (result != null) if (result.substring(0, 9).equals("O jogador")) mainMenu();
+			
+        	// Enviar Request com a jogada escolhida
+        	String position;
+        	do {
+        		System.out.print("Opcao: ");
+        		position = scan.nextLine();
+        		if (!checkValid(position)) System.out.println("Posicao invalida! Insira uma posico novamente:\n");
+        	}
+        	while(!checkValid(position));
+			result = sendRequestPlay(username, position);
+        	System.out.println(result + "\n");
+			
 		}
     }
 
     /**
-     * Verificar se uma posição está no formato correto.
+     * Verificar se uma posicao esta no formato correto.
      * @param position
      * @return validade (boolean)
      */
@@ -133,15 +132,6 @@ public class User {
     }
     
     /**
-     * Verifica se o jogador ganhou o jogo.
-     * @param info
-     * @return boolean
-     */
-    private boolean win(String info) {
-    	return (info.substring(0, 7).equals("Vitoria"));
-    }
-    
-    /**
      * Menu inicial que apresenta o perfil do utilizador e 
      * permite o jogador iniciar um novo jogo ou editar o perfil.
      * @param os, is, scan
@@ -158,7 +148,7 @@ public class User {
     	this.winNum  = profile.split(",")[3];
     	this.date    = profile.split(",")[4];
     	
-    	// Apresentação do perfil
+    	// Apresentaï¿½ï¿½o do perfil
     	System.out.println("--------------------------------");
     	System.out.println("Bem-vindo " + username + "!!");
     	System.out.println("--------------------------------");
@@ -192,7 +182,7 @@ public class User {
 	}
 
     /**
-     * Edição da foto de perfil.
+     * Ediï¿½ï¿½o da foto de perfil.
      * @param os, is, scan
      * @throws ParserConfigurationException, IOException
      */
@@ -205,7 +195,7 @@ public class User {
     }
 
     /**
-     * Inicia sessão, a partir da inscrição no servidor
+     * Inicia sessï¿½o, a partir da inscriï¿½ï¿½o no servidor
      * ou a partir de uma conta existente.
      */
 	public boolean sessionState() throws IOException, ParserConfigurationException {
@@ -253,7 +243,7 @@ public class User {
     		picture = scan.nextLine();	
     		if (picture.isEmpty()) System.out.println("Aviso: Foto de perfil pre-predefinida atribuida.");
     		
-    		// Envio do pedido e recepção da resposta
+    		// Envio do pedido e recepï¿½ï¿½o da resposta
         	reply = sendRequestLogin(nickname, name, password, color, date, picture, true);  	
     		break;
     		
@@ -274,11 +264,11 @@ public class User {
 	    		if (password.isEmpty()) System.out.println("Erro: Campo da palavra-passe nao pode estar vazio.");
     		} while(password.isEmpty());
 
-    		// Envio do pedido e recepção da resposta
+    		// Envio do pedido e recepï¿½ï¿½o da resposta
         	reply = sendRequestLogin(nickname, name, password, color, date, picture, false);  		
     	}
     	
-    	// Atualização dos dados do utilizador, dados vindo do servidor
+    	// Atualizaï¿½ï¿½o dos dados do utilizador, dados vindo do servidor
 
 		System.out.println("Sessao -> " + reply + "\n");
 		if (reply.substring(0, 4).equals("Erro")) return false;
@@ -302,10 +292,10 @@ public class User {
 	}
 	
 	/**
-     * Envia uma Request ao servidor, a pedir para iniciar sessão, a partir de login ou inscrevendo-se.
-     * Para iniciar sessão o utilizador deve inserir o seu nickname (chave primária) e palavra-passe,
+     * Envia uma Request ao servidor, a pedir para iniciar sessï¿½o, a partir de login ou inscrevendo-se.
+     * Para iniciar sessï¿½o o utilizador deve inserir o seu nickname (chave primï¿½ria) e palavra-passe,
      * para inscrever-se o utilizador deve introduzir todos os dados, nomeadamente, nickname, nome publico,
-     * palavra-passe e fotografia (caso queira). É retornado o resultado da sessão e os dados atualizados
+     * palavra-passe e fotografia (caso queira). ï¿½ retornado o resultado da sessï¿½o e os dados atualizados
      * de acordo com a base de dados do servidor.
      */
 	public String sendRequestLogin(String nickname, String name, String password, String color, String date, String picture, boolean register) throws ParserConfigurationException, IOException {
@@ -320,8 +310,8 @@ public class User {
      * Envia uma Request ao servidor, a pedir para atualizar um certo dado e recebe a resposta do mesmo. 
      * Os dados a ser atualizados, podem ser a palavra-passe, fotografia, nome publico do jogador, etc...
      * O argumento contenttype destina-se a identificar o tipo de dado a ser atualizado. O argumento
-     * nickname é utilizado como chave primária e o argumento value transforma os dados atualizados,
-     * que vão substituir os antigos.
+     * nickname ï¿½ utilizado como chave primï¿½ria e o argumento value transforma os dados atualizados,
+     * que vï¿½o substituir os antigos.
      */
 	public String sendRequestUpload(String contentType, String nickname, String value) throws ParserConfigurationException, IOException {
 
@@ -333,9 +323,9 @@ public class User {
     
     /**
      * Envia uma Request ao servidor, a pedir o tabuleiro e recebe a resposta do mesmo. O argumento player
-     * indica a qual jogador o tabuleiro se destina. Quando o argumento view é igual a true, indica que o
-     * utilizador quer receber o próprio tabuleiro, com todos os navios visíveis, caso seja falso, indica
-     * que quer receber o tabuleiro do adversário, com os navios que ainda não foram encontrados ocultos.
+     * indica a qual jogador o tabuleiro se destina. Quando o argumento view ï¿½ igual a true, indica que o
+     * utilizador quer receber o prï¿½prio tabuleiro, com todos os navios visï¿½veis, caso seja falso, indica
+     * que quer receber o tabuleiro do adversï¿½rio, com os navios que ainda nï¿½o foram encontrados ocultos.
      */
     public String sendRequestBoard(String player, String view) throws ParserConfigurationException, IOException {
 		
@@ -346,9 +336,9 @@ public class User {
     }
     
     /**
-     * Envia uma Request ao servidor, a pedir que uma jogada (posição do tiro) seja aplicada no jogo e 
+     * Envia uma Request ao servidor, a pedir que uma jogada (posiï¿½ï¿½o do tiro) seja aplicada no jogo e 
      * recebe uma resposta do mesmo, que contem o resultado da jogada. O argumento player indica qual o 
-     * jogador a enviar a jogada. O argumento position contem a posição do tiro escolhida pelo jogador.
+     * jogador a enviar a jogada. O argumento position contem a posiï¿½ï¿½o do tiro escolhida pelo jogador.
      */
     public String sendRequestPlay(String username, String position) throws ParserConfigurationException, IOException {	
 		

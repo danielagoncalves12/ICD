@@ -2,10 +2,10 @@
 	<Player Nickname="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
-		<Color>#ed8cc5</Color>
+		<Color>#e06dbb</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>16</WinsNumber>
+		<WinsNumber>20</WinsNumber>
 	</Player>
 	<Player Nickname="Nick">
 		<Name>Nick</Name>
@@ -13,7 +13,7 @@
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>27</WinsNumber>
+		<WinsNumber>37</WinsNumber>
 	</Player>
 	<Player Nickname="teste1">
 		<Name>GoingOn</Name>

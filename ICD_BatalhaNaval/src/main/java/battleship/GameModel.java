@@ -8,6 +8,7 @@ import java.util.Random;
 import java.util.concurrent.Semaphore;
 
 import session.Profile;
+import socket.GameQueueThread;
 
 
 public class GameModel {
@@ -15,17 +16,18 @@ public class GameModel {
 	// Constantes
 	private int MAXPOINTS = 1;
 	
-	// Variáveis
+	// Variaveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
 	private int[][] boardPlayer2 = new int[10][10]; // Tabuleiro do jogador 2
-	private int pointsPlayer1, pointsPlayer2; 		// Pontuação dos jogadores
+	private int pointsPlayer1, pointsPlayer2; 		// Pontuacao dos jogadores
 	private HashMap<String, Integer> columnValue  = new HashMap<>();
 	private HashMap<String, Integer> playerNumber = new HashMap<>();
 	private String username1, username2;
+	private boolean end;
 	
 	// Sincronizacao
 	private Semaphore wait;
-	private static boolean play1 = false, play2 = false;
+	private static boolean play1, play2;
 	
 	public GameModel(String username1, String username2, Semaphore wait) {
 		
@@ -57,7 +59,7 @@ public class GameModel {
 		pointsPlayer1 = 0;
 		pointsPlayer2 = 0; 
 		
-		// Pergunta ao jogador, pelas posições dos navios
+		// Pergunta ao jogador, pelas posicoes dos navios
 		randomShipPosition(username1);
 		randomShipPosition(username2);
 	}
@@ -80,12 +82,12 @@ public class GameModel {
 	}
 	
 	/**
-	 * Receber o array do tabuleiro do adversário, as posições dos navios que ainda não foram
-	 * descobertos não são reveladas. Esta função é usada unicamente para retornar o array - 
-	 * tabuleiro do adversário ao jogador.
+	 * Receber o array do tabuleiro do adversario, as posicoes dos navios que ainda nao foram
+	 * descobertos nao sao reveladas. Esta funcao e usada unicamente para retornar o array - 
+	 * tabuleiro do adversario ao jogador.
 	 * 
-	 * @param values1 - Jogador 1 ou 2
-	 * @return Dicionário com as posições do respetivo tipo de navio.
+	 * @param username 
+	 * @return Dicionario com as posicoes do respetivo tipo de navio.
 	 */
 	public HashMap<String, List<List<Integer>>> getBoardPositions(String username) {
 
@@ -103,7 +105,7 @@ public class GameModel {
 				
 				// Vazio
 				if (cell == ShipType.EMPTY)     positionEmpty.add(Arrays.asList(i, j));
-				// Porta-aviões
+				// Porta-avioes
 				if (cell == ShipType.TYPE1SHOW) positionType1.add(Arrays.asList(i, j));	
 				// Navio-tanque
 				if (cell == ShipType.TYPE2SHOW) positionType2.add(Arrays.asList(i, j));				
@@ -121,16 +123,37 @@ public class GameModel {
 		dic.put("Destroyer", positionType3);
 		dic.put("Submarine", positionType4);
 
+		if (checkWin(1)) {
+			
+			if (end) {
+				if (GameQueueThread.activeGames.contains(this)) { 				
+					GameQueueThread.activeGames.remove(this);
+				Profile.uploadWinsNumber(username1);
+				}
+			}
+			end = true;					
+		}
+		if (checkWin(2)) { 
+			
+			if (end) {				
+				if (GameQueueThread.activeGames.contains(this))
+					GameQueueThread.activeGames.remove(this);
+				Profile.uploadWinsNumber(username2);
+			}
+			
+			end = true;
+		}
+		
 		return dic;
 	}	
 	
 	/**
-	 * Receber o tabuleiro, pela vista do jogador, as posições dos navios são reveladas
-	 * visualmente para o jogador. Esta função é usada unicamente para apresentar o 
-	 * próprio tabuleiro para o jogador.
+	 * Receber o tabuleiro, pela vista do jogador, as posicoes dos navios sao reveladas
+	 * visualmente para o jogador. Esta funcao ï¿½ usada unicamente para apresentar o 
+	 * proprio tabuleiro para o jogador.
 	 * 
-	 * @param player
-	 * @return Dicionário com as posições de cada tipo de navio
+	 * @param username
+	 * @return Dicionario com as posicoes de cada tipo de navio
 	 */
 	public HashMap<String, List<List<Integer>>> getBoardPositionsView(String username) {
 
@@ -150,7 +173,7 @@ public class GameModel {
 				// Vazio
 				if (cell == ShipType.EMPTY) shootEmpty.add(Arrays.asList(i, j));
 				
-				// Porta-aviões
+				// Porta-avioes
 				if (cell == ShipType.TYPE1SHOW)   shootShip.add(Arrays.asList(i, j));
 				if (cell == ShipType.TYPE1HIDDEN) positionType1.add(Arrays.asList(i, j));	
 				
@@ -167,7 +190,7 @@ public class GameModel {
 				if (cell == ShipType.TYPE4HIDDEN) positionType4.add(Arrays.asList(i, j));			
 			}
 		}
-			
+					
 		HashMap<String, List<List<Integer>>> dic = new HashMap<>();
 		dic.put("Empty", positionEmpty);
 		dic.put("Aircraft", positionType1);
@@ -199,7 +222,7 @@ public class GameModel {
 	/**
 	 * @param player - Jogador 1 ou 2
 	 * @param choice - Jogada, linha e coluna (Exemplo: 1A, 5F, etc)
-	 * @return String que contém o estado do jogo.
+	 * @return String que contem o estado do jogo.
 	 */
 	public String play(String username, String choice) {
 
@@ -209,7 +232,7 @@ public class GameModel {
 		if (player == 1) play1 = true;
 		if (player == 2) play2 = true;
 			
-		// Se os dois jogadores já enviaram jogada
+		// Se os dois jogadores ja enviaram jogada
 		if (play1 && play2) wait.release(2);
 
 		if (choice.length() == 2) {
@@ -229,8 +252,8 @@ public class GameModel {
 		state = board[line][column];
 		if (state >= 6 && state <= 9) if (player == 1) pointsPlayer1++; else pointsPlayer2++;
 			
-		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY : 	  // Não encontrou navio
-							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-aviões
+		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY : 	  // Nï¿½o encontrou navio
+							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-aviï¿½es
 							  (state == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW :  // Encontrou Navio-tanque
 							  (state == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW :  // Encontrou Contratorpedeiro
 							  (state == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW :  // Encontrou Submarino
@@ -254,25 +277,24 @@ public class GameModel {
 			 : (state == ShipType.TYPE2HIDDEN) ? "Navio-tanque atingido!"
 			 : (state == ShipType.TYPE3HIDDEN) ? "Contratorpedeiro atingido!"
 			 : (state == ShipType.TYPE4HIDDEN) ? "Submarino atingido!"
-			 : "Espaco ja explorado.");		 
-	
+			 : "Espaco ja explorado.");
 	}
-
+	
 	public void randomShipPosition(String username) {
 		
 		int player = getPlayerNumber(username);
 		String letters = "ABCDEFGHIJ";
-		int[] shipSizes  = {5, 4, 3, 2};  // Dimensão de cada navio
-		int[] shipNumber = {1, 2, 3, 4};  // Número de navios a posicionar de cada tipo
+		int[] shipSizes  = {5, 4, 3, 2};  // Dimensï¿½o de cada navio
+		int[] shipNumber = {1, 2, 3, 4};  // Nï¿½mero de navios a posicionar de cada tipo
 		int[] shipSymbol = {ShipType.TYPE1HIDDEN, ShipType.TYPE2HIDDEN, ShipType.TYPE3HIDDEN, ShipType.TYPE4HIDDEN};
 
 		int[][] board = player == 1 ? boardPlayer1 : boardPlayer2;
 		
 		for (int i = 0; i < 4; i++) {
 
-			String position = "";  					 // Posição
-			boolean vertical = false, check = false; // Sentido e verificação da posição
-			int number = 0;		  					 // Número de navios por posicionar
+			String position = "";  					 // Posicao
+			boolean vertical = false, check = false; // Sentido e verificaï¿½ï¿½o da posiï¿½ï¿½o
+			int number = 0;		  					 // Numero de navios por posicionar
 			
 			while(number != shipNumber[i]) {
 			
@@ -282,10 +304,10 @@ public class GameModel {
 					if (randomLine.length() == 1) randomLine = "0" + randomLine;
 					position = randomLine + randomColumn;		
 	
-					vertical = Math.random() < 0.5; 						      		  // Escolhe se o navio será posicionado verticalmente ou horizontalmente		
-					check = checkValidPosition(player, position, shipSizes[i], vertical); // Verifica se a posição é válida
+					vertical = Math.random() < 0.5; 						      		  // Escolhe se o navio serï¿½ posicionado verticalmente ou horizontalmente		
+					check = checkValidPosition(player, position, shipSizes[i], vertical); // Verifica se a posiï¿½ï¿½o ï¿½ vï¿½lida
 					
-					// Caso a posição seja válida, o navio é introduzido
+					// Caso a posicao seja valida, o navio e introduzido
 					if (check) {
 						int steps  = 0;
 						String strLine = "" + position.charAt(0) + position.charAt(1);
@@ -314,27 +336,27 @@ public class GameModel {
 		char line2  = position.charAt(1);
 		char column = position.charAt(2);
 		
-		// Verificação do sintaxe da posição
+		// Verificaï¿½ï¿½o do sintaxe da posiï¿½ï¿½o
 		if (Character.isDigit(line1) && Character.isDigit(line2)) {
 			
 			String line = "" + Character.getNumericValue(line1) + Character.getNumericValue(line2);
 			int line_number = Integer.parseInt(line) - 1;
 					
-			// Verificação do sintaxe da posição
+			// Verificaï¿½ï¿½o do sintaxe da posiï¿½ï¿½o
 			if (Character.isLetter(column)) {
 
 				int column_number = columnValue.get(column + "");
 				int steps = 0;						
 				while(steps != shipSize) {
 
-					// Verificação - Dentro do tabuleiro
+					// Verificaï¿½ï¿½o - Dentro do tabuleiro
 					if (line_number < 0 || line_number >= 10)     return false; // Erro: Navio fora do tabuleiro
 					if (column_number < 0 || column_number >= 10) return false; // Erro: Navio fora do tabuleiro
 
-					// Verificação - Colisão com outro navio
-					if (board[line_number][column_number] != 0)   return false; // Erro: Colisão com outro navio.
+					// Verificaï¿½ï¿½o - Colisï¿½o com outro navio
+					if (board[line_number][column_number] != 0)   return false; // Erro: Colisï¿½o com outro navio.
 					
-					// Verificação - 1 Espaço de afastamento (Contíguos)
+					// Verificaï¿½ï¿½o - 1 Espaï¿½o de afastamento (Contï¿½guos)
 					if (!checkContiguous(board, line_number, column_number)) return false;
 	
 					// Verificar proxima posicao
@@ -345,7 +367,7 @@ public class GameModel {
 				return true;
 			}
 		}	
-		System.out.println("Erro: Sintaxe inválida");		
+		System.out.println("Erro: Sintaxe invï¿½lida");		
 		return false;
 	}
 

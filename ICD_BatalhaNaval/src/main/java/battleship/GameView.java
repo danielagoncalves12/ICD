@@ -1,7 +1,5 @@
 package battleship;
 
-
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,10 +9,10 @@ public class GameView {
 
 	public static void convertSymbols() {
 		
-		symbols.put(ShipType.EMPTYHIDDEN, new String(" ")); // Por explorar (Sem navio)
+		symbols.put(ShipType.EMPTYHIDDEN, new String("Â ")); // Por explorar (Sem navio)
 		symbols.put(ShipType.EMPTY, new String("x"));       // Pressionado (Sem Sucesso)
 	    
-		symbols.put(ShipType.TYPE1SHOW, new String("P"));   // Porta-aviões encontrado
+		symbols.put(ShipType.TYPE1SHOW, new String("P"));   // Porta-aviï¿½es encontrado
 		symbols.put(ShipType.TYPE2SHOW, new String("N"));   // Navio-tanque encontrado
 		symbols.put(ShipType.TYPE3SHOW, new String("C"));   // Contratorpedeiro encontrado
 		symbols.put(ShipType.TYPE4SHOW, new String("S"));   // Submarino encontrado
@@ -22,7 +20,7 @@ public class GameView {
 		symbols.put(ShipType.TYPE2HIDDEN, new String("Q")); // Navio-tanque escondido
 		symbols.put(ShipType.TYPE3HIDDEN, new String("W")); // Contratorpedeiro escondido
 		symbols.put(ShipType.TYPE4HIDDEN, new String("O")); // Submarino escondido	
-		symbols.put(ShipType.TYPE1HIDDEN, new String("R")); // Porta-aviões escondido
+		symbols.put(ShipType.TYPE1HIDDEN, new String("R")); // Porta-aviï¿½es escondido
 		
 		symbols.put(ShipType.TYPESHOOT, new String("X"));	   // Tiro num navio
 		symbols.put(ShipType.TYPESHOOTEMPTY, new String("Y")); // Tiro falha
@@ -55,7 +53,7 @@ public class GameView {
 		
 		board = board.replaceAll("(\r\n|\n)", "<br>");
 		board = board.replaceAll("x", "<img src='resources/found_empty.png'/>");
-		board = board.replaceAll(" ", "<img src='resources/not_found.png'/>");
+		board = board.replaceAll("Â ", "<img src='resources/not_found.png'/>");
 		board = board.replaceAll("(C|S|P|N)", "<img src='resources/ship.png'/>");
 		board = board.replaceAll("(Q|W|O|R)", "<img src='resources/not_found.png'/>");	
 
@@ -89,7 +87,7 @@ public class GameView {
 		
 		board = board.replaceAll("(\r\n|\n)", "<br>");
 		board = board.replaceAll("x", "<img src='resources/found_empty.png'/>");
-		board = board.replaceAll(" ", "<img src='resources/not_found.png'/>");
+		board = board.replaceAll("Â ", "<img src='resources/not_found.png'/>");
 		
 		board = board.replaceAll("X", "<img src='resources/target_ship.png'/>");
 		board = board.replaceAll("Y", "<img src='resources/target_empty.png'/>");
@@ -100,7 +98,7 @@ public class GameView {
 	}
 	
 	/** 
-	 * Método printBoard
+	 * Mï¿½todo printBoard
 	 * Apresenta o tabuleiro do jogo.
 	 */
 	public static String printBoard(String player, String view, int[][] board) {
@@ -109,18 +107,18 @@ public class GameView {
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};
 		StringBuilder strBoard = new StringBuilder();
 
-		// Apresentação das letras
+		// Apresentacao das letras
 		strBoard.append("0 ");
 		for (int i = 0; i < 10; i++) {
 			strBoard.append(" " + letters[i] + " ");
 		}
 		strBoard.append("\n");
 
-		// Apresentação da borda do tabuleiro
+		// Apresentacao da borda do tabuleiro
 		//strBoard.append("   X ");
 		//for (int i = 0; i <= 28; i++) strBoard.append((i != 28) ? "-" : " X\n");
 			
-		// Apresentação do conteúdo do tabuleiro
+		// Apresentacao do conteudo do tabuleiro
 		for (int i = 0; i < 10; i++) {
 			
 			strBoard.append(i+1 + " ");
@@ -133,7 +131,7 @@ public class GameView {
 			strBoard.append("\n");
 		}
 		
-		// Apresentação da borda do tabuleiro
+		// Apresentacao da borda do tabuleiro
 		//strBoard.append("   X ");
 		//for (int i = 0; i <= 28; i++) strBoard.append((i != 28) ? "-" : " X\n");
 		

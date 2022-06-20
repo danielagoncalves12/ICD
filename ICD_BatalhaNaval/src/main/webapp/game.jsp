@@ -24,44 +24,72 @@ if (user == null) user = new User();
 if (result == null) result = "";
 
 // Primeira vez
-if (state == null) user.sendRequestGame(username);
+if (state == null) {
+	user.sendRequestGame(username);
+	session.setAttribute("clean", false);
+}
 
 // Ao longo do jogo
 String myBoard = user.sendRequestBoard(username, "true");
 String anotherBoard = user.sendRequestBoard(username, "false");
 %>
 
-<div class="center">
 
-	<div style="text-align: center" class="center">
+<div style="border-radius:5%; background-color: rgba(108, 122, 186, 0.8); text-align:center; width:70%" class="center">
+
+	<br>
+	<img src="images/titulo.png" width="300px"/>
 	
-		<h2>JOGO</h2>
-		<h2> Bem vindo <%=name%> !! </h2>
-
-		<form method="POST" action="PlayServlet">
-			<input type="hidden" name="username" id="username" value="<%=username%>">
-			<input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
-			<input type="submit" name="play" id="play" value="Jogar">
-		</form>
+	<hr style="width: 90%"/>
+	<div style="width: 100%; overflow: hidden; text-align: center" class="center">
+	
+		<div class="center" style="text-align:left; padding: 1%; width: 51%; float: left;"> 
 		
-		<form method="POST" action="LoginServlet">
-			<input type="submit" name="exit" id="exit" value="Sair">
-		</form> 
+			<div class="center" style="text-align: center; width:29%; float:left">
+				<img style="object-fit:cover; border: 2px solid #00008B;" src="pictures/<%=profile.get("Picture")%>" width="100px" height="100px"/>
+			</div>
+			
+			<div class="center" style="width:70%; float:right">
+				<h3>Bem-vindo <%=name%> !!</h3>
+				<span>Os teus navios foram distribuidos aleatoriamente pelo tabuleiro.</span>
+				<span>Acerte em todos os navios inimigos, antes do inimigo descobrir todos os teus navios, para vencer.</span>
+			</div>			
 
+		</div>
+		<div class="center" style="text-align:left; height:130px; width: 42%;  padding: 2%; float: right;"> 
+			
+			<div class="center" style="width:100%; float:left">
+				
+				<!-- FORM JOGADA -->
+				<form method="POST" action="PlayServlet"><br>
+					<input type="hidden" name="username" id="username" value="<%=username%>">
+					<span>Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
+					<input type="submit" name="play" id="play" value="Jogar">
+				</form>
+					
+				<a href="index.jsp" id="exit">Sair</a>
+				
+				<br><br>
+				<span>Resultado: <%=result%></span><br>
+			</div>
+		</div>
 		<br>
-		<p><%=result%></p>
 
+	</div>
+	<br>
+	<hr style="width: 90%">
+	<br>
+	<div style="text-align:center; width: 100%;">
+	    <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
+	        <%=GameView.viewBoardView(myBoard)%>
+	    </div>
+	    <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
+	        <%=GameView.viewBoard(anotherBoard)%>  
+	    </div>
 	</div>
 </div>
 
-<div style="text-align:center; width: 100%;">
-    <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
-        <%=GameView.viewBoardView(myBoard)%>
-    </div>
-    <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
-        <%=GameView.viewBoard(anotherBoard)%>  
-    </div>
-</div>
+
 
 
 <script type="text/javascript">
@@ -76,6 +104,13 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 		document.getElementById('play').disabled = true;
 		document.getElementById('play').style.display = 'block';
         document.getElementById('play').style.display = 'none';
+        
+        if (<%=(boolean) session.getAttribute("clean")%> == true) {
+        	<%session.removeAttribute("result");%>
+            <%session.removeAttribute("state");%>
+            <%session.setAttribute("clean", false);%>
+        }      
+        <%session.setAttribute("clean", true);%> 
 	}
 	else {
 		document.getElementById('exit').disabled = true;
