@@ -1,4 +1,8 @@
+
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
+import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -7,8 +11,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
-
-import bean.Check;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.FileItemFactory;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import session.Profile;
 import socket.User;
 
@@ -47,28 +54,59 @@ public class RegisterServlet extends HttpServlet {
 				session.setAttribute("date", Profile.getDate(username));
 				session.setAttribute("picture", Profile.getPicture(username));
 				
-				// TODO
-				
 				request.getRequestDispatcher("/index.jsp").forward(request, response);
 				return;
 			}
 		}
 		
 		// Criar uma nova conta
-		String newUsername = request.getParameter("new_username");
+		String newUsername = "", newName = "", newPassword = "", newColor = "", newDate = "", newPicture = "";
+		
+		/*String newUsername = request.getParameter("new_username");
 		String newName     = request.getParameter("new_name");
 		String newPassword = request.getParameter("new_password");
 		String newColor    = request.getParameter("new_color");
 		String newDate     = request.getParameter("new_date");
-		String newPicture  = request.getParameter("new_picture");
-	
-		// TODO UPLOAD de imagens
+		String newPicture  = request.getParameter("new_picture");*/
+		
+		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
+        if (!isMultipart) {
+            return;
+        }
+        try {
+            FileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = upload.parseRequest(new ServletRequestContext(request));
+
+            for (FileItem item : items) {
+            	
+            	if (item.isFormField()) {
+            		
+            		if (item.getFieldName().equals("new_username")) newUsername = item.getString();
+            		if (item.getFieldName().equals("new_name")) 	newName = item.getString();
+            		if (item.getFieldName().equals("new_password")) newPassword = item.getString();
+            		if (item.getFieldName().equals("new_color")) 	newColor = item.getString();
+            		if (item.getFieldName().equals("new_date")) 	newDate = item.getString();
+            	} 
+            	
+            	else if (item.getFieldName().equals("new_picture")) {
+    		
+                    String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
+                    String imgName = newUsername + imgtype;
+                    newPicture = imgName;
+                    item.write(new File("./src/main/webapp/pictures/", imgName));
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		
 		User user = (User) session.getAttribute("user");
 		if (user == null) user = new User();
 		
 		String result = "", honor = " ";
 		
+		// Enviar os pedidos
 		try {
 			result = user.sendRequestLogin(newUsername, newName, newPassword, newColor, newDate, newPicture, true);
 			honor  = user.sendRequestHonorBoard();
@@ -83,11 +121,12 @@ public class RegisterServlet extends HttpServlet {
 			session.setAttribute("color", Profile.getColor(newUsername));
 			session.setAttribute("date", Profile.getDate(newUsername));
 			session.setAttribute("picture", Profile.getPicture(newUsername));
-			session.setAttribute("win_num", Profile.getWinNum(username));
+			session.setAttribute("win_num", Profile.getWinNum(newUsername));
 			session.setAttribute("honor", honor);
 			
 			Cookie cookie = new Cookie("username", username);
 			response.addCookie(cookie);
+
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		else {
@@ -96,4 +135,34 @@ public class RegisterServlet extends HttpServlet {
 		}
 	}
 
+	/*@Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
+        if (!isMultipart) {
+            return;
+        }
+        try {
+            FileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = upload.parseRequest(new ServletRequestContext(req));
+            System.out.println(items);
+
+            for (FileItem item : items) {
+            	
+            	if (item.getFieldName().equals("new_picture")) {
+
+                    String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
+                    String imgName = UUID.randomUUID() + imgtype;
+
+                    item.write(new File("./src/main/WebContent/images/", imgName));
+
+                    System.out.println("Saved successfully!");
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+		
+    }*/
 }

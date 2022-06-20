@@ -31,8 +31,7 @@ public class LoginServlet extends HttpServlet {
 		String result = "", honor = "";
 		if (user == null) user = new User();
 
-		try {
-			
+		try {		
 			result = user.sendRequestLogin(username, "", password, "", "", "", false);
 			honor  = user.sendRequestHonorBoard();
 			

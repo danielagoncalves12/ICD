@@ -8,6 +8,7 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="fileName"/>
 			<item value="table"/>
 			<item value="hover"/>
 			<item value="login100-form-btnlogin100-form-btn"/>
@@ -15,7 +16,6 @@
 			<item value="XML invali"/>
 			<item value="f"/>
 			<item value="reading"/>
-			<item value="system.ou"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>

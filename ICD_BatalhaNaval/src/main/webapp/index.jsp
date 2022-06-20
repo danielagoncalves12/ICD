@@ -53,7 +53,7 @@ String[][] players = XMLUtils.stringToArray2D(honor);
 		<div class="container-login100">
 			<div class="wrap-login100" style="padding-top:50px">
 			
-				<div style="width:50%; text-align:center; border-radius:20px; padding:10px; padding-left:100px; padding-right:100px; line-height: 20px;
+				<div style="width:50%; text-align:center; border-radius:20px; padding:10px; padding-left:80px; padding-right:80px; line-height: 20px;
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
 					<h5 style="padding: 10px">Perfil de <%=username%></h5><br>

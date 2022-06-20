@@ -22,9 +22,10 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
+
 </head>
 <body>
-	
+
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100" style="padding-top: 100px">
@@ -34,7 +35,7 @@
 				</div>
 
 				<!-- FORM de inicio de sessao -->
-				<form class="login100-form validate-form" method = "POST" action ="RegisterServlet">
+				<form class="login100-form validate-form" method = "POST" action ="RegisterServlet" enctype="multipart/form-data">
 					<span class="login100-form-title">
 						Criar uma conta nova
 					</span>
@@ -74,7 +75,8 @@
 						<p style="line-height: 10px; font-size: 10px"> </p>
 						
 						<p>Selecione a sua foto de perfil (Opcional):</p>
-						<input style="width: 100%; height:40px; border: 8px solid #E6E6E6; border-radius: 10px" type="file" id="new_picture" name="new_picture" accept="image/png, image/jpeg" value="" placeholder="Foto de Perfil"><br>
+						<input style="width: 100%; height:40px; border: 8px solid #E6E6E6; border-radius: 10px" type="file" onchange="show(this)" id="new_picture" name="new_picture" accept="image/png, image/jpeg" value="" placeholder="Foto de Perfil"><br>
+						<img src="" width="100" height="100" id="showimg">
 					</div>
 					
 					<div class="container-login100-form-btn">
@@ -92,8 +94,18 @@
 		</div>
 	</div>
 	
+	<script type="text/javascript">
 	
-
+	function show(file) {
+        var reader = new FileReader();  //Create file read object
+        var files = file.files[0];      //Get the file in the file component
+        reader.readAsDataURL(files);    //File read and install to base64 type
+        reader.onloadend = function(e) {
+            document.getElementById("showimg").src = this.result;
+        }
+    }
+	
+	</script>
 	
 <!--===============================================================================================-->	
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>

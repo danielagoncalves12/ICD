@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="bean.Check" import="socket.User" %>
+<%@page import="session.Profile" %>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,6 +26,21 @@
 <!--===============================================================================================-->
 </head>
 <body>
+	
+	<%
+	
+	Cookie[] cookies = request.getCookies();
+    if (cookies != null)
+        for (Cookie cookie : cookies) {
+        	if (cookie.getName().equals("username")) {
+        		cookie.setValue(null);
+        		cookie.setMaxAge(0);
+	            response.addCookie(cookie);
+        	}            
+        }
+    request.removeAttribute("username");
+	
+	%>
 	
 	<div class="limiter">
 		<div class="container-login100">
@@ -68,7 +85,6 @@
 			</div>
 		</div>
 	</div>
-	
 
 <!--===============================================================================================-->	
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
