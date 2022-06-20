@@ -17,15 +17,18 @@ public class Check {
 		HttpSession session = request.getSession(true);
 		String username = (String) session.getAttribute("username");
 
+		System.out.println("check " + username);
+		
 		// Se nao houver username guardado na sessao,
-		// é procurado pelo username guardado em cookie
+		// ï¿½ procurado pelo username guardado em cookie
+
 		if (username == null) {
 			Cookie[] cookies = request.getCookies();
 			
 			if (cookies != null) 
 				for (Cookie cookie : cookies) 
 				   if (cookie.getName().equals("username")) 
-					   username = cookie.getValue();
+					   username = cookie.getValue();			
 		}
 		
 		if (username != null) return username;
@@ -36,10 +39,9 @@ public class Check {
 		}
 	}
 
-	public static HashMap<String, String> profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParserConfigurationException {
-		
+	public static HashMap<String, String> profile(String username) throws ServletException, IOException, ParserConfigurationException {
+
 		HashMap<String, String> profile = new HashMap<>();
-		String username = Check.username(request, response);
 		
 		if (!username.equals("")) {
 			

@@ -1,4 +1,5 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
 	<Player Nickname="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
@@ -87,15 +88,6 @@
 		<Picture>shrek.png</Picture>
 		<WinsNumber>14</WinsNumber>
 	</Player>
-
-	<Player Nickname="alo">
-		<Name>alo</Name>
-		<Password>1B2CCF52B54EA2C9468CA24FBE164919</Password>
-		<Color>#334db0</Color>
-		<Date>2022-06-06</Date>
-		<Picture>default.png</Picture>
-		<WinsNumber>0</WinsNumber>
-	</Player>
 	<Player Nickname="Dann">
 		<Name>Dann</Name>
 		<Password>E9F49E0ADDDF4EDBB14C2832DA3283A2</Password>
@@ -104,4 +96,12 @@
 		<Picture>default.png</Picture>
 		<WinsNumber>0</WinsNumber>
 	</Player>
-<Player Nickname="ftngjngc"><Name>ftngjngc</Name><Password>E35C0921308ADAA27A45847DBAD763C0</Password><Color>#000000</Color><Date>2022-06-06</Date><Picture>ftngjngc.jpg</Picture><WinsNumber>0</WinsNumber></Player><Player Nickname="PhotoBoss"><Name>testefoto</Name><Password>98372C8496D2F2100C65ADB5CF0294AF</Password><Color>#ef7a5c</Color><Date>2012-06-04</Date><Picture>PhotoBoss.jpg</Picture><WinsNumber>0</WinsNumber></Player></Data>
+	<Player Nickname="PhotoBoss">
+		<Name>testefoto</Name>
+		<Password>98372C8496D2F2100C65ADB5CF0294AF</Password>
+		<Color>#ef7a5c</Color>
+		<Date>2012-06-04</Date>
+		<Picture>PhotoBoss.jpg</Picture>
+		<WinsNumber>0</WinsNumber>
+	</Player>
+</Data>

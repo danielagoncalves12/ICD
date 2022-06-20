@@ -118,7 +118,7 @@ public class Session {
 		
 		// Valida��o
 		try {
-			if (XMLUtils.validate(XMLUtils.documentToString(doc), "src/main/webapp/xml/PlayerInfo.xsd")) {
+			if (XMLUtils.validate(XMLUtils.documentToString(doc), "src/main/java/protocol/PlayerInfo.xsd")) {
 			
 				// Atualizar o novo ficheiro
 				try (FileOutputStream output = new FileOutputStream(dataBasePath)) {

@@ -1,6 +1,7 @@
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 import javax.servlet.ServletException;
@@ -31,7 +32,7 @@ public class RegisterServlet extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		// Sessão
+		// Sessao
 		HttpSession session = request.getSession();
 		
 		// Verificar se existe alguma entrada nos cookies
@@ -82,44 +83,38 @@ public class RegisterServlet extends HttpServlet {
                     String imgName = newUsername + imgtype;
                     newPicture = imgName;
                     item.write(new File("./src/main/webapp/pictures/", imgName));
+                    
+                    //byte[] bytes = item.get();
+                    //newPicture = Base64.getEncoder().encodeToString(bytes);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-		
+
 		User user = (User) session.getAttribute("user");
 		if (user == null) user = new User();
 		
-		String result = "", honor = " ";
+		String result = "";
 		
 		// Enviar os pedidos
 		try {
 			result = user.sendRequestLogin(newUsername, newName, newPassword, newColor, newDate, newPicture, true);
-			honor  = user.sendRequestHonorBoard();
 		} catch (ParserConfigurationException | IOException e) {
 			e.printStackTrace();
 		}
 		
 		if (newUsername != null && newName != null && newPassword != null && !result.substring(0, 4).equals("Erro")) {
-			
-			// TODO
-			/*session.setAttribute("username", newUsername);		
-			session.setAttribute("name", Profile.getName(newUsername));
-			session.setAttribute("color", Profile.getColor(newUsername));
-			session.setAttribute("date", Profile.getDate(newUsername));
-			session.setAttribute("picture", Profile.getPicture(newUsername));
-			session.setAttribute("win_num", Profile.getWinNum(newUsername));*/
-			session.setAttribute("honor", honor);
-			
-			Cookie cookie = new Cookie("username", username);
-			response.addCookie(cookie);
 
+			session.setAttribute("username", newUsername);
+			Cookie cookie = new Cookie("username", newUsername);
+			response.addCookie(cookie);
+			
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		else {
 			session.invalidate();
-			request.getRequestDispatcher("/login.jsp").forward(request, response);
+			request.getRequestDispatcher("/register.jsp").forward(request, response);
 		}
 	}
 }
