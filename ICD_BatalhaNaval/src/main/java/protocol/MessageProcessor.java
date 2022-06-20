@@ -37,12 +37,12 @@ public class MessageProcessor {
 				switch(method) {
 				
 				case "GetBoard"  : return board(doc);
-				case "GetInfo"   : return info(doc);
 				case "Play"      : return play(doc);	
 				case "Login"     : return session(doc);
 				case "Upload"    : return upload(doc);
 				case "FindGame"  : return find(doc);
 				case "GetHonorBoard": return honor(doc);
+				case "GetProfileInfo": return profile(doc);
 				}
 			}
 		} catch (SAXException | IOException e) {
@@ -50,6 +50,31 @@ public class MessageProcessor {
 		}
 		System.out.println("Messagem inválida! ->" + message);
 		return null;
+	}
+	
+	private static String profile(Document doc) {
+		
+		XPath xPath  = XPathFactory.newInstance().newXPath();
+		Node nodeUsername = null;
+		Node nodeName = null, nodePicture = null, nodeWins = null, nodeColor = null, nodeDate = null; boolean isReply = false;
+        
+		try {
+			// Request
+			nodeUsername = (Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE);
+			
+			// Response
+			nodeName    = (Node) xPath.compile("//Response/Name").evaluate(doc, XPathConstants.NODE);
+			nodeColor   = (Node) xPath.compile("//Response/Color").evaluate(doc, XPathConstants.NODE);
+			nodePicture = (Node) xPath.compile("//Response/Picture").evaluate(doc, XPathConstants.NODE);
+			nodeWins    = (Node) xPath.compile("//Response/WinsNum").evaluate(doc, XPathConstants.NODE);
+			nodeDate    = (Node) xPath.compile("//Response/Date").evaluate(doc, XPathConstants.NODE);
+			
+			isReply    = (boolean) xPath.compile("boolean(//Response/Name/text())").evaluate(doc, XPathConstants.BOOLEAN);
+		} catch (XPathExpressionException e) { e.printStackTrace(); }
+
+		if (isReply) return nodeName.getTextContent() + "," + nodeColor.getTextContent() + "," + nodePicture.getTextContent() + "," + 
+		nodeWins.getTextContent() + "," + nodeDate.getTextContent();
+		else return "ProfileInfo," + nodeUsername.getTextContent();
 	}
 	
 	private static String honor(Document doc) {
@@ -162,25 +187,9 @@ public class MessageProcessor {
 				}
 			}
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
-		
-		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), nodePoints1.getTextContent(), nodePoints2.getTextContent(), board);
-		else return "GetBoard" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
-	}
-	
-	private static String info(Document doc) throws DOMException, SAXException, IOException {
 
-		XPath xPath  = XPathFactory.newInstance().newXPath();
-	    Node nodePlayer = null, nodeInfo = null;
-	    boolean isReply = false;
-	    
-		try {
-			nodePlayer = ((Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE));
-			nodeInfo   = ((Node) xPath.compile("//Response/Info").evaluate(doc, XPathConstants.NODE));
-			isReply    = (boolean) xPath.compile("boolean(//Response/Info/text())").evaluate(doc, XPathConstants.BOOLEAN);
-			} catch (XPathExpressionException e) { e.printStackTrace(); }
-	 
-			if (isReply) return nodeInfo.getTextContent();
-			else return "Info," + nodePlayer.getTextContent();
+		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), board);
+		else return "GetBoard" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 	}
 	
 	private static String find(Document doc) throws DOMException, SAXException {
@@ -232,22 +241,8 @@ public class MessageProcessor {
 			if (picture.equals(""))
 				picture = "default.png"; 
 		}		
-		// Caso o utilizador esteja a iniciar sessão (login), obtem o nome publico e foto de perfil
-		else {
-			if (!Session.availableNickname(nickname)) {
-				name 	= Profile.getName(nodeNickname.getTextContent());
-				date	= Profile.getDate(nodeNickname.getTextContent());
-				color	= Profile.getColor(nodeNickname.getTextContent());
-				picture = Profile.getPicture(nodeNickname.getTextContent());
-			} else {
-				name = "null";
-				date = "null";
-				color = "null";
-				picture = "null";
-			}
-		}
 		
-		if (isReply) return nodeResult.getTextContent() + "," + nickname + "," + name + "," + color + "," + date + "," + picture;
+		if (isReply) return nodeResult.getTextContent();
 		else {
 			if (nodeRegister.getNodeValue().equals("true"))
 				return "Register," + nickname + "," + name + "," + password + "," + color + "," + date + "," + picture;

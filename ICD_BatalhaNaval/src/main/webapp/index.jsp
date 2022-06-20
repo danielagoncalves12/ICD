@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="bean.Check" import="socket.User" import="session.Profile" import="java.awt.Color"%>
 <%@page import="java.time.*" import="java.time.format.DateTimeFormatter" import="java.time.temporal.ChronoUnit"%>
-<%@page import="protocol.XMLUtils" %>
+<%@page import="protocol.XMLUtils" import="java.util.HashMap" %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,21 +30,17 @@
 <% 
 // Obter dados
 String username = Check.username(request, response);
-String name 	= Check.name(request);
-String color	= Check.color(request);
-String date 	= Check.date(request);
-String picture  = Check.picture(request);
-String winNum   = Check.winNum(request);
+HashMap<String, String> profile = Check.profile(request, response);
 
-String rgbColor = Profile.hex2Rgb(color);
+String rgbColor = Profile.hex2Rgb(profile.get("Color"));
 
 // Calculo da idade
 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-LocalDate birth = LocalDate.parse(date, formatter);
+LocalDate birth = LocalDate.parse(profile.get("Date"), formatter);
 String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 
 // Quadro de honra
-String honor = (String) session.getAttribute("honor");
+String honor  = new User().sendRequestHonorBoard();
 String[][] players = XMLUtils.stringToArray2D(honor);
 
 %>
@@ -52,20 +48,20 @@ String[][] players = XMLUtils.stringToArray2D(honor);
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100" style="padding-top:50px">
-			
+
 				<div style="width:50%; text-align:center; border-radius:20px; padding:10px; padding-left:80px; padding-right:80px; line-height: 20px;
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
 					<h5 style="padding: 10px">Perfil de <%=username%></h5><br>
 					
-					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=picture%>" width="140px" height="140px" /><br>
+					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=profile.get("Picture")%>" width="140px" height="140px" /><br>
 					
 					<hr style="width: 80%; margin-left:10% !important; margin-right:10% !important;">
 					
-					<p><b>Nome público:</b> <%=name%></p>
+					<p><b>Nome público:</b> <%=profile.get("Name")%></p>
 					<p><b>Idade:</b> <%=age%> anos</p>
-					<p><b>Cor favorita:</b> <%=color%></p>
-					<p><b>Total de vitórias:</b> <%=winNum%></p>
+					<p><b>Cor favorita:</b> <%=profile.get("Color")%></p>
+					<p><b>Total de vitórias:</b> <%=profile.get("WinsNum")%></p>
 					
 					<div class="container-login100-form-btn">
 						<a style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" title="Editar" aria-current="page" href="edit.jsp">Editar perfil</a>

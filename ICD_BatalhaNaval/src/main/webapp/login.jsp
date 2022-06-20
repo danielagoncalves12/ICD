@@ -28,7 +28,6 @@
 <body>
 	
 	<%
-	
 	Cookie[] cookies = request.getCookies();
     if (cookies != null)
         for (Cookie cookie : cookies) {
@@ -38,8 +37,7 @@
 	            response.addCookie(cookie);
         	}            
         }
-    request.removeAttribute("username");
-	
+    request.removeAttribute("username");	
 	%>
 	
 	<div class="limiter">
@@ -50,7 +48,7 @@
 				</div>
 
 				<!-- FORM de inicio de sessao -->
-				<form class="login100-form validate-form" method = "POST" action ="LoginServlet">
+				<form class="login100-form validate-form" method="POST" action="LoginServlet">
 					<span class="login100-form-title">
 						Iniciar sessão
 					</span>

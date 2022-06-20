@@ -10,6 +10,52 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
+	public static String messageGetProfileInfo (String username) throws ParserConfigurationException {
+		
+		return messageGetProfileInfo(username, null);
+	}
+	
+	public static String messageGetProfileInfo(String username, HashMap<String, String> profileInfo) throws ParserConfigurationException {
+		
+		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
+        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+
+        // Elemento Protocol
+        Element elementRoot = document.createElement("Protocol");
+        document.appendChild(elementRoot);
+        
+        // Elemento Method (Position)
+        Element elementMethod = document.createElement("GetProfileInfo");
+        elementRoot.appendChild(elementMethod); 
+
+        // Elemento Request
+        Element elementRequest = document.createElement("Request");
+            
+        // Elemento ContentType
+    	Element elementUsername = document.createElement("Username");
+    	elementUsername.appendChild(document.createTextNode(username));
+    	elementRequest.appendChild(elementUsername);
+        
+        elementMethod.appendChild(elementRequest);
+        
+        // Elemento Reply
+        Element elementReply = document.createElement("Response");
+        
+        // Elemento Result
+        if (profileInfo != null) {    	
+        	for (String key : profileInfo.keySet()) {
+        		
+        		Element element = document.createElement(key);
+        		element.setTextContent(profileInfo.get(key));
+        		elementReply.appendChild(element);    		
+        	}
+        }     
+        elementMethod.appendChild(elementReply);
+        
+        return XMLUtils.documentToString(document);
+	}
+	
 	public static String messageHonorBoard() throws ParserConfigurationException {
 		
 		return messageHonorBoard(null, null, null);
@@ -61,7 +107,6 @@ public class MessageCreator {
         elementMethod.appendChild(elementReply);
         
         return XMLUtils.documentToString(document);
-		
 	}
 	
 	public static String messageUpload(String contentType, String nickname, String value) throws ParserConfigurationException {
@@ -119,10 +164,10 @@ public class MessageCreator {
 	
 	public static String messageBoard(String player, String view) throws ParserConfigurationException {
 		
-		return messageBoard(player, view, "", "", null);
+		return messageBoard(player, view, null);
 	}
 	
-	public static String messageBoard(String player, String view, String points1, String points2, HashMap<String, List<List<Integer>>> dic) throws ParserConfigurationException {
+	public static String messageBoard(String player, String view, HashMap<String, List<List<Integer>>> dic) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -157,22 +202,6 @@ public class MessageCreator {
         
         // Elemento Reply
         Element elementReply = document.createElement("Response");
-        
-        // Elemento Points
-        if (!points1.equals("") && !points2.equals("")) {
-        	
-        	Element elementPoints = document.createElement("Points");
-        	
-        	Element elementPlayer1 = document.createElement("Player1");
-        	elementPlayer1.setTextContent(points1);
-        	elementPoints.appendChild(elementPlayer1);
-        	
-        	Element elementPlayer2 = document.createElement("Player2");
-        	elementPlayer2.setTextContent(points2);
-        	elementPoints.appendChild(elementPlayer2);
-        	
-        	elementReply.appendChild(elementPoints);
-        }
         
         // Elemento Board
         if (dic != null) {
@@ -254,50 +283,6 @@ public class MessageCreator {
         	Element elementResult = document.createElement("Result");
         	elementResult.appendChild(document.createTextNode(result));
         	elementReply.appendChild(elementResult);
-        }
-        elementMethod.appendChild(elementReply);
-
-        return XMLUtils.documentToString(document);
-	}
-	
-	public static String messageInfo(String player) throws ParserConfigurationException {
-		
-		return messageInfo(player, "");
-	}
-
-	public static String messageInfo(String player, String info) throws ParserConfigurationException {
-		
-		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
-        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
-        Document document = documentBuilder.newDocument();
-
-        // Elemento Protocol
-        Element elementRoot = document.createElement("Protocol");
-        document.appendChild(elementRoot);
-        
-        // Elemento Method (Position, Board, etc)
-        Element elementMethod = document.createElement("GetInfo");
-        elementRoot.appendChild(elementMethod); 
-
-        // Elemento Request
-        Element elementRequest = document.createElement("Request");
-        
-        // Elemento Player
-        if (!player.equals("")) {
-	    	Element elementPlayer = document.createElement("Player");
-	    	elementPlayer.appendChild(document.createTextNode(player));
-	    	elementRequest.appendChild(elementPlayer);
-        }
-        elementMethod.appendChild(elementRequest);
-        
-        // Elemento Reply
-        Element elementReply = document.createElement("Response");
-        
-        // Elemento Info
-        if (!info.equals("")) {
-        	Element elementInfo = document.createElement("Info");
-        	elementInfo.appendChild(document.createTextNode(info));
-        	elementReply.appendChild(elementInfo);
         }
         elementMethod.appendChild(elementReply);
 

@@ -103,7 +103,7 @@ public class GameView {
 	 * Método printBoard
 	 * Apresenta o tabuleiro do jogo.
 	 */
-	public static String printBoard(String player, String view, String pointsPlayer1, String pointsPlayer2, int[][] board) {
+	public static String printBoard(String player, String view, int[][] board) {
 			
 		convertSymbols();
 		String[] letters = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J"};

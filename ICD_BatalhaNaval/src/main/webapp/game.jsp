@@ -1,4 +1,4 @@
-<%@ page import="socket.User" import="battleship.GameView" import="bean.Check" language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@ page import="socket.User" import="java.util.HashMap" import="battleship.GameView" import="bean.Check" language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <html>
 <head>
 <meta charset="ISO-8859-1">
@@ -6,18 +6,12 @@
 <link rel="stylesheet" href="resources/GameStyle.css">
 <title>Batalha Naval</title>
 
-<script type="text/javascript">
-
-var state = '<%=session.getAttribute("state")%>';
-if (state === "ended") {}
-
-</script>
-
 </head>
 <body>
 <% 
 String username = Check.username(request, response);
-String name = Check.name(request);
+HashMap<String, String> profile  = Check.profile(request, response);
+String name = profile.get("Name");
 %>
 
 <%
@@ -28,23 +22,13 @@ User user     = (User) session.getAttribute("user");
 
 if (user == null) user = new User();
 if (result == null) result = "";
-String myBoard = "", anotherBoard = "";
-
-System.out.println("Username -> " + session.getAttribute("username"));
-System.out.println("User aqui no jogo -> " + user);
 
 // Primeira vez
-if (state == null) {
-	System.out.println("Primeira vez");
-	user.sendRequestGame(username);
-	System.out.println("Encontrei jogo");
-	myBoard = user.sendRequestBoard(username, "true");
-	anotherBoard = user.sendRequestBoard(username, "false");
-}
-else {	
-	myBoard = user.sendRequestBoard(username, "true");
-	anotherBoard = user.sendRequestBoard(username, "false");
-}
+if (state == null) user.sendRequestGame(username);
+
+// Ao longo do jogo
+String myBoard = user.sendRequestBoard(username, "true");
+String anotherBoard = user.sendRequestBoard(username, "false");
 %>
 
 <div class="center">
@@ -57,8 +41,12 @@ else {
 		<form method="POST" action="PlayServlet">
 			<input type="hidden" name="username" id="username" value="<%=username%>">
 			<input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
-			<input type="submit" value="Jogar">
+			<input type="submit" name="play" id="play" value="Jogar">
 		</form>
+		
+		<form method="POST" action="LoginServlet">
+			<input type="submit" name="exit" id="exit" value="Sair">
+		</form> 
 
 		<br>
 		<p><%=result%></p>
@@ -67,15 +55,35 @@ else {
 </div>
 
 <div style="text-align:center; width: 100%;">
-       <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
-           <%=GameView.viewBoardView(myBoard)%>
-       </div>
-       <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
-           <%=GameView.viewBoard(anotherBoard)%>  
-       </div>
-   </div>
+    <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
+        <%=GameView.viewBoardView(myBoard)%>
+    </div>
+    <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
+        <%=GameView.viewBoard(anotherBoard)%>  
+    </div>
+</div>
 
 
+<script type="text/javascript">
+
+	var state = '<%=session.getAttribute("state")%>';
+	if (state === "ended") {
+		
+		document.getElementById('position').disabled = true;
+		document.getElementById('position').style.display = 'block';
+        document.getElementById('position').style.display = 'none';
+		
+		document.getElementById('play').disabled = true;
+		document.getElementById('play').style.display = 'block';
+        document.getElementById('play').style.display = 'none';
+	}
+	else {
+		document.getElementById('exit').disabled = true;
+		document.getElementById('exit').style.display = 'block';
+        document.getElementById('exit').style.display = 'none';
+	}
+
+</script>
 
 </body>
 </html>

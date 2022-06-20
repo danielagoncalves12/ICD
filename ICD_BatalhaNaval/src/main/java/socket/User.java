@@ -5,6 +5,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
+import java.util.HashMap;
 import java.util.Scanner;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -20,7 +24,7 @@ public class User {
 
 	private final static String HOST = "localhost"; // Endereço do Servidor
     private final static int    PORT = 49152;       // Porto onde o Servidor aceita conexões
-    private String username, name, color, date, picture;   // Dados da conta do utilizador
+    private String username, name, color, date, winNum, picture;   // Dados da conta do utilizador
     private Socket socket;
     private BufferedReader is;
     private PrintWriter os;
@@ -145,6 +149,15 @@ public class User {
      */
     private void mainMenu() throws ParserConfigurationException, IOException {
     	
+    	System.out.println("A enviar este " + username);
+    	
+    	String profile = sendRequestProfileInfo(username);
+    	this.name    = profile.split(",")[0];
+    	this.color   = profile.split(",")[1];
+    	this.picture = profile.split(",")[2];
+    	this.winNum  = profile.split(",")[3];
+    	this.date    = profile.split(",")[4];
+    	
     	// Apresentação do perfil
     	System.out.println("--------------------------------");
     	System.out.println("Bem-vindo " + username + "!!");
@@ -153,6 +166,9 @@ public class User {
     	System.out.println("Nickname:     " + username);
     	System.out.println("Nome publico: " + name);
     	System.out.println("Fotografia:   " + picture);
+    	System.out.println("Numero de vitorias: " + winNum);
+    	System.out.println("Idade: " + getAge(date) + " anos");
+    	System.out.println("Cor: " + color);
     	System.out.println("--------------------------------");
     	
     	// Menu principal   
@@ -263,17 +279,19 @@ public class User {
     	}
     	
     	// Atualização dos dados do utilizador, dados vindo do servidor
-    	String state  = reply.split(",")[0];
-		this.username = reply.split(",")[1];
-		this.name     = reply.split(",")[2];
-		this.color    = reply.split(",")[3];
-		this.date 	  = reply.split(",")[4];
-		this.picture  = reply.split(",")[5];
-    	
-		System.out.println("Sessao -> " + state + "\n");
-		if (state.substring(0, 4).equals("Erro")) return false;
+
+		System.out.println("Sessao -> " + reply + "\n");
+		if (reply.substring(0, 4).equals("Erro")) return false;
+		this.username = nickname;
 		return true;
     }
+	
+	private String getAge(String date) {
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		LocalDate birth = LocalDate.parse(date, formatter);
+		return String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
+	}
 	
 	public String sendRequestGame(String nickname) throws ParserConfigurationException, IOException {
 		
@@ -332,9 +350,9 @@ public class User {
      * recebe uma resposta do mesmo, que contem o resultado da jogada. O argumento player indica qual o 
      * jogador a enviar a jogada. O argumento position contem a posição do tiro escolhida pelo jogador.
      */
-    public String sendRequestPlay(String player, String position) throws ParserConfigurationException, IOException {	
+    public String sendRequestPlay(String username, String position) throws ParserConfigurationException, IOException {	
 		
-    	os.println(MessageCreator.messagePlay(player, position));
+    	os.println(MessageCreator.messagePlay(username, position));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 
@@ -343,6 +361,14 @@ public class User {
     public String sendRequestHonorBoard() throws ParserConfigurationException, IOException {
     	
     	os.println(MessageCreator.messageHonorBoard());
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
+		if (reply == null) return null;
+		return MessageProcessor.process(reply); 
+    }
+    
+    public String sendRequestProfileInfo(String username) throws ParserConfigurationException, IOException {
+    	
+    	os.println(MessageCreator.messageGetProfileInfo(username));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 

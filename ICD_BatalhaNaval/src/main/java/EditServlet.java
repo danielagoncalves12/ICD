@@ -1,15 +1,18 @@
 
-
+import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.xml.parsers.ParserConfigurationException;
-
-import protocol.MessageProcessor;
+import org.apache.tomcat.util.http.fileupload.FileItem;
+import org.apache.tomcat.util.http.fileupload.FileItemFactory;
+import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
+import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
 import socket.User;
 
 /**
@@ -31,51 +34,55 @@ public class EditServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 	
-		String username = request.getParameter("username");
-		String name    = request.getParameter("new_name");
-		String color   = request.getParameter("new_color");
-		String picture = request.getParameter("new_picture");
-		String date    = request.getParameter("new_date");
-		
 		HttpSession session = request.getSession(true);
 		User user = (User) session.getAttribute("user");
 		if (user == null) user = new User();
 	
+		String username = "", newName = "", newColor = "", newDate = "", newPicture = "";
+		
 		try {
+            FileItemFactory factory = new DiskFileItemFactory();
+            ServletFileUpload upload = new ServletFileUpload(factory);
+            List<FileItem> items = upload.parseRequest(new ServletRequestContext(request));
+
+            for (FileItem item : items) {
+            	
+            	if (item.isFormField()) {
+            		
+            		if (item.getFieldName().equals("username"))  username = item.getString();
+            		if (item.getFieldName().equals("new_name"))  newName = item.getString();
+            		if (item.getFieldName().equals("new_color")) newColor = item.getString();
+            		if (item.getFieldName().equals("new_date"))  newDate = item.getString();
+            	} 
+            	
+            	else if (item.getFieldName().equals("new_picture")) {
+    		
+            		if (item.getSize() > 0) {
+            		
+            			String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
+                        String imgName = username + imgtype;
+                        newPicture = imgName;
+                        item.write(new File("./src/main/webapp/pictures/", imgName));
+            		}    
+            	
+                }
+            }
+
 			// Atualizar o nome publico	
-			if (name != null) {
-				if (!name.equals("")) {
-					name = user.sendRequestUpload("Name", username, name);
-					request.setAttribute("name", name);
-				}
-			}
+			if (newName != null) if (!newName.equals("")) newName = user.sendRequestUpload("Name", username, newName);
 				
 			// Atualizar a cor
-			if (color != null) {
-				if (!color.equals("")) {
-					color = user.sendRequestUpload("Color", username, color);
-					request.setAttribute("color", color);
-				}
-			}
-			
-			// Atualizar a fotografia
-			if (picture != null) {
-				if (!picture.equals("")) {
-					picture = user.sendRequestUpload("Picture", username, picture);
-					request.setAttribute("picture", picture);
-				}
-			}
-			
+			if (newColor != null) if (!newColor.equals("")) newColor = user.sendRequestUpload("Color", username, newColor);
+	
 			// Atualizar a data de nascimento
-			if (date != null) {
-				if (!date.equals("")) {
-					date = user.sendRequestUpload("Date", username, date);
-					request.setAttribute("date", date);
-				}
-			}
-		} catch (ParserConfigurationException | IOException e) {
-			e.printStackTrace();
-		}
+			if (newDate != null) if (!newDate.equals("")) newDate = user.sendRequestUpload("Date", username, newDate);
+
+			// Atualizar a fotografia
+			if (newPicture != null) if (!newPicture.equals("")) newPicture = user.sendRequestUpload("Picture", username, newPicture);
+	
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 		
 		request.getRequestDispatcher("/index.jsp").forward(request, response);		
 	}

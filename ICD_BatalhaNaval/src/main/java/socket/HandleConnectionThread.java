@@ -78,32 +78,42 @@ public class HandleConnectionThread extends Thread {
 		//System.out.println("Metodo -> " + method);
 		
 		// - Login - //
-		if (method.equals("Login"))
-			login(request);
+		if (method.equals("Login")) login(request);
 
 		// - Register - //
-		else if (method.equals("Register"))
-			register(request);
+		else if (method.equals("Register")) register(request);
 
 		// - Find Game - //
-		else if (method.equals("FindGame"))
-			findGame(request);
+		else if (method.equals("FindGame")) findGame(request);
 
 		// - Upload Profile - //
-		else if (method.equals("Upload"))
-			upload(request);
+		else if (method.equals("Upload")) upload(request);
 		
 		// - Play - //
-		else if (method.equals("Play"))
-			play(request);
+		else if (method.equals("Play")) play(request);
 		
 		// - Get Board - //
-		else if (method.equals("GetBoard"))
-			board(request);
+		else if (method.equals("GetBoard")) board(request);
 		
 		// - Get Honor Board - //
-		else if (method.equals("HonorBoard"))
-			honorBoard(request);
+		else if (method.equals("HonorBoard")) honorBoard(request);
+		
+		// - Get Profile Info - //
+		else if (method.equals("ProfileInfo")) profile(request);
+	}
+	
+	private void profile(String request) throws ParserConfigurationException {
+		
+		String username = MessageProcessor.process(request).split(",")[1];
+
+		HashMap<String, String> profileInfo = new HashMap<>();
+		profileInfo.put("Name", Profile.getName(username));
+		profileInfo.put("Color", Profile.getColor(username));
+		profileInfo.put("Date", Profile.getDate(username));
+		profileInfo.put("Picture", Profile.getPicture(username));
+		profileInfo.put("WinsNum", Profile.getWinNum(username));
+		
+		os.println(MessageCreator.messageGetProfileInfo(username, profileInfo));
 	}
 	
 	private void honorBoard(String request) throws ParserConfigurationException {
@@ -170,7 +180,7 @@ public class HandleConnectionThread extends Thread {
 			HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
 					  														  : game.getBoardPositions(player));
 
-			os.println(MessageCreator.messageBoard(player, view, game.getPoints(player), game.getOpponentPoints(player), board));
+			os.println(MessageCreator.messageBoard(player, view, board));
 	}
 	
 	private void login(String request) throws ParserConfigurationException {

@@ -48,12 +48,6 @@ public class RegisterServlet extends HttpServlet {
 		
 		if (username != null) {
 			if (!username.equals("")) {
-				session.setAttribute("username", username);		
-				session.setAttribute("name", Profile.getName(username));
-				session.setAttribute("color", Profile.getColor(username));
-				session.setAttribute("date", Profile.getDate(username));
-				session.setAttribute("picture", Profile.getPicture(username));
-				
 				request.getRequestDispatcher("/index.jsp").forward(request, response);
 				return;
 			}
@@ -61,14 +55,7 @@ public class RegisterServlet extends HttpServlet {
 		
 		// Criar uma nova conta
 		String newUsername = "", newName = "", newPassword = "", newColor = "", newDate = "", newPicture = "";
-		
-		/*String newUsername = request.getParameter("new_username");
-		String newName     = request.getParameter("new_name");
-		String newPassword = request.getParameter("new_password");
-		String newColor    = request.getParameter("new_color");
-		String newDate     = request.getParameter("new_date");
-		String newPicture  = request.getParameter("new_picture");*/
-		
+
 		boolean isMultipart = ServletFileUpload.isMultipartContent(request);
         if (!isMultipart) {
             return;
@@ -116,12 +103,13 @@ public class RegisterServlet extends HttpServlet {
 		
 		if (newUsername != null && newName != null && newPassword != null && !result.substring(0, 4).equals("Erro")) {
 			
-			session.setAttribute("username", newUsername);		
+			// TODO
+			/*session.setAttribute("username", newUsername);		
 			session.setAttribute("name", Profile.getName(newUsername));
 			session.setAttribute("color", Profile.getColor(newUsername));
 			session.setAttribute("date", Profile.getDate(newUsername));
 			session.setAttribute("picture", Profile.getPicture(newUsername));
-			session.setAttribute("win_num", Profile.getWinNum(newUsername));
+			session.setAttribute("win_num", Profile.getWinNum(newUsername));*/
 			session.setAttribute("honor", honor);
 			
 			Cookie cookie = new Cookie("username", username);
@@ -134,35 +122,4 @@ public class RegisterServlet extends HttpServlet {
 			request.getRequestDispatcher("/login.jsp").forward(request, response);
 		}
 	}
-
-	/*@Override
-    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-        boolean isMultipart = ServletFileUpload.isMultipartContent(req);
-        if (!isMultipart) {
-            return;
-        }
-        try {
-            FileItemFactory factory = new DiskFileItemFactory();
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            List<FileItem> items = upload.parseRequest(new ServletRequestContext(req));
-            System.out.println(items);
-
-            for (FileItem item : items) {
-            	
-            	if (item.getFieldName().equals("new_picture")) {
-
-                    String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
-                    String imgName = UUID.randomUUID() + imgtype;
-
-                    item.write(new File("./src/main/WebContent/images/", imgName));
-
-                    System.out.println("Saved successfully!");
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-		
-    }*/
 }

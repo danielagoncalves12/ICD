@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@page import="bean.Check" import="socket.User" import="session.Profile" import="java.awt.Color"%>
 <%@page import="java.time.*" import="java.time.format.DateTimeFormatter" import="java.time.temporal.ChronoUnit"%>
+<%@page import="java.util.HashMap"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,16 +29,13 @@
 	
 <% 
 String username = Check.username(request, response);
-String name 	= Check.name(request);
-String color	= Check.color(request);
-String date 	= Check.date(request);
-String picture  = Check.picture(request);
+HashMap<String, String> profile = Check.profile(request, response);
 
-String rgbColor = Profile.hex2Rgb(color);
+String rgbColor = Profile.hex2Rgb(profile.get("Color"));
 
 // Calculo da idade
 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-LocalDate birth = LocalDate.parse(date, formatter);
+LocalDate birth = LocalDate.parse(profile.get("Date"), formatter);
 String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 %>
 	
@@ -49,18 +47,18 @@ String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
 					<h5 style="padding: 10px">Edição do perfil de <b><%=username%></b></h5><br>				
-					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=picture%>" width="140px" height="140px" /><br>
+					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=profile.get("Picture")%>" width="140px" height="140px" /><br>
 					
 					<hr style="width: 80%; margin-left:10% !important; margin-right:10% !important;">
 							
-					<form method="POST" action="EditServlet">
+					<form method="POST" action="EditServlet" enctype="multipart/form-data">
 					
 						<div style="display: inline-block; text-align: left;">	
 							<input type="hidden" name="username" id="username" value="<%=username%>" />					
-							<span>Nome público:  </span> <input style="width:200px; border: 2px solid #9e9e9e" type="text" name="new_name" id="new_name" value="<%=name%>" required/><br>
-							<span>Cor favorita:       </span> <input style="width:200px; border: 2px solid #9e9e9e" type="color" name="new_color" id="new_color" value="<%=color%>" required/> <br>
-							<span>Fotografia:         </span> <input style="width:200px; border: 2px solid #9e9e9e" type="file" accept="" name="new_picture" id="new_picture" value="<%=picture%>"/> <br> 
-							<span>Data de nascimento:      </span> <input style="border: 2px solid #9e9e9e" type="date" name="new_date" id="new_date" value="<%=date%>" required/> <br>							
+							<span>Nome público:  </span> <input style="width:200px; border: 2px solid #9e9e9e" type="text" name="new_name" id="new_name" value="<%=profile.get("Name")%>" required/><br>
+							<span>Cor favorita:       </span> <input style="width:200px; border: 2px solid #9e9e9e" type="color" name="new_color" id="new_color" value="<%=profile.get("Color")%>" required/> <br>
+							<span>Fotografia:         </span> <input style="width:200px; border: 2px solid #9e9e9e" type="file" accept="" name="new_picture" id="new_picture" value="<%=profile.get("Picture")%>"/> <br> 
+							<span>Data de nascimento:      </span> <input style="border: 2px solid #9e9e9e" type="date" name="new_date" id="new_date" value="<%=profile.get("Date")%>" required/> <br>							
 					    </div>								
 		
 						<div class="container-login100-form-btn">

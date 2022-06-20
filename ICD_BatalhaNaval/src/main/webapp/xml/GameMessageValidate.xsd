@@ -82,20 +82,26 @@
           </xs:complexType>
         </xs:element>
 
-		<xs:element name="GetInfo">
+		<xs:element name="GetProfileInfo">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Player" type="xs:string"/>
+                    <xs:element name="Username" type="xs:string"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
               <xs:element name="Response">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Info" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
+					<xs:element name="WinsNum" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="Picture" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="Color" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="Date" type="xs:string" minOccurs="0" maxOccurs="1"/>
+                    <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1"/>
+
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>

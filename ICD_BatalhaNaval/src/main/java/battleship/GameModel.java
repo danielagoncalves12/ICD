@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.Semaphore;
 
+import session.Profile;
+
 
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 30;
+	private int MAXPOINTS = 1;
 	
 	// Variáveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
@@ -188,11 +190,9 @@ public class GameModel {
 	 * @param player - Jogador 1 ou 2
 	 * @return
 	 */
-	public boolean checkWin(String username) {
+	public boolean checkWin(int playerNum) {
 		
-		int player = getPlayerNumber(username);
-		
-		if (player == 1) return pointsPlayer1 == MAXPOINTS;
+		if (playerNum == 1) return pointsPlayer1 == MAXPOINTS;
 		else return pointsPlayer2 == MAXPOINTS;
 	}
 	
@@ -202,7 +202,7 @@ public class GameModel {
 	 * @return String que contém o estado do jogo.
 	 */
 	public String play(String username, String choice) {
-		
+
 		int player = getPlayerNumber(username);
 		int line, column;
 	
@@ -212,8 +212,6 @@ public class GameModel {
 		// Se os dois jogadores já enviaram jogada
 		if (play1 && play2) wait.release(2);
 
-		System.out.println("O jogador num " + player + " vai jogar.");
-		
 		if (choice.length() == 2) {
 			line   = Character.getNumericValue(choice.charAt(0)) - 1;
 			column = columnValue.get(Character.toUpperCase(choice.charAt(1)) + "");
@@ -246,6 +244,10 @@ public class GameModel {
 		play1 = false;
 		play2 = false;
 			
+		// Verificar se o jogador ganhou apos a jogada
+		if (checkWin(1)) return "O jogador " + Profile.getName(username1) + " venceu!! Encontrou todos os navios!";
+		if (checkWin(2)) return "O jogador " + Profile.getName(username2) + " venceu!! Encontrou todos os navios!";
+		
 		return "Resultado: " + (
 			   (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 
 			 : (state == ShipType.TYPE1HIDDEN) ? "Porta-avioes atingido!"
