@@ -47,7 +47,7 @@ String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
 					<h5 style="padding: 10px">Edição do perfil de <b><%=username%></b></h5><br>				
-					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=profile.get("Picture")%>" width="140px" height="140px" /><br>
+					<img src="data:image/png;base64,<%=profile.get("Picture")%>" style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" width="140px" height="140px"/> <br>
 					
 					<hr style="width: 80%; margin-left:10% !important; margin-right:10% !important;">
 							

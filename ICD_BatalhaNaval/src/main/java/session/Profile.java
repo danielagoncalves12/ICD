@@ -1,12 +1,18 @@
 package session;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import javax.imageio.ImageIO;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -32,6 +38,24 @@ public class Profile {
 		 
 		if (!(contentType.equals("Picture") || contentType.equals("Name") || contentType.equals("Color") || contentType.equals("Date")))
 			return "";
+
+		if (contentType.equals("Picture")) {
+			
+			byte[] image = Base64.getDecoder().decode(value);
+			BufferedImage img = null;
+			
+			try {
+				String filename = username + ".png";
+				img = ImageIO.read(new ByteArrayInputStream(image));
+				File out = new File("src/main/webapp/pictures/" + filename);
+				ImageIO.write(img, "png", out);
+				
+				value = filename;
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -141,7 +165,23 @@ public class Profile {
 		} catch (XPathExpressionException e) { 
 			e.printStackTrace(); 
 		}
-		return nodePicture.getTextContent();
+		
+		String filename = nodePicture.getTextContent();
+		BufferedImage image;
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		String img = null;
+		
+		try {
+			image = ImageIO.read(new File("src/main/webapp/pictures/" + filename));
+			ImageIO.write(image, "png", out);
+			byte[] array = out.toByteArray();
+			img = Base64.getEncoder().encodeToString(array);
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return img;
 	}
 	
 	public static String getName(String nickname) {

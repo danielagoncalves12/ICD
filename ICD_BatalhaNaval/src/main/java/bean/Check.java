@@ -17,8 +17,6 @@ public class Check {
 		HttpSession session = request.getSession(true);
 		String username = (String) session.getAttribute("username");
 
-		System.out.println("check " + username);
-		
 		// Se nao houver username guardado na sessao,
 		// � procurado pelo username guardado em cookie
 
@@ -39,9 +37,10 @@ public class Check {
 		}
 	}
 
-	public static HashMap<String, String> profile(String username) throws ServletException, IOException, ParserConfigurationException {
+	public static HashMap<String, String> profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParserConfigurationException {
 
 		HashMap<String, String> profile = new HashMap<>();
+		String username = username(request, response);
 		
 		if (!username.equals("")) {
 			

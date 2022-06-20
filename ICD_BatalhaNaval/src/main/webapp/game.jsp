@@ -35,7 +35,7 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 %>
 
 
-<div style="border-radius:5%; background-color: rgba(108, 122, 186, 0.8); text-align:center; width:70%" class="center">
+<div style="border-radius:5%; background-color: rgba(108, 122, 186, 0.6); text-align:center; width:70%" class="center">
 
 	<br>
 	<img src="images/titulo.png" width="300px"/>
@@ -46,7 +46,7 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 		<div class="center" style="text-align:left; padding: 1%; width: 51%; float: left;"> 
 		
 			<div class="center" style="text-align: center; width:29%; float:left">
-				<img style="object-fit:cover; border: 2px solid #00008B;" src="pictures/<%=profile.get("Picture")%>" width="100px" height="100px"/>
+				<img style="object-fit:cover; border: 2px solid #00008B;" src="data:image/png;base64,<%=profile.get("Picture")%>" width="100px" height="100px"/>
 			</div>
 			
 			<div class="center" style="width:70%; float:right">

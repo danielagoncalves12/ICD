@@ -1,6 +1,6 @@
 
-import java.io.File;
 import java.io.IOException;
+import java.util.Base64;
 import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -59,12 +59,9 @@ public class EditServlet extends HttpServlet {
     		
             		if (item.getSize() > 0) {
             		
-            			String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
-                        String imgName = username + imgtype;
-                        newPicture = imgName;
-                        item.write(new File("./src/main/webapp/pictures/", imgName));
-            		}    
-            	
+            			byte[] bytes = item.get();
+                        newPicture = Base64.getEncoder().encodeToString(bytes);
+            		}             	
                 }
             }
 

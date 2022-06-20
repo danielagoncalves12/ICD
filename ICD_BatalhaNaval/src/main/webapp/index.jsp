@@ -30,7 +30,7 @@
 <% 
 // Obter dados
 String username = Check.username(request, response);
-HashMap<String, String> profile = Check.profile(username);
+HashMap<String, String> profile = Check.profile(request, response);
 
 String rgbColor = Profile.hex2Rgb(profile.get("Color"));
 
@@ -40,7 +40,7 @@ LocalDate birth = LocalDate.parse(profile.get("Date"), formatter);
 String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 
 // Quadro de honra
-String honor  = new User().sendRequestHonorBoard();
+String honor = new User().sendRequestHonorBoard();
 String[][] players = XMLUtils.stringToArray2D(honor);
 
 %>
@@ -53,8 +53,8 @@ String[][] players = XMLUtils.stringToArray2D(honor);
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
 					<h5 style="padding: 10px">Perfil de <%=username%></h5><br>
-					
-					<img style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" src="pictures/<%=profile.get("Picture")%>" width="140px" height="140px" /><br>
+
+					<img src="data:image/png;base64,<%=profile.get("Picture")%>" style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" width="140px" height="140px"/> <br>
 					
 					<hr style="width: 80%; margin-left:10% !important; margin-right:10% !important;">
 					
@@ -108,47 +108,47 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					  </tr>
 					  <tr>
 					    <td style="text-align:left"> 1º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[0][1]%>" width="44px" height="44px"/> <%=players[0][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[0][1]%>" width="44px" height="44px"/> <%=players[0][0]%></td>
 					    <td><%=players[0][2]%></td>
 					    <td></td>
 					    <td style="text-align:left"> 6º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[5][1]%>" width="44px" height="44px"/> <%=players[5][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[5][1]%>" width="44px" height="44px"/> <%=players[5][0]%></td>
 					    <td><%=players[5][2]%></td>
 					  </tr>
 					  <tr>
 					    <td style="text-align:left"> 2º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[1][1]%>" width="44px" height="44px"/> <%=players[1][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[1][1]%>" width="44px" height="44px"/> <%=players[1][0]%></td>
 					    <td><%=players[1][2]%></td>
 					    <td></td>
 					    <td style="text-align:left"> 7º</td>
-						<td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[6][1]%>" width="44px" height="44px"/> <%=players[6][0]%></td>
+						<td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[6][1]%>" width="44px" height="44px"/> <%=players[6][0]%></td>
 					    <td><%=players[6][2]%></td>
 					  </tr>
 					  <tr>
 					    <td style="text-align:left"> 3º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[2][1]%>" width="44px" height="44px"/> <%=players[2][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[2][1]%>"width="44px" height="44px"/> <%=players[2][0]%></td>
 					    <td><%=players[2][2]%></td>
 					    <td></td>
 					    <td style="text-align:left"> 8º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[7][1]%>" width="44px" height="44px"/> <%=players[7][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[7][1]%>" width="44px" height="44px"/> <%=players[7][0]%></td>
 					    <td><%=players[7][2]%></td>
 					  </tr>
 					  <tr>
 					    <td style="text-align:left"> 4º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[3][1]%>" width="44px" height="44px"/> <%=players[3][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[3][1]%>" width="44px" height="44px"/> <%=players[3][0]%></td>
 					    <td><%=players[3][2]%></td>
 					    <td></td>
 					    <td style="text-align:left"> 9º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[8][1]%>" width="44px" height="44px"/> <%=players[8][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[8][1]%>" width="44px" height="44px"/> <%=players[8][0]%></td>
 					    <td><%=players[8][2]%></td>
 					  </tr>
 					  <tr>
 					    <td style="text-align:left"> 5º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[4][1]%>" width="44px" height="44px"/> <%=players[4][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[4][1]%>" width="44px" height="44px"/> <%=players[4][0]%></td>
 					    <td><%=players[4][2]%></td>
 					    <td></td>
 					    <td style="text-align:left"> 10º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="pictures/<%=players[9][1]%>" width="44px" height="44px"/> <%=players[9][0]%></td>
+					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[9][1]%>" width="44px" height="44px"/> <%=players[9][0]%></td>
 					    <td><%=players[9][2]%></td>
 					  </tr>
 					</table> 

@@ -1,7 +1,14 @@
 package protocol;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
+
+import javax.imageio.ImageIO;
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
@@ -48,7 +55,7 @@ public class MessageProcessor {
 		} catch (SAXException | IOException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Messagem inv�lida! ->" + message);
+		System.out.println("Messagem invalida! ->" + message);
 		return null;
 	}
 	
@@ -142,7 +149,7 @@ public class MessageProcessor {
 	private static String board(Document doc) throws NumberFormatException, DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodeView = null, nodePlayer = null, nodePoints1 = null, nodePoints2 = null;
+        Node nodeView = null, nodePlayer = null;
         int[][] board = null;
         boolean isReply = false;
         
@@ -152,10 +159,7 @@ public class MessageProcessor {
 			isReply    = (boolean) xPath.compile("boolean(//Response/Board)").evaluate(doc, XPathConstants.BOOLEAN);
 
 			if (isReply) {
-				
-				nodePoints1 = ((Node) xPath.compile("//Points/Player1").evaluate(doc, XPathConstants.NODE));
-				nodePoints2 = ((Node) xPath.compile("//Points/Player2").evaluate(doc, XPathConstants.NODE));
-				
+
 				board = new int[10][10];
 				Arrays.stream(board).forEach(a -> Arrays.fill(a, 0));
 
@@ -236,10 +240,17 @@ public class MessageProcessor {
 		String date		= nodeDate.getTextContent();
 		String picture  = nodePicture.getTextContent();
 		
-		// Caso o utilizador n�o tenha introduzido uma foto durante a inscri��o, � atribuido uma foto pre-definida	
+		// Caso o utilizador nao tenha introduzido uma foto durante a inscricao, � atribuido uma foto pre-definida	
 		if (nodeRegister.getNodeValue().equals("true")) { 
-			if (picture.equals(""))
-				picture = "default.png"; 
+			if (picture.equals("")) {
+	
+				BufferedImage bImage = ImageIO.read(new File("src/main/webapp/pictures/default.png"));
+		        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		        ImageIO.write(bImage, "png", bos );
+		        byte[] data = bos.toByteArray();
+				
+		        picture = Base64.getEncoder().encodeToString(data);
+			}				
 		}		
 		
 		if (isReply) return nodeResult.getTextContent();

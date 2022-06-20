@@ -1,6 +1,9 @@
 package socket;
 
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -9,11 +12,13 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import javax.imageio.ImageIO;
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -221,7 +226,23 @@ public class HandleConnectionThread extends Thread {
 
 		String result = "";
 
-		// Encripta��o da palavra-passe
+		// Conversao da imagem para base64
+		byte[] image = Base64.getDecoder().decode(picture);
+		BufferedImage img = null;
+		
+		try {
+			String filename = username + ".png";
+			img = ImageIO.read(new ByteArrayInputStream(image));
+			File out = new File("src/main/webapp/pictures/" + filename);
+			ImageIO.write(img, "png", out);
+
+			picture = filename;
+			
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		// Encriptacao da palavra-passe
 		MessageDigest md = null;
 		try {
 			md = MessageDigest.getInstance("MD5");
@@ -261,7 +282,7 @@ public class HandleConnectionThread extends Thread {
 		String contentType = MessageProcessor.process(request).split(",")[1];
 		String username    = MessageProcessor.process(request).split(",")[2];
 		String value 	   = MessageProcessor.process(request).split(",")[3];
-		
+				
 		String result = Profile.upload(contentType, username, value);
 		os.println(MessageCreator.messageUpload(contentType, username, value, result));
 	}

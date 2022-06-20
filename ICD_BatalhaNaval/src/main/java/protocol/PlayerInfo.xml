@@ -1,12 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
 	<Player Nickname="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
 		<Color>#e06dbb</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>20</WinsNumber>
+		<WinsNumber>23</WinsNumber>
 	</Player>
 	<Player Nickname="Nick">
 		<Name>Nick</Name>
@@ -94,14 +93,6 @@
 		<Color>#000000</Color>
 		<Date>2022-06-06</Date>
 		<Picture>default.png</Picture>
-		<WinsNumber>0</WinsNumber>
-	</Player>
-	<Player Nickname="PhotoBoss">
-		<Name>testefoto</Name>
-		<Password>98372C8496D2F2100C65ADB5CF0294AF</Password>
-		<Color>#ef7a5c</Color>
-		<Date>2012-06-04</Date>
-		<Picture>PhotoBoss.jpg</Picture>
 		<WinsNumber>0</WinsNumber>
 	</Player>
 </Data>

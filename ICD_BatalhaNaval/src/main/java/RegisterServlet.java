@@ -1,9 +1,7 @@
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Base64;
 import java.util.List;
-import java.util.UUID;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -17,7 +15,6 @@ import org.apache.tomcat.util.http.fileupload.FileItemFactory;
 import org.apache.tomcat.util.http.fileupload.disk.DiskFileItemFactory;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletFileUpload;
 import org.apache.tomcat.util.http.fileupload.servlet.ServletRequestContext;
-import session.Profile;
 import socket.User;
 
 /**
@@ -79,13 +76,13 @@ public class RegisterServlet extends HttpServlet {
             	
             	else if (item.getFieldName().equals("new_picture")) {
     		
-                    String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
-                    String imgName = newUsername + imgtype;
-                    newPicture = imgName;
-                    item.write(new File("./src/main/webapp/pictures/", imgName));
+                    //String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
+                    //String imgName = newUsername + imgtype;
+                    //newPicture = imgName;
+                    //item.write(new File("./src/main/webapp/pictures/", imgName));
                     
-                    //byte[] bytes = item.get();
-                    //newPicture = Base64.getEncoder().encodeToString(bytes);
+                    byte[] bytes = item.get();
+                    newPicture = Base64.getEncoder().encodeToString(bytes);
                 }
             }
         } catch (Exception e) {
