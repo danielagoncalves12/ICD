@@ -5,7 +5,8 @@
 		<Color>#e368c1</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>28</WinsNumber>
+		<WinsNumber>50</WinsNumber>
+		<AverageTime>2.5</AverageTime>
 	</Player>
 	<Player Username="Nick">
 		<Name>Nick</Name>
@@ -13,7 +14,8 @@
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>43</WinsNumber>
+		<WinsNumber>50</WinsNumber>
+		<AverageTime>5.5</AverageTime>
 	</Player>
 	<Player Username="teste1">
 		<Name>GoingOn</Name>
@@ -22,6 +24,7 @@
 		<Date>2022-05-29</Date>
 		<Picture>default.png</Picture>
 		<WinsNumber>21</WinsNumber>
+		<AverageTime>14</AverageTime>
 	</Player>
 	<Player Username="teste2">
 		<Name>xXTryHardXx</Name>
@@ -29,7 +32,8 @@
 		<Color>#8892ea</Color>
 		<Date>2022-05-29</Date>
 		<Picture>icd.png</Picture>
-		<WinsNumber>10</WinsNumber>
+		<WinsNumber>11</WinsNumber>
+		<AverageTime>5</AverageTime>
 	</Player>
 	<Player Username="teste3">
 		<Name>reallu</Name>
@@ -38,6 +42,7 @@
 		<Date>2022-05-29</Date>
 		<Picture>dog.jpg</Picture>
 		<WinsNumber>5</WinsNumber>
+		<AverageTime>10</AverageTime>
 	</Player>
 	<Player Username="teste4">
 		<Name>Anya</Name>
@@ -46,6 +51,7 @@
 		<Date>2022-05-29</Date>
 		<Picture>girl.png</Picture>
 		<WinsNumber>2</WinsNumber>
+		<AverageTime>8</AverageTime>
 	</Player>
 	<Player Username="teste5">
 		<Name>Mapped</Name>
@@ -54,6 +60,7 @@
 		<Date>2022-05-29</Date>
 		<Picture>mapped.png</Picture>
 		<WinsNumber>12</WinsNumber>
+		<AverageTime>4</AverageTime>
 	</Player>
 	<Player Username="teste6">
 		<Name>Pandora</Name>
@@ -62,6 +69,7 @@
 		<Date>2022-05-29</Date>
 		<Picture>pandora.png</Picture>
 		<WinsNumber>12</WinsNumber>
+		<AverageTime>7</AverageTime>
 	</Player>
 	<Player Username="teste7">
 		<Name>Gamerz19</Name>
@@ -70,6 +78,7 @@
 		<Date>2022-05-29</Date>
 		<Picture>logo.png</Picture>
 		<WinsNumber>4</WinsNumber>
+		<AverageTime>6</AverageTime>
 	</Player>
 	<Player Username="teste8">
 		<Name>Wazowski</Name>
@@ -78,6 +87,7 @@
 		<Date>2002-05-29</Date>
 		<Picture>mike.png</Picture>
 		<WinsNumber>12</WinsNumber>
+		<AverageTime>0</AverageTime>
 	</Player>
 	<Player Username="JohnGames">
 		<Name>JohnGames</Name>
@@ -86,6 +96,7 @@
 		<Date>2022-06-14</Date>
 		<Picture>shrek.png</Picture>
 		<WinsNumber>14</WinsNumber>
+		<AverageTime>0</AverageTime>
 	</Player>
 	<Player Username="Dann">
 		<Name>Dann</Name>
@@ -93,6 +104,7 @@
 		<Color>#000000</Color>
 		<Date>2022-06-06</Date>
 		<Picture>default.png</Picture>
-		<WinsNumber>0</WinsNumber>
+		<WinsNumber>2</WinsNumber>
+		<AverageTime>5</AverageTime>
 	</Player>
 </Data>

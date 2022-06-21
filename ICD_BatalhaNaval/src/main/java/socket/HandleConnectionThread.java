@@ -76,13 +76,11 @@ public class HandleConnectionThread extends Thread {
 
 	public void sendResponse(String request) throws ParserConfigurationException, IOException {
 
-		System.out.println(request);
+		//System.out.println(request);
 		
 		// Primeiro argumento representa o tipo de pedido
 		String method = MessageProcessor.process(request).split(",")[0]; 
 
-		//System.out.println("Metodo -> " + method);
-		
 		// - Login - //
 		if (method.equals("Login")) login(request);
 

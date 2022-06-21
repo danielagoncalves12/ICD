@@ -61,7 +61,7 @@ public class Session {
 		return true;
 	}
 
-	public static void register(String nickname, String name, String password, String color, String date, String picture) {
+	public static void register(String username, String name, String password, String color, String date, String picture) {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -83,10 +83,10 @@ public class Session {
 		
 		// Guardar as suas informacoes
 		
-		// Nickname
-		player.setAttribute("Username", nickname);
+		// Username
+		player.setAttribute("Username", username);
 	
-		// Nome p�blico
+		// Nome publico
 		Element playerName = doc.createElement("Name");
 		playerName.setTextContent(name);
 		player.appendChild(playerName);
@@ -111,10 +111,15 @@ public class Session {
 		playerPicture.setTextContent(picture);
 		player.appendChild(playerPicture);
 		
-		// N�mero de vit�rias
+		// Numero de vitorias
 		Element playerWinsNumber = doc.createElement("WinsNumber");
 		playerWinsNumber.setTextContent("0");
 		player.appendChild(playerWinsNumber);
+		
+		// Tempo medio de jogo
+		Element playerAverageTime = doc.createElement("AverageTime");
+		playerAverageTime.setTextContent("0");
+		player.appendChild(playerAverageTime);
 		
 		// Validacao
 		try {

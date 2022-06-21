@@ -25,9 +25,15 @@ public class GameModel {
 	private String username1, username2;
 	private boolean end;
 	
+	// Contagem do tempo
+	private ArrayList<Long> timesPlayer1 = new ArrayList<>();
+	private ArrayList<Long> timesPlayer2 = new ArrayList<>();
+	private long time1 = System.currentTimeMillis();
+	private long time2 = System.currentTimeMillis();
+	
 	// Sincronizacao
 	private Semaphore wait;
-	private static boolean play1, play2;
+	private boolean play1, play2;
 	
 	public GameModel(String username1, String username2, Semaphore wait) {
 		
@@ -125,28 +131,41 @@ public class GameModel {
 
 		if (checkWin(1)) {
 			
-			System.out.println(username + " pt1 - player 1 ganhou " + end);
 			if (end) {
+				// Terminar jogo
 				if (GameQueueThread.activeGames.contains(this))  				
 					GameQueueThread.activeGames.remove(this);
+				
+				// Media do tempo de jogada dos jogadores
+				double averageTime1 = timesPlayer1.stream().mapToDouble(d -> d).average().orElse(0.0);
+				double averageTime2 = timesPlayer2.stream().mapToDouble(d -> d).average().orElse(0.0);
+				
+				// Atualizacao dos dados
+				Profile.updateAverageTime(username1, averageTime1);
+				Profile.updateAverageTime(username2, averageTime2);
 				Profile.updateWinsNumber(username1);
 				Profile.updateHonorBoard();
-				
 			}
 			end = true;
-			System.out.println(username + " pt2 - player 1 ganhou " + end);
 		}
 		else if (checkWin(2)) { 
 			
-			System.out.println(username + " pt1 - player 2 ganhou " + end);
-			if (end) {				
+			if (end) {			
+				// Terminar jogo
 				if (GameQueueThread.activeGames.contains(this)) 
 					GameQueueThread.activeGames.remove(this);
+				
+				// Media do tempo de jogada dos jogadores
+				double averageTime1 = timesPlayer1.stream().mapToDouble(d -> d).average().orElse(0.0);
+				double averageTime2 = timesPlayer2.stream().mapToDouble(d -> d).average().orElse(0.0);
+				
+				// Atualizacao dos dados
+				Profile.updateAverageTime(username1, averageTime1);
+				Profile.updateAverageTime(username2, averageTime2);
 				Profile.updateWinsNumber(username2);
 				Profile.updateHonorBoard();
 			}		
 			end = true;
-			System.out.println(username + " pt2 - player 2 ganhou " + end);
 		}	
 		return dic;
 	}	
@@ -233,8 +252,18 @@ public class GameModel {
 		int player = getPlayerNumber(username);
 		int line, column;
 	
-		if (player == 1) play1 = true;
-		if (player == 2) play2 = true;
+		if (player == 1) { 
+			play1 = true;
+			time1 = (int) ((System.currentTimeMillis() - time1) / 1000);
+			timesPlayer1.add(time1);
+			time1 = System.currentTimeMillis();
+		}
+		if (player == 2) {
+			play2 = true;
+			time2 = (int) ((System.currentTimeMillis() - time2) / 1000);
+			timesPlayer2.add(time2);
+			time2 = System.currentTimeMillis();
+		}
 			
 		// Se os dois jogadores ja enviaram jogada
 		if (play1 && play2) wait.release(2);

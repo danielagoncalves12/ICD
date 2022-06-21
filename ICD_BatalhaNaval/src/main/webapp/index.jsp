@@ -99,12 +99,12 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					<table style="width: 100%">
 					  <tr>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white"> Pos.</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Player</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Victories</th>
+					    <th style="text-align:left; background-color: #9e9e9e; color: white">Jogador</th>
+					    <th style="text-align:left; background-color: #9e9e9e; color: white">Vitorias</th>
 					    <th>  </th>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white"> Pos.</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Player</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Victories</th>
+					    <th style="text-align:left; background-color: #9e9e9e; color: white">Jogador</th>
+					    <th style="text-align:left; background-color: #9e9e9e; color: white">Vitorias</th>
 					  </tr>
 					  <tr>
 					    <td style="text-align:left"> 1º</td>

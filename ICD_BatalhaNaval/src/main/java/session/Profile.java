@@ -7,10 +7,14 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
@@ -267,6 +271,8 @@ public class Profile {
 	
 	public static HashMap<String, String> getHonorBoard() {
 		
+		updateHonorBoard();
+		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder;
@@ -329,6 +335,49 @@ public class Profile {
 		}
 	}
 	
+	public static void updateAverageTime(String username, double time) {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder;
+        Document doc = null;
+		
+		try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(dataBasePath);
+			XPath xPath = XPathFactory.newInstance().newXPath();
+
+	        String query = "//Player[@Username='" + username + "']/AverageTime";
+	        Node nodeTime = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);
+	        
+			int averageTime = Integer.valueOf(nodeTime.getTextContent());
+			
+			if (averageTime == 0) {
+				nodeTime.setTextContent(String.valueOf(time)); 
+			}
+			else {
+				double average = (averageTime + time) / 2;
+				nodeTime.setTextContent(String.valueOf(average));
+			}
+			
+		} catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		
+		// Atualizar o novo ficheiro
+		try (FileOutputStream output = new FileOutputStream(dataBasePath)) {
+			
+		    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		    Transformer transformer = transformerFactory.newTransformer();
+		    DOMSource source = new DOMSource(doc);
+		    StreamResult result = new StreamResult(output);
+		    transformer.transform(source, result);
+		    
+		} catch (IOException | TransformerException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public static void updateHonorBoard() {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -336,36 +385,82 @@ public class Profile {
         DocumentBuilder builder;
         Document doc = null;
         HashMap<String, Integer> players = new HashMap<>();
+        LinkedHashMap<String, Integer> playersOrderFinal = new LinkedHashMap<>();
         
         // Obter os dados dos jogadores
         try {
 			builder = factory.newDocumentBuilder();
 			doc = builder.parse(dataBasePath);			
 	        XPath xPath = XPathFactory.newInstance().newXPath();
-	        NodeList nodePlayers = null;            
 	        
-			String query = "//Player";
-			nodePlayers = (NodeList) xPath.compile(query).evaluate(doc, XPathConstants.NODESET);
+	        NodeList nodePlayers = null;            
+			nodePlayers = (NodeList) xPath.compile("//Player").evaluate(doc, XPathConstants.NODESET);
 
 			for (int i = 0; i < nodePlayers.getLength(); i++) {
-				String username  = nodePlayers.item(i).getAttributes().item(0).getNodeValue();
-				String winNum = ((Node) xPath.compile("//Player[@Username='" + username + "']/WinsNumber").evaluate(doc, XPathConstants.NODE)).getTextContent();
+				
+				String username    = nodePlayers.item(i).getAttributes().item(0).getNodeValue();	
+				String winNum	   = ((Node) xPath.compile("//Player[@Username='" + username + "']/WinsNumber").evaluate(doc, XPathConstants.NODE)).getTextContent();
 				
 				players.put(username, Integer.valueOf(winNum));
-			}		
+			}
+			
+	        // Ordenar o dicionario de acordo com o numero de vitorias
+			LinkedHashMap<String, Integer> playersOrder = new LinkedHashMap<>();
+			
+			players.entrySet()
+			  .stream()
+			  .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
+			  .limit(10)
+			  .forEachOrdered(x -> playersOrder.put(x.getKey(), x.getValue()));
+			 	
+			// Ordenar o dicionario, para desempatar valores duplicados com o tempo medio de jogo
+			int lastWinNum = 0;
+			List<Object> order = new ArrayList<>(), duplicates = new ArrayList<>();
+			
+			for (int i = 0; i < playersOrder.keySet().size(); i++) {
+					
+				// Username e numero de vitorias do jogador
+				String username = (String) playersOrder.keySet().toArray()[i];
+				int winNumber   = (int)    playersOrder.values().toArray()[i];
+
+				duplicates.add(username);
+				lastWinNum = winNumber;
+				
+				// Se for o ultimo utilizador adiciona
+				if (i == playersOrder.keySet().size() - 1) order.addAll(duplicates);	
+				
+				// Verificar se o proximo utilizador contem um numero de vitorias diferente
+				if (i+1 < playersOrder.keySet().size()) {
+					if (lastWinNum != (int) (playersOrder.values().toArray()[i+1])) {
+	
+						// Dicionario com os utilizadores de numero de vitorias repetido
+						// key - username, value - tempo medio de jogada
+						LinkedHashMap<String, Double> beforeSort = new LinkedHashMap<>();
+						for (Object user : duplicates) {
+							
+							String averageTime = ((Node) xPath.compile("//Player[@Username='" + user + "']/AverageTime").evaluate(doc, XPathConstants.NODE)).getTextContent();
+							double time = Double.valueOf(averageTime);
+							beforeSort.put((String) user, time);
+						}
+
+						// Ordenar de acordo com o tempo medio de jogada
+						LinkedHashMap<String, Double> afterSort = new LinkedHashMap<>();
+						beforeSort.entrySet()
+						  .stream()
+						  .sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
+						  .forEachOrdered(x -> afterSort.put(x.getKey(), x.getValue()));
+						order.addAll(Arrays.asList(afterSort.keySet().toArray()));
+						duplicates.clear();			
+					}
+				}
+			}
+	
+			for (Object user : order) playersOrderFinal.put((String) user, Integer.valueOf(Profile.getWinNum((String) user)));
+	
 		} catch (XPathExpressionException| SAXException | IOException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
-
-        // Ordenar o dicionario de acordo com o numero de vitorias
-		LinkedHashMap<String, Integer> playersOrder = new LinkedHashMap<>();
 		
-		players.entrySet()
-		  .stream()
-		  .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
-		  .limit(10)
-		  .forEachOrdered(x -> playersOrder.put(x.getKey(), x.getValue()));
-		 		
 		// Atualizar a base de dados do quadro de honra
         try {
 			builder = factory.newDocumentBuilder();
@@ -378,13 +473,13 @@ public class Profile {
 			}
 			
 			int i = 0;
-			for (String key : playersOrder.keySet()) {
+			for (String key : playersOrderFinal.keySet()) {
 				
 				Element player = doc.createElement("Player");
 				player.setAttribute("Top", String.valueOf(++i));
 				player.setAttribute("Username", key);
-				
-				Element winsNum = doc.createElement("WinsNum");
+
+				Element winsNum = doc.createElement("WinsNumber");
 				winsNum.setTextContent(String.valueOf(players.get(key)));
 				player.appendChild(winsNum);
 				
