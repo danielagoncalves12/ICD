@@ -13,7 +13,7 @@
               <xs:element name="Picture" type="xs:string"/>
 			  <xs:element name="WinsNumber" type="xs:int"/>
             </xs:sequence>
-			<xs:attribute name="Nickname" type="xs:string" use="required"/>
+			<xs:attribute name="Username" type="xs:string" use="required"/>
           </xs:complexType>	 
         </xs:element>
       </xs:sequence>

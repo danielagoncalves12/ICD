@@ -97,7 +97,7 @@
                   <xs:sequence>
 
 					<xs:element name="WinsNum" type="xs:string" minOccurs="0" maxOccurs="1"/>
-					<xs:element name="Picture" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="Picture" type="xs:base64Binary" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="Color" type="xs:string" minOccurs="0" maxOccurs="1"/>
 					<xs:element name="Date" type="xs:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1"/>

@@ -3,7 +3,7 @@
 <head>
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="resources/GameStyle.css">
+<link rel="stylesheet" href="css/game_styles.css">
 <title>Batalha Naval</title>
 
 </head>
@@ -52,7 +52,7 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 			<div class="center" style="width:70%; float:right">
 				<h3>Bem-vindo <%=name%> !!</h3>
 				<span>Os teus navios foram distribuidos aleatoriamente pelo tabuleiro.</span>
-				<span>Acerte em todos os navios inimigos, antes do inimigo descobrir todos os teus navios, para vencer.</span>
+				<span>Para vender acerte em todos os navios inimigos, antes do inimigo descobrir todos os teus navios.</span>
 			</div>			
 
 		</div>
@@ -67,10 +67,10 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 					<input type="submit" name="play" id="play" value="Jogar">
 				</form>
 					
-				<a href="index.jsp" id="exit">Sair</a>
+				<a href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
 				
 				<br><br>
-				<span>Resultado: <%=result%></span><br>
+				<span>Resultado: <%=result%></span>
 			</div>
 		</div>
 		<br>
@@ -88,8 +88,6 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 	    </div>
 	</div>
 </div>
-
-
 
 
 <script type="text/javascript">

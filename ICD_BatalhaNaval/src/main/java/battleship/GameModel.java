@@ -125,25 +125,29 @@ public class GameModel {
 
 		if (checkWin(1)) {
 			
+			System.out.println(username + " pt1 - player 1 ganhou " + end);
 			if (end) {
-				if (GameQueueThread.activeGames.contains(this)) { 				
+				if (GameQueueThread.activeGames.contains(this))  				
 					GameQueueThread.activeGames.remove(this);
-				Profile.uploadWinsNumber(username1);
-				}
+				Profile.updateWinsNumber(username1);
+				Profile.updateHonorBoard();
+				
 			}
-			end = true;					
-		}
-		if (checkWin(2)) { 
-			
-			if (end) {				
-				if (GameQueueThread.activeGames.contains(this))
-					GameQueueThread.activeGames.remove(this);
-				Profile.uploadWinsNumber(username2);
-			}
-			
 			end = true;
+			System.out.println(username + " pt2 - player 1 ganhou " + end);
 		}
-		
+		else if (checkWin(2)) { 
+			
+			System.out.println(username + " pt1 - player 2 ganhou " + end);
+			if (end) {				
+				if (GameQueueThread.activeGames.contains(this)) 
+					GameQueueThread.activeGames.remove(this);
+				Profile.updateWinsNumber(username2);
+				Profile.updateHonorBoard();
+			}		
+			end = true;
+			System.out.println(username + " pt2 - player 2 ganhou " + end);
+		}	
 		return dic;
 	}	
 	
@@ -220,7 +224,7 @@ public class GameModel {
 	}
 	
 	/**
-	 * @param player - Jogador 1 ou 2
+	 * @param username
 	 * @param choice - Jogada, linha e coluna (Exemplo: 1A, 5F, etc)
 	 * @return String que contem o estado do jogo.
 	 */
@@ -252,8 +256,8 @@ public class GameModel {
 		state = board[line][column];
 		if (state >= 6 && state <= 9) if (player == 1) pointsPlayer1++; else pointsPlayer2++;
 			
-		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY : 	  // N�o encontrou navio
-							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-avi�es
+		board[line][column] = (state == ShipType.EMPTYHIDDEN) ? ShipType.EMPTY : 	  // Nao encontrou navio
+							  (state == ShipType.TYPE1HIDDEN) ? ShipType.TYPE1SHOW :  // Encontrou Porta-avioes
 							  (state == ShipType.TYPE2HIDDEN) ? ShipType.TYPE2SHOW :  // Encontrou Navio-tanque
 							  (state == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW :  // Encontrou Contratorpedeiro
 							  (state == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW :  // Encontrou Submarino
@@ -293,7 +297,7 @@ public class GameModel {
 		for (int i = 0; i < 4; i++) {
 
 			String position = "";  					 // Posicao
-			boolean vertical = false, check = false; // Sentido e verifica��o da posi��o
+			boolean vertical = false, check = false; // Sentido e verificacao da posi��o
 			int number = 0;		  					 // Numero de navios por posicionar
 			
 			while(number != shipNumber[i]) {
@@ -304,8 +308,8 @@ public class GameModel {
 					if (randomLine.length() == 1) randomLine = "0" + randomLine;
 					position = randomLine + randomColumn;		
 	
-					vertical = Math.random() < 0.5; 						      		  // Escolhe se o navio ser� posicionado verticalmente ou horizontalmente		
-					check = checkValidPosition(player, position, shipSizes[i], vertical); // Verifica se a posi��o � v�lida
+					vertical = Math.random() < 0.5; 						      		  // Escolhe se o navio sera posicionado verticalmente ou horizontalmente		
+					check = checkValidPosition(player, position, shipSizes[i], vertical); // Verifica se a posicao e valida
 					
 					// Caso a posicao seja valida, o navio e introduzido
 					if (check) {
@@ -336,27 +340,27 @@ public class GameModel {
 		char line2  = position.charAt(1);
 		char column = position.charAt(2);
 		
-		// Verifica��o do sintaxe da posi��o
+		// Verificacao do sintaxe da posicao
 		if (Character.isDigit(line1) && Character.isDigit(line2)) {
 			
 			String line = "" + Character.getNumericValue(line1) + Character.getNumericValue(line2);
 			int line_number = Integer.parseInt(line) - 1;
 					
-			// Verifica��o do sintaxe da posi��o
+			// Verificacao do sintaxe da posicao
 			if (Character.isLetter(column)) {
 
 				int column_number = columnValue.get(column + "");
 				int steps = 0;						
 				while(steps != shipSize) {
 
-					// Verifica��o - Dentro do tabuleiro
+					// Verificacao - Dentro do tabuleiro
 					if (line_number < 0 || line_number >= 10)     return false; // Erro: Navio fora do tabuleiro
 					if (column_number < 0 || column_number >= 10) return false; // Erro: Navio fora do tabuleiro
 
-					// Verifica��o - Colis�o com outro navio
+					// Verificacao - Colis�o com outro navio
 					if (board[line_number][column_number] != 0)   return false; // Erro: Colis�o com outro navio.
 					
-					// Verifica��o - 1 Espa�o de afastamento (Cont�guos)
+					// Verificacao - 1 Espaco de afastamento
 					if (!checkContiguous(board, line_number, column_number)) return false;
 	
 					// Verificar proxima posicao

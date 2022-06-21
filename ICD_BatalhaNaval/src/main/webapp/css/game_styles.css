@@ -6,7 +6,7 @@ html {
 }
 
 body {
-	background: url('background.png') no-repeat;
+	background: url('../resources/background.png') no-repeat;
 	background-size: 100% 100%;
 	background-attachment: fixed;
 	width: 100vw;
@@ -15,8 +15,22 @@ body {
 	margin: 0;
 }
 
+.button-exit:link, .button-exit:visited {
+	background-color: #4160a3;
+	color: white;
+	padding: 14px 25px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	border-radius: 15px;
+}
+
+button-exit:hover, button-exit:active {
+	background-color: #7a9ce6;
+}
+
 .bg {
-	background-image: url("background.png");
+	background-image: url('../resources/background.png');
 	background-repeat: no-repeat;
 	background-size: cover;
 	background-attachment: fixed;

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
-	<Player Nickname="Dannie">
+	<Player Username="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
-		<Color>#e06dbb</Color>
+		<Color>#e368c1</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>23</WinsNumber>
+		<WinsNumber>28</WinsNumber>
 	</Player>
-	<Player Nickname="Nick">
+	<Player Username="Nick">
 		<Name>Nick</Name>
 		<Password>9CFA7AEFCC61936B70AAEC6729329EDA</Password>
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>37</WinsNumber>
+		<WinsNumber>43</WinsNumber>
 	</Player>
-	<Player Nickname="teste1">
+	<Player Username="teste1">
 		<Name>GoingOn</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -23,7 +23,7 @@
 		<Picture>default.png</Picture>
 		<WinsNumber>21</WinsNumber>
 	</Player>
-	<Player Nickname="teste2">
+	<Player Username="teste2">
 		<Name>xXTryHardXx</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -31,7 +31,7 @@
 		<Picture>icd.png</Picture>
 		<WinsNumber>10</WinsNumber>
 	</Player>
-	<Player Nickname="teste3">
+	<Player Username="teste3">
 		<Name>reallu</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -39,7 +39,7 @@
 		<Picture>dog.jpg</Picture>
 		<WinsNumber>5</WinsNumber>
 	</Player>
-	<Player Nickname="teste4">
+	<Player Username="teste4">
 		<Name>Anya</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -47,7 +47,7 @@
 		<Picture>girl.png</Picture>
 		<WinsNumber>2</WinsNumber>
 	</Player>
-	<Player Nickname="teste5">
+	<Player Username="teste5">
 		<Name>Mapped</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -55,7 +55,7 @@
 		<Picture>mapped.png</Picture>
 		<WinsNumber>12</WinsNumber>
 	</Player>
-	<Player Nickname="teste6">
+	<Player Username="teste6">
 		<Name>Pandora</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -63,7 +63,7 @@
 		<Picture>pandora.png</Picture>
 		<WinsNumber>12</WinsNumber>
 	</Player>
-	<Player Nickname="teste7">
+	<Player Username="teste7">
 		<Name>Gamerz19</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -71,7 +71,7 @@
 		<Picture>logo.png</Picture>
 		<WinsNumber>4</WinsNumber>
 	</Player>
-	<Player Nickname="teste8">
+	<Player Username="teste8">
 		<Name>Wazowski</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -79,7 +79,7 @@
 		<Picture>mike.png</Picture>
 		<WinsNumber>12</WinsNumber>
 	</Player>
-	<Player Nickname="JohnGames">
+	<Player Username="JohnGames">
 		<Name>JohnGames</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#52e2d8</Color>
@@ -87,7 +87,7 @@
 		<Picture>shrek.png</Picture>
 		<WinsNumber>14</WinsNumber>
 	</Player>
-	<Player Nickname="Dann">
+	<Player Username="Dann">
 		<Name>Dann</Name>
 		<Password>E9F49E0ADDDF4EDBB14C2832DA3283A2</Password>
 		<Color>#000000</Color>

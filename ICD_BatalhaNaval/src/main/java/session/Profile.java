@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Base64;
@@ -26,13 +27,17 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 public class Profile {
 
-	public static String dataBasePath = "src/main/java/protocol/PlayerInfo.xml";
+	public static String dataBasePath   = "src/main/java/protocol/PlayerInfo.xml";
+	public static String honorBoardPath = "src/main/java/protocol/HonorBoard.xml";
+	
+	// UPLOAD
 	
 	public static String upload(String contentType, String username, String value) {
 		 
@@ -74,7 +79,7 @@ public class Profile {
         Node node = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + username + "']/" + contentType;
+			String query = "//Player[@Username='" + username + "']/" + contentType;
 			node = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);		
 			node.setTextContent(value); 
 				
@@ -97,48 +102,8 @@ public class Profile {
 		
 		return value;
 	}
-	
-	public static void uploadWinsNumber(String nickname) {
-		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true);
-        DocumentBuilder builder;
-        Document doc = null;
-		
-		try {
-			builder = factory.newDocumentBuilder();
-			doc = builder.parse(dataBasePath);
-			
-		} catch (SAXException | IOException | ParserConfigurationException e) {
-			e.printStackTrace();
-		}
-		
-		XPath xPath = XPathFactory.newInstance().newXPath();
-        Node nodeWinsNumber = null;    
-        
-		try {
-			String query = "//Player[@Nickname='" + nickname + "']/WinsNumber";
-			nodeWinsNumber = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);
-			int winsNumber = Integer.valueOf(nodeWinsNumber.getTextContent());
-			nodeWinsNumber.setTextContent(String.valueOf(++winsNumber)); 
 
-		} catch (XPathExpressionException e) { 
-			e.printStackTrace(); 
-		}
-		
-		// Atualizar o novo ficheiro
-		try (FileOutputStream output = new FileOutputStream(dataBasePath)) {
-			
-		    TransformerFactory transformerFactory = TransformerFactory.newInstance();
-		    Transformer transformer = transformerFactory.newTransformer();
-		    DOMSource source = new DOMSource(doc);
-		    StreamResult result = new StreamResult(output);
-		    transformer.transform(source, result);
-		    
-		} catch (IOException | TransformerException e) {
-			e.printStackTrace();
-		}
-	}
+	// GETTER
 	
 	public static String getPicture(String nickname) {
 		
@@ -159,7 +124,7 @@ public class Profile {
         Node nodePicture = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + nickname + "']/Picture";
+			String query = "//Player[@Username='" + nickname + "']/Picture";
 			nodePicture = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);;
 
 		} catch (XPathExpressionException e) { 
@@ -203,7 +168,7 @@ public class Profile {
         Node nodeName = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + nickname + "']/Name";
+			String query = "//Player[@Username='" + nickname + "']/Name";
 			nodeName = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);;
 
 		} catch (XPathExpressionException e) { 
@@ -232,7 +197,7 @@ public class Profile {
         Node nodeColor = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + username + "']/Color";
+			String query = "//Player[@Username='" + username + "']/Color";
 			nodeColor = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);;
 
 		} catch (XPathExpressionException e) { 
@@ -261,7 +226,7 @@ public class Profile {
         Node nodeDate = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + username + "']/Date";
+			String query = "//Player[@Username='" + username + "']/Date";
 			nodeDate = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);;
 
 		} catch (XPathExpressionException e) { 
@@ -290,7 +255,7 @@ public class Profile {
         Node nodeWin = null;    
         
 		try {
-			String query = "//Player[@Nickname='" + username + "']/WinsNumber";
+			String query = "//Player[@Username='" + username + "']/WinsNumber";
 			nodeWin = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);;
 
 		} catch (XPathExpressionException e) { 
@@ -300,7 +265,36 @@ public class Profile {
 		return nodeWin.getTextContent();
 	}
 	
-	public static HashMap<String, Integer> getHonorBoard() {
+	public static HashMap<String, String> getHonorBoard() {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder;
+        Document doc = null;
+        LinkedHashMap<String, String> players = new LinkedHashMap<>();
+        
+		try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(honorBoardPath);			
+			XPath xPath = XPathFactory.newInstance().newXPath();
+
+			for (int num = 1; num <= 10; num++) {
+							
+				Node nodePlayer = ((Node) xPath.compile("//Player[@Top='" + num + "']").evaluate(doc, XPathConstants.NODE));			
+				String username = nodePlayer.getAttributes().item(1).getNodeValue();
+				String winsNum  = nodePlayer.getChildNodes().item(0).getTextContent();
+				players.put(username, winsNum);
+			}			
+
+		} catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		return players;
+	}
+	
+	// Update
+	
+	public static void updateWinsNumber(String username) {
 		
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
@@ -310,32 +304,60 @@ public class Profile {
 		try {
 			builder = factory.newDocumentBuilder();
 			doc = builder.parse(dataBasePath);
+			XPath xPath = XPathFactory.newInstance().newXPath();
+
+	        String query = "//Player[@Username='" + username + "']/WinsNumber";
+	        Node nodeWinsNumber = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);
+			int winsNumber = Integer.valueOf(nodeWinsNumber.getTextContent());
+			nodeWinsNumber.setTextContent(String.valueOf(++winsNumber)); 
 			
-		} catch (SAXException | IOException | ParserConfigurationException e) {
+		} catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
 		
-		XPath xPath = XPathFactory.newInstance().newXPath();
-        NodeList nodePlayers = null;    
+		// Atualizar o novo ficheiro
+		try (FileOutputStream output = new FileOutputStream(dataBasePath)) {
+			
+		    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		    Transformer transformer = transformerFactory.newTransformer();
+		    DOMSource source = new DOMSource(doc);
+		    StreamResult result = new StreamResult(output);
+		    transformer.transform(source, result);
+		    
+		} catch (IOException | TransformerException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void updateHonorBoard() {
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder;
+        Document doc = null;
         HashMap<String, Integer> players = new HashMap<>();
         
-		try {
+        // Obter os dados dos jogadores
+        try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(dataBasePath);			
+	        XPath xPath = XPathFactory.newInstance().newXPath();
+	        NodeList nodePlayers = null;            
+	        
 			String query = "//Player";
 			nodePlayers = (NodeList) xPath.compile(query).evaluate(doc, XPathConstants.NODESET);
 
-			System.out.println(nodePlayers.getLength());
-			
 			for (int i = 0; i < nodePlayers.getLength(); i++) {
 				String username  = nodePlayers.item(i).getAttributes().item(0).getNodeValue();
-				String winNum = ((Node) xPath.compile("//Player[@Nickname='" + username + "']/WinsNumber").evaluate(doc, XPathConstants.NODE)).getTextContent();
+				String winNum = ((Node) xPath.compile("//Player[@Username='" + username + "']/WinsNumber").evaluate(doc, XPathConstants.NODE)).getTextContent();
 				
 				players.put(username, Integer.valueOf(winNum));
-			}
-			
-		} catch (XPathExpressionException e) { 
-			e.printStackTrace(); 
+			}		
+		} catch (XPathExpressionException| SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
 		}
-		
+
+        // Ordenar o dicionario de acordo com o numero de vitorias
 		LinkedHashMap<String, Integer> playersOrder = new LinkedHashMap<>();
 		
 		players.entrySet()
@@ -343,19 +365,54 @@ public class Profile {
 		  .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())) 
 		  .limit(10)
 		  .forEachOrdered(x -> playersOrder.put(x.getKey(), x.getValue()));
-		 
-		return playersOrder;
-	}
+		 		
+		// Atualizar a base de dados do quadro de honra
+        try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(honorBoardPath);		
+			Element root = doc.getDocumentElement();
+			
+			NodeList childNodes = root.getChildNodes();
+			while (childNodes.getLength() > 0) {
+				root.removeChild(childNodes.item(0));
+			}
+			
+			int i = 0;
+			for (String key : playersOrder.keySet()) {
+				
+				Element player = doc.createElement("Player");
+				player.setAttribute("Top", String.valueOf(++i));
+				player.setAttribute("Username", key);
+				
+				Element winsNum = doc.createElement("WinsNum");
+				winsNum.setTextContent(String.valueOf(players.get(key)));
+				player.appendChild(winsNum);
+				
+		 		root.appendChild(player);
+			}
+						
+		} catch (SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+		}
 	
-	public static void main(String[] args) {
-		
-		getHonorBoard();
+ 		// Atualizar as alteracoes
+		try (FileOutputStream output = new FileOutputStream(honorBoardPath)) {
+			
+		    TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		    Transformer transformer = transformerFactory.newTransformer();
+		    DOMSource source = new DOMSource(doc);
+		    StreamResult result = new StreamResult(output);
+		    transformer.transform(source, result);
+		    
+		} catch (IOException | TransformerException e) {
+			e.printStackTrace();
+		}
 	}
-	
+
 	public static String hex2Rgb(String colorStr) {
 		
-		return "rgba(" + Integer.valueOf( colorStr.substring( 1, 3 ), 16 ) +
-			   "," + Integer.valueOf( colorStr.substring( 3, 5 ), 16 ) +
-			   "," + Integer.valueOf( colorStr.substring( 5, 7 ), 16 ) + ", 0.5)";
+		return "rgba(" + Integer.valueOf(colorStr.substring(1, 3), 16) +
+			   "," + Integer.valueOf(colorStr.substring(3, 5), 16 ) +
+			   "," + Integer.valueOf(colorStr.substring(5, 7), 16 ) + ", 0.5)";
 	}
 }

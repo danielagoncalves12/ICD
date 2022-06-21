@@ -53,7 +53,7 @@ public class Session {
 			nicknames = (NodeList) (xPath.compile(queryRead).evaluate(doc, XPathConstants.NODESET));
 
 		    for (int i = 0; i < nicknames.getLength(); i++) {
-		        String nickn = ((Element) nicknames.item(i)).getAttribute("Nickname");
+		        String nickn = ((Element) nicknames.item(i)).getAttribute("Username");
 		        
 		        if (nickn.equals(nickname)) return false;
 		    }
@@ -81,10 +81,10 @@ public class Session {
 		Element player = doc.createElement("Player");
 		root.appendChild(player);
 		
-		// Guardar as suas informa��es
+		// Guardar as suas informacoes
 		
 		// Nickname
-		player.setAttribute("Nickname", nickname);
+		player.setAttribute("Username", nickname);
 	
 		// Nome p�blico
 		Element playerName = doc.createElement("Name");
@@ -116,7 +116,7 @@ public class Session {
 		playerWinsNumber.setTextContent("0");
 		player.appendChild(playerWinsNumber);
 		
-		// Valida��o
+		// Validacao
 		try {
 			if (XMLUtils.validate(XMLUtils.documentToString(doc), "src/main/java/protocol/PlayerInfo.xsd")) {
 			
@@ -134,7 +134,6 @@ public class Session {
 	   } catch (IOException | TransformerException | SAXException | TransformerFactoryConfigurationError e) {
 			e.printStackTrace();
 	   }
-
 	}
 	
 	public static boolean login(String nickname, String password) {
@@ -153,11 +152,11 @@ public class Session {
 		}
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-		String queryPassword = "//Player[@Nickname='" + nickname + "']/Password";
+		String queryPassword = "//Player[@Username='" + nickname + "']/Password";
         Node pass; 
 		
 		try {
-			// Desencripta��o da palavra-passe
+			// Palavra-passe
 			pass = ((Node) (xPath.compile(queryPassword).evaluate(doc, XPathConstants.NODE)));
 			
 			if (pass == null) return false;

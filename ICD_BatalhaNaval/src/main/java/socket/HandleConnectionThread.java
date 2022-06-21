@@ -124,7 +124,7 @@ public class HandleConnectionThread extends Thread {
 	
 	private void honorBoard(String request) throws ParserConfigurationException {
 		
-		HashMap<String, Integer> players = Profile.getHonorBoard();
+		HashMap<String, String> players = Profile.getHonorBoard();
 		
 		String[] names      = new String[10];
 		String[] pictures   = new String[10];
@@ -145,7 +145,7 @@ public class HandleConnectionThread extends Thread {
 	private void play(String request) throws ParserConfigurationException {
 		
 		String player   = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
-		String position = MessageProcessor.process(request).split(",")[2]; // Posi��o
+		String position = MessageProcessor.process(request).split(",")[2]; // Posicao
 		
 		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;
 		GameModel game = null;
