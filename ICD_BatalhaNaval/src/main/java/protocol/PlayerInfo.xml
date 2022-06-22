@@ -1,12 +1,13 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
 	<Player Username="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
 		<Color>#e963c0</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>64</WinsNumber>
-		<AverageTime>345.9164537978895</AverageTime>
+		<WinsNumber>73</WinsNumber>
+		<AverageTime>5.717899319261646</AverageTime>
 	</Player>
 	<Player Username="Nick">
 		<Name>Nick</Name>
@@ -14,10 +15,10 @@
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>57</WinsNumber>
-		<AverageTime>348.2684953217555</AverageTime>
+		<WinsNumber>64</WinsNumber>
+		<AverageTime>8.717525764393947</AverageTime>
 	</Player>
-	<Player Username="teste1">
+	<Player Username="GoingOn">
 		<Name>GoingOn</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -26,7 +27,7 @@
 		<WinsNumber>21</WinsNumber>
 		<AverageTime>14</AverageTime>
 	</Player>
-	<Player Username="teste2">
+	<Player Username="xXTryHardXx">
 		<Name>xXTryHardXx</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -35,7 +36,7 @@
 		<WinsNumber>11</WinsNumber>
 		<AverageTime>5</AverageTime>
 	</Player>
-	<Player Username="teste3">
+	<Player Username="reallu">
 		<Name>reallu</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -44,7 +45,7 @@
 		<WinsNumber>5</WinsNumber>
 		<AverageTime>10</AverageTime>
 	</Player>
-	<Player Username="teste4">
+	<Player Username="Anya">
 		<Name>Anya</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -53,7 +54,7 @@
 		<WinsNumber>2</WinsNumber>
 		<AverageTime>8</AverageTime>
 	</Player>
-	<Player Username="teste5">
+	<Player Username="Mapped">
 		<Name>Mapped</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -62,7 +63,7 @@
 		<WinsNumber>12</WinsNumber>
 		<AverageTime>4</AverageTime>
 	</Player>
-	<Player Username="teste6">
+	<Player Username="Pandora">
 		<Name>Pandora</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -71,7 +72,7 @@
 		<WinsNumber>12</WinsNumber>
 		<AverageTime>7</AverageTime>
 	</Player>
-	<Player Username="teste7">
+	<Player Username="Gamerz19">
 		<Name>Gamerz19</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -80,7 +81,7 @@
 		<WinsNumber>4</WinsNumber>
 		<AverageTime>6</AverageTime>
 	</Player>
-	<Player Username="teste8">
+	<Player Username="Wazowski">
 		<Name>Wazowski</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
@@ -107,4 +108,13 @@
 		<WinsNumber>2</WinsNumber>
 		<AverageTime>5</AverageTime>
 	</Player>
-<Player Username="Ola123"><Name>ola</Name><Password>2FE04E524BA40505A82E03A2819429CC</Password><Color>#d97659</Color><Date>2004-06-08</Date><Picture>Ola123.png</Picture><WinsNumber>0</WinsNumber><AverageTime>0</AverageTime></Player></Data>
+	<Player Username="Ola123">
+		<Name>ola</Name>
+		<Password>2FE04E524BA40505A82E03A2819429CC</Password>
+		<Color>#d97659</Color>
+		<Date>2004-06-08</Date>
+		<Picture>Ola123.png</Picture>
+		<WinsNumber>0</WinsNumber>
+		<AverageTime>0</AverageTime>
+	</Player>
+</Data>

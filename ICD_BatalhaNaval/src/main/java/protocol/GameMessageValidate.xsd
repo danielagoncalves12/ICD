@@ -44,14 +44,6 @@
               <xs:element name="Response">
                 <xs:complexType>
                   <xs:sequence>
-					<xs:element name="Points" minOccurs="0" maxOccurs="1">
-					  <xs:complexType>
-                        <xs:sequence>
-					      <xs:element name="Player1" type="xs:integer"/>
-						  <xs:element name="Player2" type="xs:integer"/>
-					    </xs:sequence>
-			          </xs:complexType>
-					</xs:element>
                     <xs:element name="Board" type="BoardType" minOccurs="0" maxOccurs="1"/>
                   </xs:sequence>
                 </xs:complexType>
@@ -115,7 +107,7 @@
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Nickname" type="xs:string"/>
+                    <xs:element name="Username" type="xs:string"/>
                   </xs:sequence>
                 </xs:complexType>
               </xs:element>
@@ -130,13 +122,34 @@
           </xs:complexType>
         </xs:element>
 
+		<xs:element name="GetPlayers">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="Request"/>
+              <xs:element name="Response">
+                <xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Players" minOccurs="0" maxOccurs="1">
+					  <xs:complexType>
+						<xs:sequence>
+						  <xs:element name="Username" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+						</xs:sequence>
+					  </xs:complexType>
+                    </xs:element>
+                  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+
 		<xs:element name="Login">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
-                    <xs:element name="Nickname" type="xs:string"/>
+                    <xs:element name="Username" type="xs:string"/>
 					<xs:element name="Name" type="xs:string" minOccurs="0" maxOccurs="1"/>
                     <xs:element name="Password" type="xs:string"/>
 					<xs:element name="Color" type="xs:string" minOccurs="0" maxOccurs="1"/>
@@ -164,7 +177,7 @@
                 <xs:complexType>
                   <xs:sequence>
                     <xs:element name="ContentType" type="xs:string"/>
-                    <xs:element name="Nickname" type="xs:string"/>
+                    <xs:element name="Username" type="xs:string"/>
 					<xs:element name="Value" type="xs:string"/>
                   </xs:sequence>
                 </xs:complexType>

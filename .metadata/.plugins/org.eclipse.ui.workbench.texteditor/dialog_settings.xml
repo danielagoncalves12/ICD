@@ -8,14 +8,14 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="img"/>
+			<item value="padding"/>
 			<item value="end"/>
 			<item value="listener"/>
 			<item value="connect"/>
 			<item value="fileName"/>
 			<item value="table"/>
 			<item value="hover"/>
-			<item value="login100-form-btnlogin100-form-btn"/>
-			<item value="login100-form-btn"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>

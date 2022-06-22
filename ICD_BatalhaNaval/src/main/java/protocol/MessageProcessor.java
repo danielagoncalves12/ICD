@@ -50,6 +50,7 @@ public class MessageProcessor {
 				case "FindGame"  : return find(doc);
 				case "GetHonorBoard": return honor(doc);
 				case "GetProfileInfo": return profile(doc);
+				case "GetPlayers": return players(doc);
 				}
 			}
 		} catch (SAXException | IOException e) {
@@ -117,7 +118,7 @@ public class MessageProcessor {
         Node nodeResult = null; boolean isReply = false;          
         
 		try {
-			nodeNickname    = (Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE);
+			nodeNickname    = (Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE);
 			nodeContentType = (Node) xPath.compile("//Request/ContentType").evaluate(doc, XPathConstants.NODE);
 			nodeValue 		= (Node) xPath.compile("//Request/Value").evaluate(doc, XPathConstants.NODE);
 			nodeResult      = (Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE);
@@ -196,6 +197,30 @@ public class MessageProcessor {
 		else return "GetBoard" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 	}
 	
+	private static String players(Document doc) {
+		
+		XPath xPath  = XPathFactory.newInstance().newXPath();
+        NodeList nodePlayers = null;
+        boolean isReply = false;
+        
+		try {		
+			nodePlayers   = ((NodeList) xPath.compile("//Players/Username").evaluate(doc, XPathConstants.NODESET));
+			isReply    = (boolean) xPath.compile("boolean(//Players/Username/text())").evaluate(doc, XPathConstants.BOOLEAN);
+		} catch (XPathExpressionException e) { e.printStackTrace(); }
+
+		String[] players = new String[nodePlayers.getLength()];
+		
+		if (isReply) {	
+			for (int i = 0; i < nodePlayers.getLength(); i++) {			
+				String player = nodePlayers.item(i).getTextContent();
+				players[i] = player;
+			}
+		}
+		
+		if (isReply) return Arrays.toString(players);
+		else return "GetPlayers";
+	}
+	
 	private static String find(Document doc) throws DOMException, SAXException {
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
@@ -203,7 +228,7 @@ public class MessageProcessor {
         boolean isReply = false;
         
 		try {	
-			nodeNickname = ((Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE));		
+			nodeNickname = ((Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE));		
 			nodeResult   = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
 			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
@@ -222,7 +247,7 @@ public class MessageProcessor {
         
 		try {
 			nodeRegister = ((Node) xPath.compile("//Login/@register").evaluate(doc, XPathConstants.NODE));			
-			nodeNickname = ((Node) xPath.compile("//Request/Nickname").evaluate(doc, XPathConstants.NODE));
+			nodeNickname = ((Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE));
 			nodeName     = ((Node) xPath.compile("//Request/Name").evaluate(doc, XPathConstants.NODE));
 			nodePassword = ((Node) xPath.compile("//Request/Password").evaluate(doc, XPathConstants.NODE));
 			nodeColor	 = ((Node) xPath.compile("//Request/Color").evaluate(doc, XPathConstants.NODE));

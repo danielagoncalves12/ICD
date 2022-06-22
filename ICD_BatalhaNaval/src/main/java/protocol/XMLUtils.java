@@ -65,7 +65,7 @@ public class XMLUtils {
 		// Criar uma Stream a partir da String
 		Source source = new StreamSource(new StringReader(inputXml));
 		
-		// Validação
+		// Validaï¿½ï¿½o
 		boolean isValid = true;
 		try {
 			validator.validate(source);
@@ -92,5 +92,13 @@ public class XMLUtils {
 		}
 
 		return matrix;
+	}
+	
+	public static String[] stringToArray(String str) {
+		
+		String temp = str.substring(1, str.length() - 1);
+		String[] resplit = temp.split(", ");
+		
+		return resplit;
 	}
 }

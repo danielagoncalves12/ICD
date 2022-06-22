@@ -31,7 +31,7 @@ import session.Session;
 public class HandleConnectionThread extends Thread {
 
 	public static ArrayList<GameModel> activeGames = new ArrayList<>();
-	public static Hashtable<String, ThreadReader> activeUsers = new Hashtable<>();
+	public static ArrayList<String> activeUsers = new ArrayList<>();
 	private ThreadReader reader;
 	private Socket user;
 	private BufferedReader is;
@@ -81,29 +81,25 @@ public class HandleConnectionThread extends Thread {
 		// Primeiro argumento representa o tipo de pedido
 		String method = MessageProcessor.process(request).split(",")[0]; 
 
-		// - Login - //
-		if (method.equals("Login")) login(request);
-
-		// - Register - //
-		else if (method.equals("Register")) register(request);
-
-		// - Find Game - //
-		else if (method.equals("FindGame")) findGame(request);
-
-		// - Upload Profile - //
-		else if (method.equals("Upload")) upload(request);
+		switch (method) {
 		
-		// - Play - //
-		else if (method.equals("Play")) play(request);
+		case "Login"   : login(request); break;
+		case "Register": register(request); break;
+		case "FindGame": findGame(request); break;
+		case "Upload"  : upload(request); break;
+		case "Play"    : play(request); break;
+		case "GetBoard": board(request); break;
+		case "HonorBoard" : honorBoard(request); break;
+		case "ProfileInfo": profile(request); break;
+		case "GetPlayers" : players(request); break;
 		
-		// - Get Board - //
-		else if (method.equals("GetBoard")) board(request);
+		}
+	}
+	
+	private void players(String request) throws ParserConfigurationException {
 		
-		// - Get Honor Board - //
-		else if (method.equals("HonorBoard")) honorBoard(request);
-		
-		// - Get Profile Info - //
-		else if (method.equals("ProfileInfo")) profile(request);
+		ArrayList<String> players = Profile.getAllPlayersUsername();
+		os.println(MessageCreator.messageGetPlayers(players));
 	}
 	
 	private void profile(String request) throws ParserConfigurationException {
@@ -264,8 +260,11 @@ public class HandleConnectionThread extends Thread {
 	private void findGame(String request) throws ParserConfigurationException, IOException {
 
 		String username = MessageProcessor.process(request).split(",")[1];	
-		if (!activeUsers.containsKey(username)) activeUsers.put(username, this.reader);
-		else return;
+		if (!activeUsers.contains(username)) activeUsers.add(username);
+		else {
+			os.println(MessageCreator.messageFind(username, "ERROR"));
+			return;
+		}
 		
 		try {
 			semaphore.acquire();

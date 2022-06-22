@@ -31,7 +31,7 @@
 <% 
 // Obter dados
 String username = Check.username(request, response);
-HashMap<String, String> profile = Check.profile(request, response);
+HashMap<String, String> profile = Check.profile(username);
 
 String rgbColor = Profile.hex2Rgb(profile.get("Color"));
 
@@ -44,6 +44,9 @@ String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 String honor = new User().sendRequestHonorBoard();
 String[][] players = XMLUtils.stringToArray2D(honor);
 
+// Lista de jogadores inscritos
+String playersListStr = new User().sendRequestPlayers();
+String[] playersList  = XMLUtils.stringToArray(playersListStr);
 %>
 	
 	<div class="limiter">
@@ -82,16 +85,21 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 							Batalha Naval!
 						</span>
 						
-						<h6>Procurar um jogador: </h6>
-						<div class="ui-widget">
-						  <input style="margin-top:10px; border: 1px solid black" type="text" id="tags">
-						</div>						
-		
 						<div class="container-login100-form-btn" style="margin: auto; width: 80%">
-							<a id="link" onclick="javascript:clickAndDisable(this);" style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Play</a>
+							<a id="link" onclick="javascript:clickAndDisable(this);" style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Jogar</a>
 							<p id="searching" style="color: red; display: none">A procurar um oponente...</p>
 						</div>				
-						
+
+						<br><br>
+						<span class="login100-form-title" style="padding:12px">
+							Procurar um jogador!
+						</span>
+						<br>
+						<h6>Introduza o nome: </h6>
+						<form action="SearchServlet" method="POST">
+							<input style="margin-top:10px; border: 1px solid black" type="text" name="search_name" id="tags"/><br><br>	
+							<input type="submit" id="profile" style="padding-right:0px; padding-left:0px; font-size: 13px; background-color:#8b989e" class="login100-form-btn" value="Ver Perfil"/>
+						</form>
 					</div>	
 				</div>
 				<br>
@@ -179,15 +187,15 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 	
   <script>
   $(function() {
-    var availableTags = [
-      "ActionScript",
-      "AppleScript",
-      "Asp",
-      "BASIC",
-      "C"
-    ];
+	   
+	var availablePlayers = new Array();
+	
+	<% for (String element : playersList) {%> 
+		availablePlayers.push("<%=element%>");
+	<% } %>
+
     $( "#tags" ).autocomplete({
-      source: availableTags
+      source: availablePlayers
     });
   } );
   </script>

@@ -1,5 +1,6 @@
 package protocol;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -10,6 +11,48 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
+	public static String messageGetPlayers() throws ParserConfigurationException {
+		
+		return messageGetPlayers(null);
+	}
+	
+	public static String messageGetPlayers(ArrayList<String> players) throws ParserConfigurationException {
+		
+		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
+        DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
+        Document document = documentBuilder.newDocument();
+
+        // Elemento Protocol
+        Element elementRoot = document.createElement("Protocol");
+        document.appendChild(elementRoot);
+        
+        // Elemento GetPlayers
+        Element elementMethod = document.createElement("GetPlayers");
+        elementRoot.appendChild(elementMethod); 
+
+        // Elemento Request
+        Element elementRequest = document.createElement("Request");     
+        elementMethod.appendChild(elementRequest);
+        
+        // Elemento Reply
+        Element elementReply = document.createElement("Response");    
+        Element elementPlayers = document.createElement("Players");
+        
+        // Elemento Result
+        if (players != null) {
+        	for (String username : players) {
+        	
+	        	Element elementName = document.createElement("Username");
+	        	elementName.setTextContent(username);
+	        	elementPlayers.appendChild(elementName);
+        	}
+        }     
+        elementReply.appendChild(elementPlayers);
+        elementMethod.appendChild(elementReply);
+        
+        return XMLUtils.documentToString(document);
+	}
+	
 	public static String messageGetProfileInfo (String username) throws ParserConfigurationException {
 		
 		return messageGetProfileInfo(username, null);
@@ -25,14 +68,14 @@ public class MessageCreator {
         Element elementRoot = document.createElement("Protocol");
         document.appendChild(elementRoot);
         
-        // Elemento Method (Position)
+        // Elemento Method (GetProfileInfo)
         Element elementMethod = document.createElement("GetProfileInfo");
         elementRoot.appendChild(elementMethod); 
 
         // Elemento Request
         Element elementRequest = document.createElement("Request");
             
-        // Elemento ContentType
+        // Elemento Username
     	Element elementUsername = document.createElement("Username");
     	elementUsername.appendChild(document.createTextNode(username));
     	elementRequest.appendChild(elementUsername);
@@ -137,7 +180,7 @@ public class MessageCreator {
     	elementRequest.appendChild(elementContentType);
                
         // Elemento Nickname
-    	Element elementNickname = document.createElement("Nickname");
+    	Element elementNickname = document.createElement("Username");
     	elementNickname.appendChild(document.createTextNode(nickname));
     	elementRequest.appendChild(elementNickname);
         
@@ -209,7 +252,7 @@ public class MessageCreator {
         	// Elemento Board
             Element elementBoard = document.createElement("Board");
 
-            // Tipos de navios e respetivas posições
+            // Tipos de navios e respetivas posiï¿½ï¿½es
             int index = 0;
             for (String key : dic.keySet()) {
             	
@@ -304,7 +347,7 @@ public class MessageCreator {
         Element elementRoot = document.createElement("Protocol");
         document.appendChild(elementRoot);
 		
-        // Elemento Sessão
+        // Elemento Sessï¿½o
         Element elementSession = document.createElement("Login");
         elementSession.setAttribute("register", register ? "true" : "false");
         elementRoot.appendChild(elementSession);
@@ -314,7 +357,7 @@ public class MessageCreator {
         elementSession.appendChild(elementRequest);
         
         // Elemento Nickname
-        Element elementNickname = document.createElement("Nickname");
+        Element elementNickname = document.createElement("Username");
         elementNickname.setTextContent(nickname);
         elementRequest.appendChild(elementNickname);
         
@@ -371,7 +414,7 @@ public class MessageCreator {
         Element elementRoot = document.createElement("Protocol");
         document.appendChild(elementRoot);
 		
-        // Elemento Sessão
+        // Elemento Sessï¿½o
         Element elementSession = document.createElement("FindGame");
         
         // Elemento Request
@@ -379,7 +422,7 @@ public class MessageCreator {
         elementSession.appendChild(elementRequest);
         
         // Elemento Nickname
-        Element elementNickname = document.createElement("Nickname");
+        Element elementNickname = document.createElement("Username");
         elementNickname.setTextContent(username);
         elementRequest.appendChild(elementNickname);
         

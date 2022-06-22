@@ -36,6 +36,9 @@ String myBoard = user.sendRequestBoard(username, "true");
 String anotherBoard = user.sendRequestBoard(username, "false");
 %>
 
+<audio src="resources/background.mp3" autoplay loop>
+</audio>
+
 <br>
 <div style="border-radius:5%; box-shadow: inset 0px 0px 78px 3px rgba(0,0,0,0.73); background-color: rgba(101, 149, 207, 0.8); text-align:center; width:70%" class="center">
 
@@ -55,7 +58,7 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 			<div class="center" style="width:70%; float:right">
 				<h3>Bem-vindo <%=name%> !!</h3>
 				<span>Os teus navios foram distribuidos aleatoriamente pelo tabuleiro.</span>
-				<span>Para vender acerte em todos os navios inimigos, antes do inimigo descobrir todos os teus navios.</span>
+				<span>Para vencer acerte em todos os navios inimigos, antes do inimigo descobrir todos os teus navios.</span>
 			</div>			
 
 		</div>
@@ -66,8 +69,8 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 				<!-- FORM JOGADA -->
 				<form method="POST" action="PlayServlet"><br>
 					<input type="hidden" name="username" id="username" value="<%=username%>">
-					<span>Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
-					<input type="submit" name="play" id="play" value="Jogar">
+					<span id="title">Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
+					<input type="submit" name="play" id="play" value="Jogar" onclick="buttonClick()">
 				</form>
 				
 				<div id="time" class="circle wrapper">
@@ -94,10 +97,10 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 			
 			<div class="center" style="width:59%; float:right">
 								
-				<br><span style="float:left;"><%=result%></span><br>
+				<br><span style="float:left;"><%=result%></span><br><br><br>
 				<a style="float:left;" href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
 				
-				<br><br>
+				<br>
 				
 			</div>
 		</div>
@@ -117,8 +120,26 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 
 <script type="text/javascript">
 
+	function buttonClick() {
+		
+		document.getElementById('play').style.pointerEvents = 'none';
+		document.getElementById('play').style.cursor = 'not-allowed';
+		document.getElementById('play').style.opacity = '0.65';
+		
+		document.getElementById('position').style.pointerEvents = 'none';
+		document.getElementById('position').style.cursor = 'not-allowed';
+		document.getElementById('position').style.opacity = '0.65';
+		
+		var shotSound = new Audio('resources/shot.mp3');
+		shotSound.loop = false;
+		shotSound.play();
+	}
+	
 	var state = '<%=session.getAttribute("state")%>';
 	if (state === "ended") {
+		
+		document.getElementById('title').disabled = true;
+        document.getElementById('title').style.display = 'none';
 		
 		document.getElementById('position').disabled = true;
         document.getElementById('position').style.display = 'none';

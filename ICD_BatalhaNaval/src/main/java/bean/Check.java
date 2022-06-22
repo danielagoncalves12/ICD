@@ -37,11 +37,9 @@ public class Check {
 		}
 	}
 
-	public static HashMap<String, String> profile(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, ParserConfigurationException {
+	public static HashMap<String, String> profile(String username) throws ServletException, IOException, ParserConfigurationException {
 
 		HashMap<String, String> profile = new HashMap<>();
-		String username = username(request, response);
-		
 		if (!username.equals("")) {
 			
 			String profileInfo = new User().sendRequestProfileInfo(username);

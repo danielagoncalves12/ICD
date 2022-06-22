@@ -135,21 +135,25 @@ public class Profile {
 			e.printStackTrace(); 
 		}
 		
-		String filename = nodePicture.getTextContent();
-		BufferedImage image;
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		String img = null;
-		
-		try {
-			image = ImageIO.read(new File("src/main/webapp/pictures/" + filename));
-			ImageIO.write(image, "png", out);
-			byte[] array = out.toByteArray();
-			img = Base64.getEncoder().encodeToString(array);
+		if (nodePicture != null) {
+			String filename = nodePicture.getTextContent();
+			BufferedImage image;
+			ByteArrayOutputStream out = new ByteArrayOutputStream();			
 			
-		} catch (IOException e) {
-			e.printStackTrace();
+			try {
+				image = ImageIO.read(new File("src/main/webapp/pictures/" + filename));
+				ImageIO.write(image, "png", out);
+				byte[] array = out.toByteArray();
+				img = Base64.getEncoder().encodeToString(array);
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			return "";
 		}
-
+				
 		return img;
 	}
 	
@@ -179,6 +183,7 @@ public class Profile {
 			e.printStackTrace(); 
 		}
 		
+		if (nodeName == null) return "Jogador não encontrado";		
 		return nodeName.getTextContent();
 	}
 	
@@ -208,6 +213,7 @@ public class Profile {
 			e.printStackTrace(); 
 		}
 		
+		if (nodeColor == null) return "#000000";	
 		return nodeColor.getTextContent();
 	}
 	
@@ -237,6 +243,7 @@ public class Profile {
 			e.printStackTrace(); 
 		}
 		
+		if (nodeDate == null) return "2022-06-22";
 		return nodeDate.getTextContent();
 	}
 	
@@ -266,6 +273,7 @@ public class Profile {
 			e.printStackTrace(); 
 		}
 		
+		if (nodeWin == null) return "0";
 		return nodeWin.getTextContent();
 	}
 	
@@ -295,6 +303,33 @@ public class Profile {
 		} catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}
+		return players;
+	}
+	
+	public static ArrayList<String> getAllPlayersUsername() {
+
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        DocumentBuilder builder;
+        Document doc = null;
+        ArrayList<String> players = new ArrayList<>();
+        
+		try {
+			builder = factory.newDocumentBuilder();
+			doc = builder.parse(dataBasePath);
+			
+			XPath xPath = XPathFactory.newInstance().newXPath();		
+	        NodeList nodePlayers = (NodeList) xPath.compile("//Player/@Username").evaluate(doc, XPathConstants.NODESET);
+
+			for (int i = 0; i < nodePlayers.getLength(); i++) {
+				String username = nodePlayers.item(i).getNodeValue();
+				players.add(username);
+			}		
+			
+		} catch (XPathExpressionException | SAXException | IOException | ParserConfigurationException e) {
+			e.printStackTrace();
+		}
+		
 		return players;
 	}
 	

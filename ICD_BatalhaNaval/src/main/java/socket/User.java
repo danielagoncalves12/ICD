@@ -363,4 +363,12 @@ public class User {
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 
     }
+    
+public String sendRequestPlayers() throws ParserConfigurationException, IOException {
+    	
+    	os.println(MessageCreator.messageGetPlayers());
+		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
+		if (reply == null) return null;
+		return MessageProcessor.process(reply); 
+    }
 }
