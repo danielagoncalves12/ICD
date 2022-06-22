@@ -350,7 +350,7 @@ public class Profile {
 	        String query = "//Player[@Username='" + username + "']/AverageTime";
 	        Node nodeTime = (Node) xPath.compile(query).evaluate(doc, XPathConstants.NODE);
 	        
-			int averageTime = Integer.valueOf(nodeTime.getTextContent());
+			double averageTime = Double.valueOf(nodeTime.getTextContent());
 			
 			if (averageTime == 0) {
 				nodeTime.setTextContent(String.valueOf(time)); 

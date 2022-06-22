@@ -28,6 +28,8 @@ public class GameView {
 	
 	public static String viewBoard(String board) {
 		
+		// Numeros e Letras do tabuleiro
+		
 		String path = "<img src='resources/dez.png' />";
 		board = board.replaceFirst("10", path);
 		
@@ -47,12 +49,17 @@ public class GameView {
 			path = "<img src='resources/" + str + ".png' />";
 			board = board.replaceAll(str, path);		
 		}
-		
 		path = "<img src='resources/num.png'/>";
 		board = board.replaceFirst("C", path); 
 		
+		// Espacos, navios e tiros
+		
 		board = board.replaceAll("(\r\n|\n)", "<br>");
 		board = board.replaceAll("x", "<img src='resources/found_empty.png'/>");
+		
+		//board = board.replaceAll(" ", "<button type='submit' style='background:url(resources/not_found.png); width:36px; height:36px; display:in-line; color: inherit;"
+		//		+ "border: none; padding: 0; font: inherit; cursor: pointer; outline: inherit;' name='position' type='submit' value='5F'></button>");
+		
 		board = board.replaceAll(" ", "<img src='resources/not_found.png'/>");
 		board = board.replaceAll("(C|S|P|N)", "<img src='resources/ship.png'/>");
 		board = board.replaceAll("(Q|W|O|R)", "<img src='resources/not_found.png'/>");	

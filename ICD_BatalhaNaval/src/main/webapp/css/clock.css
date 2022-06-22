@@ -1,0 +1,92 @@
+@charset "ISO-8859-1";
+
+
+button[data-setter]:hover { opacity: 0.5; }
+.setters {
+  position: absolute;
+  left: 85px;
+  top: 75px;
+}
+.minutes-set {
+  float: left;
+  margin-right: 38px;
+}
+.seconds-set { float: right; }
+.controlls {
+  display: relative;
+  top:100px;
+}
+
+.wrapper{
+    position: relative;
+    width: 70px;
+    height: 70px;
+}
+.text{
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    color: white;
+}
+
+.display-remain-time {
+  font-family: 'Roboto';
+  font-weight: 100;
+  font-size: 20px;
+  color: rgb(68, 79, 145);
+}
+#pause {
+  outline: none;
+  background: transparent;
+  border: none;
+  margin-top: 10px;
+  width: 50px;
+  height: 50px;
+  position: relative;
+}
+.play::before {
+  display: block;
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 16px;
+  border-top: 15px solid transparent;
+  border-bottom: 15px solid transparent;
+  border-left: 22px solid #567dcc;
+}
+.pause::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  width: 15px;
+  height: 30px;
+  background-color: transparent;
+  border-radius: 1px;
+  border: 5px solid #567dcc;
+  border-top: none;
+  border-bottom: none;
+}
+#pause:hover { opacity: 0.8; }
+.e-c-base {
+  fill: none;
+  stroke: #acc7e8;
+  stroke-width: 7px
+}
+.e-c-progress {
+  fill: none;
+  stroke: rgb(68, 79, 145);
+  stroke-width: 10px;
+  transition: stroke-dashoffset 0.7s;
+}
+.e-c-pointer {
+  fill: #FFF;
+  stroke: #3367a6;
+  stroke-width: 8px;
+}
+#e-pointer { transition: transform 0.7s; }

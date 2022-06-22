@@ -301,10 +301,10 @@ public class GameModel {
 		play2 = false;
 			
 		// Verificar se o jogador ganhou apos a jogada
-		if (checkWin(1)) return "O jogador " + Profile.getName(username1) + " venceu!! Encontrou todos os navios!";
-		if (checkWin(2)) return "O jogador " + Profile.getName(username2) + " venceu!! Encontrou todos os navios!";
+		if (checkWin(1)) return "O jogador " + Profile.getName(username1) + " venceu!!<br>Encontrou todos os navios!";
+		if (checkWin(2)) return "O jogador " + Profile.getName(username2) + " venceu!!<br>Encontrou todos os navios!";
 		
-		return "Resultado: " + (
+		return "<b>Resultado: </b>" + (
 			   (state == ShipType.EMPTYHIDDEN) ? "Tiro no mar!" 
 			 : (state == ShipType.TYPE1HIDDEN) ? "Porta-avioes atingido!"
 			 : (state == ShipType.TYPE2HIDDEN) ? "Navio-tanque atingido!"

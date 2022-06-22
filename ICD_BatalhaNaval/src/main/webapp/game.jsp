@@ -4,6 +4,8 @@
 <meta charset="ISO-8859-1">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="css/game_styles.css">
+<link rel="stylesheet" href="css/clock.css">
+
 <title>Batalha Naval</title>
 
 </head>
@@ -34,19 +36,20 @@ String myBoard = user.sendRequestBoard(username, "true");
 String anotherBoard = user.sendRequestBoard(username, "false");
 %>
 
-
-<div style="border-radius:5%; background-color: rgba(108, 122, 186, 0.6); text-align:center; width:70%" class="center">
+<br>
+<div style="border-radius:5%; box-shadow: inset 0px 0px 78px 3px rgba(0,0,0,0.73); background-color: rgba(101, 149, 207, 0.8); text-align:center; width:70%" class="center">
 
 	<br>
 	<img src="images/titulo.png" width="300px"/>
-	
-	<hr style="width: 90%"/>
-	<div style="width: 100%; overflow: hidden; text-align: center" class="center">
+
+	<div style="background-color: rgba(91, 148, 217, 0.8); box-shadow: inset 0px 0px 78px 3px rgba(0,0,0,0.73); width: 100%; overflow: hidden; text-align: center" class="center">
 	
 		<div class="center" style="text-align:left; padding: 1%; width: 51%; float: left;"> 
 		
-			<div class="center" style="text-align: center; width:29%; float:left">
-				<img style="object-fit:cover; border: 2px solid #00008B;" src="data:image/png;base64,<%=profile.get("Picture")%>" width="100px" height="100px"/>
+			<div class="center" style="padding-top: 10px; text-align: center; width:29%; float:left">
+				<img style="box-shadow: 0px 20px 0px -10px rgba(91, 148, 217, 0.8), 0px -20px 0px -10px rgba(91, 148, 217, 0.8),
+				20px 0px 0px -10px rgba(91, 148, 217, 0.8), -20px 0px 0px -10px rgba(91, 148, 217, 0.8), 0px 0px 0px 10px #374980,
+				2px 2px 11px 7px #5b6da3;" src="data:image/png;base64,<%=profile.get("Picture")%>" width="100px" height="100px"/>
 			</div>
 			
 			<div class="center" style="width:70%; float:right">
@@ -56,9 +59,9 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 			</div>			
 
 		</div>
-		<div class="center" style="text-align:left; height:130px; width: 42%;  padding: 2%; float: right;"> 
+		<div class="center" style="text-align:left; height:130px; width: 42%;  padding: 1%; float: right;"> 
 			
-			<div class="center" style="width:100%; float:left">
+			<div class="center" style="width:40%; float:left">
 				
 				<!-- FORM JOGADA -->
 				<form method="POST" action="PlayServlet"><br>
@@ -66,18 +69,40 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 					<span>Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
 					<input type="submit" name="play" id="play" value="Jogar">
 				</form>
-					
-				<a href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
+				
+				<div id="time" class="circle wrapper">
+				
+					<svg width="70" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+					     <g transform="translate(110,110)">
+					        <circle r="100" class="e-c-base"/>
+					        <g transform="rotate(-90)">
+					           <circle r="100" class="e-c-progress"/>
+					           <g id="e-pointer">
+					              <circle cx="100" cy="0" r="8" class="e-c-pointer"/>
+					           </g>
+					        </g>
+					     </g>
+					</svg>
+
+					<div class="text">
+						<div class="controlls">
+						  <div class="display-remain-time">00:30</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="center" style="width:59%; float:right">
+								
+				<br><span style="float:left;"><%=result%></span><br>
+				<a style="float:left;" href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
 				
 				<br><br>
-				<span>Resultado: <%=result%></span>
+				
 			</div>
 		</div>
-		<br>
 
 	</div>
-	<br>
-	<hr style="width: 90%">
 	<br>
 	<div style="text-align:center; width: 100%;">
 	    <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
@@ -96,12 +121,13 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 	if (state === "ended") {
 		
 		document.getElementById('position').disabled = true;
-		document.getElementById('position').style.display = 'block';
         document.getElementById('position').style.display = 'none';
 		
 		document.getElementById('play').disabled = true;
-		document.getElementById('play').style.display = 'block';
         document.getElementById('play').style.display = 'none';
+        
+        document.getElementById('time').disabled = true;
+        document.getElementById('time').style.display = 'none';
         
         if (<%=(boolean) session.getAttribute("clean")%> == true) {
         	<%session.removeAttribute("result");%>
@@ -112,11 +138,12 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 	}
 	else {
 		document.getElementById('exit').disabled = true;
-		document.getElementById('exit').style.display = 'block';
         document.getElementById('exit').style.display = 'none';
 	}
 
 </script>
+
+<script src="js/clock.js"></script>
 
 </body>
 </html>

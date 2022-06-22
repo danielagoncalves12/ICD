@@ -24,6 +24,7 @@
 	<link rel="stylesheet" type="text/css" href="css/util.css">
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
 </head>
 <body>
 	
@@ -60,7 +61,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					
 					<p><b>Nome público:</b> <%=profile.get("Name")%></p>
 					<p><b>Idade:</b> <%=age%> anos</p>
-					<p><b>Cor favorita:</b> <%=profile.get("Color")%></p>
+					<!--  <p><b>Cor favorita:</b> <%=profile.get("Color")%></p> --> 
 					<p><b>Total de vitórias:</b> <%=profile.get("WinsNum")%></p>
 					
 					<div class="container-login100-form-btn">
@@ -76,19 +77,22 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 				<!-- Procurar Jogo -->
 				<div style="padding: 10px; padding-left: 50px">
 				
-					<div style="height: 50%">
+					<div style="height: 50%; text-align:center">
 						<span class="login100-form-title" style="padding:12px">
 							Batalha Naval!
 						</span>
 						
 						<h6>Procurar um jogador: </h6>
-						<input style="border: 1px solid black" type="text"/>
+						<div class="ui-widget">
+						  <input style="margin-top:10px; border: 1px solid black" type="text" id="tags">
+						</div>						
 		
 						<div class="container-login100-form-btn" style="margin: auto; width: 80%">
-							<a style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Play</a>
-							<!--<input href="game.jsp" class="login100-form-btn" type = "submit" value = "Jogar!"/>  -->
-						</div>
-					</div>				
+							<a id="link" onclick="javascript:clickAndDisable(this);" style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Play</a>
+							<p id="searching" style="color: red; display: none">A procurar um oponente...</p>
+						</div>				
+						
+					</div>	
 				</div>
 				<br>
 							
@@ -101,12 +105,12 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					    <th style="text-align:left; background-color: #9e9e9e; color: white"> Pos.</th>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white">Jogador</th>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white">Vitorias</th>
-					    <th>  </th>
+					    <th style="border: 1px solid #9e9e9e"> </th>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white"> Pos.</th>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white">Jogador</th>
 					    <th style="text-align:left; background-color: #9e9e9e; color: white">Vitorias</th>
 					  </tr>
-					  <tr>
+					  <tr style="border: 1px solid #9e9e9e">
 					    <td style="text-align:left"> 1º</td>
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[0][1]%>" width="44px" height="44px"/> <%=players[0][0]%></td>
 					    <td><%=players[0][2]%></td>
@@ -115,7 +119,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[5][1]%>" width="44px" height="44px"/> <%=players[5][0]%></td>
 					    <td><%=players[5][2]%></td>
 					  </tr>
-					  <tr>
+					  <tr style="border: 1px solid #9e9e9e">
 					    <td style="text-align:left"> 2º</td>
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[1][1]%>" width="44px" height="44px"/> <%=players[1][0]%></td>
 					    <td><%=players[1][2]%></td>
@@ -124,7 +128,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 						<td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[6][1]%>" width="44px" height="44px"/> <%=players[6][0]%></td>
 					    <td><%=players[6][2]%></td>
 					  </tr>
-					  <tr>
+					  <tr style="border: 1px solid #9e9e9e">
 					    <td style="text-align:left"> 3º</td>
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[2][1]%>"width="44px" height="44px"/> <%=players[2][0]%></td>
 					    <td><%=players[2][2]%></td>
@@ -133,7 +137,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[7][1]%>" width="44px" height="44px"/> <%=players[7][0]%></td>
 					    <td><%=players[7][2]%></td>
 					  </tr>
-					  <tr>
+					  <tr style="border: 1px solid #9e9e9e">
 					    <td style="text-align:left"> 4º</td>
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[3][1]%>" width="44px" height="44px"/> <%=players[3][0]%></td>
 					    <td><%=players[3][2]%></td>
@@ -142,7 +146,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[8][1]%>" width="44px" height="44px"/> <%=players[8][0]%></td>
 					    <td><%=players[8][2]%></td>
 					  </tr>
-					  <tr>
+					  <tr style="border: 1px solid #9e9e9e">
 					    <td style="text-align:left"> 5º</td>
 					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[4][1]%>" width="44px" height="44px"/> <%=players[4][0]%></td>
 					    <td><%=players[4][2]%></td>
@@ -158,8 +162,37 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 		</div>
 	</div>
 
-<!--===============================================================================================-->	
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript">
+	
+	    function clickAndDisable(link) {
+	    	document.getElementById("searching").style.display = "block";
+			link.onclick = function(event) {
+		        event.preventDefault();       
+			}
+		}   
+	</script>
+	
+	<!--===============================================================================================-->	
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
+	
+  <script>
+  $(function() {
+    var availableTags = [
+      "ActionScript",
+      "AppleScript",
+      "Asp",
+      "BASIC",
+      "C"
+    ];
+    $( "#tags" ).autocomplete({
+      source: availableTags
+    });
+  } );
+  </script>
+
+
 <!--===============================================================================================-->
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>

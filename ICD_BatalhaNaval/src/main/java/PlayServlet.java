@@ -1,5 +1,6 @@
 import java.io.IOException;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -12,6 +13,7 @@ import socket.User;
  * Servlet implementation class DirectServlet
  */
 @WebServlet("/PlayServlet")
+//@MultipartConfig
 public class PlayServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
