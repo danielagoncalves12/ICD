@@ -1,13 +1,12 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><Data xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="PlayerInfo.xsd">
 	<Player Username="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
 		<Color>#e963c0</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>73</WinsNumber>
-		<AverageTime>5.717899319261646</AverageTime>
+		<WinsNumber>42</WinsNumber>
+		<AverageTime>18.310508294636186</AverageTime>
 	</Player>
 	<Player Username="Nick">
 		<Name>Nick</Name>
@@ -15,14 +14,14 @@
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>64</WinsNumber>
-		<AverageTime>8.717525764393947</AverageTime>
+		<WinsNumber>39</WinsNumber>
+		<AverageTime>21.727753755234644</AverageTime>
 	</Player>
 	<Player Username="GoingOn">
 		<Name>GoingOn</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2010-05-29</Date>
 		<Picture>default.png</Picture>
 		<WinsNumber>21</WinsNumber>
 		<AverageTime>14</AverageTime>
@@ -31,7 +30,7 @@
 		<Name>xXTryHardXx</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2000-05-29</Date>
 		<Picture>icd.png</Picture>
 		<WinsNumber>11</WinsNumber>
 		<AverageTime>5</AverageTime>
@@ -40,7 +39,7 @@
 		<Name>reallu</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2002-05-29</Date>
 		<Picture>dog.jpg</Picture>
 		<WinsNumber>5</WinsNumber>
 		<AverageTime>10</AverageTime>
@@ -49,7 +48,7 @@
 		<Name>Anya</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2003-05-29</Date>
 		<Picture>girl.png</Picture>
 		<WinsNumber>2</WinsNumber>
 		<AverageTime>8</AverageTime>
@@ -58,7 +57,7 @@
 		<Name>Mapped</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2002-05-29</Date>
 		<Picture>mapped.png</Picture>
 		<WinsNumber>12</WinsNumber>
 		<AverageTime>4</AverageTime>
@@ -67,7 +66,7 @@
 		<Name>Pandora</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2006-05-29</Date>
 		<Picture>pandora.png</Picture>
 		<WinsNumber>12</WinsNumber>
 		<AverageTime>7</AverageTime>
@@ -76,7 +75,7 @@
 		<Name>Gamerz19</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#8892ea</Color>
-		<Date>2022-05-29</Date>
+		<Date>2005-05-29</Date>
 		<Picture>logo.png</Picture>
 		<WinsNumber>4</WinsNumber>
 		<AverageTime>6</AverageTime>
@@ -94,7 +93,7 @@
 		<Name>JohnGames</Name>
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#52e2d8</Color>
-		<Date>2022-06-14</Date>
+		<Date>2001-06-14</Date>
 		<Picture>shrek.png</Picture>
 		<WinsNumber>14</WinsNumber>
 		<AverageTime>0</AverageTime>
@@ -103,7 +102,7 @@
 		<Name>Dann</Name>
 		<Password>E9F49E0ADDDF4EDBB14C2832DA3283A2</Password>
 		<Color>#000000</Color>
-		<Date>2022-06-06</Date>
+		<Date>2012-06-06</Date>
 		<Picture>default.png</Picture>
 		<WinsNumber>2</WinsNumber>
 		<AverageTime>5</AverageTime>
@@ -117,4 +116,4 @@
 		<WinsNumber>0</WinsNumber>
 		<AverageTime>0</AverageTime>
 	</Player>
-</Data>
+<Player Username="Gabby"><Name>Gabby</Name><Password>A9F05641DE6423D839C9F4A164FCCE7D</Password><Color>#cf8929</Color><Date>2008-05-12</Date><Picture>Gabby.png</Picture><WinsNumber>0</WinsNumber><AverageTime>0</AverageTime></Player></Data>

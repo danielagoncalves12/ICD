@@ -12,7 +12,7 @@ import socket.User;
 public class Check {
 	
 	public static String username(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
+
 		// Obter o username guardado na sessao
 		HttpSession session = request.getSession(true);
 		String username = (String) session.getAttribute("username");
@@ -28,11 +28,11 @@ public class Check {
 				   if (cookie.getName().equals("username")) 
 					   username = cookie.getValue();			
 		}
-		
+
 		if (username != null) return username;
 		else {
-			session.invalidate();
-			request.getRequestDispatcher("/login.html").forward(request, response);
+			request.getSession().invalidate();
+			request.getRequestDispatcher("/login.jsp").forward(request, response);
 			return "";
 		}
 	}

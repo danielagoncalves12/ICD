@@ -29,7 +29,7 @@
 	
 <% 
 String username = Check.username(request, response);
-HashMap<String, String> profile = Check.profile(request, response);
+HashMap<String, String> profile = Check.profile(username);
 
 String rgbColor = Profile.hex2Rgb(profile.get("Color"));
 

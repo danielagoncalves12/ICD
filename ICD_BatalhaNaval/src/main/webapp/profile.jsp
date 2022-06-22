@@ -30,6 +30,7 @@
 	
 <% 
 // Obter dados
+String validate = Check.username(request, response);
 String username = (String) session.getAttribute("search_username");
 HashMap<String, String> profile = Check.profile(username);
 
@@ -60,7 +61,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 					<p><b>Total de vitórias:</b> <%=profile.get("WinsNum")%></p>
 
 					<div class="container-login100-form-btn" style="padding-top:8px">
-						<a id="profile" style="padding-right:20px; padding-left:20px; font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="index.jsp">Regressar ao perfil</a>					
+						<a id="profile" style="padding-right:20px; padding-left:20px; font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="index.jsp">Regressar ao seu Perfil</a>					
 					</div>
 				
 				</div>

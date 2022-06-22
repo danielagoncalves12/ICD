@@ -12,7 +12,7 @@
 <body>
 <% 
 String username = Check.username(request, response);
-HashMap<String, String> profile  = Check.profile(request, response);
+HashMap<String, String> profile  = Check.profile(username);
 String name = profile.get("Name");
 %>
 
@@ -99,7 +99,7 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 								
 				<br><span style="float:left;"><%=result%></span><br><br><br>
 				<a style="float:left;" href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
-				
+			
 				<br>
 				
 			</div>
@@ -109,9 +109,13 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 	<br>
 	<div style="text-align:center; width: 100%;">
 	    <div style="width: 50%; height: 450px; float: left; font-size: 0px"> 
+	    
+	    	<span style="font-size:18px; font-weight: bold">O seu Tabuleiro</span><br>
 	        <%=GameView.viewBoardView(myBoard)%>
 	    </div>
 	    <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
+	    
+	    	<span style="font-size:18px; font-weight: bold;">Tabuleiro Adversário</span><br>
 	        <%=GameView.viewBoard(anotherBoard)%>  
 	    </div>
 	</div>

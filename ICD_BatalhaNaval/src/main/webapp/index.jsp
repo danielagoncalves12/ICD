@@ -51,7 +51,7 @@ String[] playersList  = XMLUtils.stringToArray(playersListStr);
 	
 	<div class="limiter">
 		<div class="container-login100">
-			<div class="wrap-login100" style="padding-top:50px">
+			<div class="wrap-login100" style="padding-top:50px; padding-left: 95px; padding-right: 95px">
 
 				<div style="width:50%; text-align:center; border-radius:20px; padding:10px; padding-left:80px; padding-right:80px; line-height: 20px;
 background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
@@ -97,7 +97,8 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 						<br>
 						<h6>Introduza o nome: </h6>
 						<form action="SearchServlet" method="POST">
-							<input style="margin-top:10px; border: 1px solid black" type="text" name="search_name" id="tags"/><br><br>	
+							<input type="hidden" name="validate" value="<%=username%>"/>
+							<input type="text" style="margin-top:10px; border: 1px solid black" name="search_name" id="tags"/><br><br>	
 							<input type="submit" id="profile" style="padding-right:0px; padding-left:0px; font-size: 13px; background-color:#8b989e" class="login100-form-btn" value="Ver Perfil"/>
 						</form>
 					</div>	
@@ -106,7 +107,7 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 							
 				<div style="width: 100%; text-align: center">
 					<br><hr>
-					<h4 style="text-decoration: underline">Quadro de honra</h4><br>
+					<h4>Quadro de honra</h4><br>
 					
 					<table style="width: 100%">
 					  <tr>
