@@ -28,39 +28,14 @@ function changeWholeTime(seconds) {
 }
 
 function pauseTimer(event){
-
-    this.classList.remove('pause');
-    this.classList.add('play');
-    clearInterval(intervalTimer);
-  
+    clearInterval(intervalTimer); 
 }
 
-function timer(seconds) { //counts time, takes seconds
-	let remainTime = Date.now() + (seconds * 1000);
-	displayTimeLeft(seconds);
-
-	intervalTimer = setInterval(function() {
-		timeLeft = Math.round((remainTime - Date.now()) / 1000);
-		if (timeLeft < 0) {
-			clearInterval(intervalTimer);
-			isStarted = false;
-			setterBtns.forEach(function(btn) {
-				btn.disabled = false;
-				btn.style.opacity = 1;
-			});
-			displayTimeLeft(wholeTime);
-			displayOutput.textContent = "00:00";
-			return;
-		}
-		displayTimeLeft(timeLeft);
-	}, 1000);
-}
 window.onload = function() {
+
 	if (isStarted === false) {
 		timer(wholeTime);
 		isStarted = true;
-		this.classList.remove('play');
-		this.classList.add('pause');
 
 		setterBtns.forEach(function(btn) {
 			btn.disabled = true;

@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <section name="Workbench">
 	<section name="org.eclipse.ui.texteditor.FindReplaceDialog">
-		<item key="selection" value="Listener"/>
+		<item key="selection" value="/Nick"/>
 		<item key="wrap" value="true"/>
 		<item key="casesensitive" value="false"/>
 		<item key="wholeword" value="false"/>
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="login-"/>
+			<item value="Nickname&quot;)"/>
+			<item value="nickname"/>
 			<item value="img"/>
 			<item value="padding"/>
 			<item value="end"/>
 			<item value="listener"/>
 			<item value="connect"/>
-			<item value="fileName"/>
-			<item value="table"/>
-			<item value="hover"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>

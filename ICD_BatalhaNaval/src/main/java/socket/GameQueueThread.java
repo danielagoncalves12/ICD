@@ -24,15 +24,9 @@ public class GameQueueThread extends Thread {
 		ArrayList<String> activeUsers = HandleConnectionThread.activeUsers;
 		
 		while (true) {
-			
-			//System.out.println("Jogos ativos: " + activeGames);
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			
-			if (activeUsers.size() >= 2) {
+
+			int numPlayers = activeUsers.size();
+			if (numPlayers >= 2) {
 				
 				String username1 = (String) activeUsers.get(0); // Username do jogador 1
 				String username2 = (String) activeUsers.get(1); // Username do jogador 2
@@ -41,8 +35,18 @@ public class GameQueueThread extends Thread {
 
 				System.out.println("Iniciar jogo entre " + username1 + " e " + username2);
 				
-				activeGames.add(new GameModel(username1, username2, new Semaphore(0)));
-				semaphore.release(2);
+				activeGames.add(new GameModel(username1, username2));
+				try {
+					Thread.sleep(500);
+					semaphore.release(2);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}				
+			}
+			try {
+				Thread.sleep(500);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
 			}
 		}
 	}

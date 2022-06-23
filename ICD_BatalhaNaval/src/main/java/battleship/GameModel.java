@@ -14,7 +14,7 @@ import socket.GameQueueThread;
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 1;
+	private int MAXPOINTS = 30;
 	
 	// Variaveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
@@ -30,14 +30,15 @@ public class GameModel {
 	private ArrayList<Long> timesPlayer2 = new ArrayList<>();
 	private long time1 = System.currentTimeMillis();
 	private long time2 = System.currentTimeMillis();
+	private TimerThread timer;
 	
 	// Sincronizacao
 	private Semaphore wait;
-	private boolean play1, play2;
+	public boolean play1, play2;
 	
-	public GameModel(String username1, String username2, Semaphore wait) {
+	public GameModel(String username1, String username2) {
 		
-		this.wait = wait;
+		this.wait = new Semaphore(0);
 		
 		// Identificacao dos jogadores
 		this.username1 = username1;
@@ -68,6 +69,9 @@ public class GameModel {
 		// Pergunta ao jogador, pelas posicoes dos navios
 		randomShipPosition(username1);
 		randomShipPosition(username2);
+		
+		timer = new TimerThread(this);
+		timer.start();
 	}
 
 	public ArrayList<String> getUsernames() {
@@ -108,17 +112,12 @@ public class GameModel {
 			for (int j = 0; j < board[i].length; j++) {
 				
 				int cell = board[i][j];
-				
-				// Vazio
-				if (cell == ShipType.EMPTY)     positionEmpty.add(Arrays.asList(i, j));
-				// Porta-avioes
-				if (cell == ShipType.TYPE1SHOW) positionType1.add(Arrays.asList(i, j));	
-				// Navio-tanque
-				if (cell == ShipType.TYPE2SHOW) positionType2.add(Arrays.asList(i, j));				
-				// Contratorpedeiro
-				if (cell == ShipType.TYPE3SHOW) positionType3.add(Arrays.asList(i, j));						
-				// Submarino
-				if (cell == ShipType.TYPE4SHOW) positionType4.add(Arrays.asList(i, j));			
+			
+				if (cell == ShipType.EMPTY)     positionEmpty.add(Arrays.asList(i, j)); // Vazio
+				if (cell == ShipType.TYPE1SHOW) positionType1.add(Arrays.asList(i, j));	// Porta-avioes
+				if (cell == ShipType.TYPE2SHOW) positionType2.add(Arrays.asList(i, j));	// Navio-tanque
+				if (cell == ShipType.TYPE3SHOW) positionType3.add(Arrays.asList(i, j)); // Contratorpedeiro		
+				if (cell == ShipType.TYPE4SHOW) positionType4.add(Arrays.asList(i, j));	// Submarino		
 			}
 		}
 			
@@ -129,6 +128,19 @@ public class GameModel {
 		dic.put("Destroyer", positionType3);
 		dic.put("Submarine", positionType4);
 
+		if (end) {
+			if (GameQueueThread.activeGames.contains(this))
+				GameQueueThread.activeGames.remove(this);
+			
+			timer.interrupt();
+			Profile.updateAverageTime(username1, player);
+			Profile.updateAverageTime(username2, player);
+			Profile.updateWinsNumber(username);
+			Profile.updateHonorBoard();
+			
+			return dic;
+		}
+		
 		if (checkWin(1)) {
 			
 			if (end) {
@@ -172,7 +184,7 @@ public class GameModel {
 	
 	/**
 	 * Receber o tabuleiro, pela vista do jogador, as posicoes dos navios sao reveladas
-	 * visualmente para o jogador. Esta funcao � usada unicamente para apresentar o 
+	 * visualmente para o jogador. Esta funcao e usada unicamente para apresentar o 
 	 * proprio tabuleiro para o jogador.
 	 * 
 	 * @param username
@@ -252,12 +264,14 @@ public class GameModel {
 		int player = getPlayerNumber(username);
 		int line, column;
 	
+		// Contagem do tempo de jogada do jogador 1
 		if (player == 1) { 
 			play1 = true;
 			time1 = (int) ((System.currentTimeMillis() - time1) / 1000);
 			timesPlayer1.add(time1);
 			time1 = System.currentTimeMillis();
 		}
+		// Contagem do tempo de jogada do jogador 2
 		if (player == 2) {
 			play2 = true;
 			time2 = (int) ((System.currentTimeMillis() - time2) / 1000);
@@ -266,8 +280,14 @@ public class GameModel {
 		}
 			
 		// Se os dois jogadores ja enviaram jogada
-		if (play1 && play2) wait.release(2);
+		if (play1 && play2) {
+			timer.interrupt();
+			wait.release(2);
+			timer = new TimerThread(this);
+			timer.start();
+		}
 
+		// Inicio - Aplicacao da jogada
 		if (choice.length() == 2) {
 			line   = Character.getNumericValue(choice.charAt(0)) - 1;
 			column = columnValue.get(Character.toUpperCase(choice.charAt(1)) + "");
@@ -291,16 +311,26 @@ public class GameModel {
 							  (state == ShipType.TYPE3HIDDEN) ? ShipType.TYPE3SHOW :  // Encontrou Contratorpedeiro
 							  (state == ShipType.TYPE4HIDDEN) ? ShipType.TYPE4SHOW :  // Encontrou Submarino
 							  board[line][column];
-
+		// Final - Aplicacao da jogada
+		
+		// Espera passiva, aguarda pela jogada do outro jogador
 		try {
 			wait.acquire(1);
+			Thread.sleep(500);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		
+		// Reset das variaveis de jogada 
 		play1 = false;
 		play2 = false;
 			
+		// O jogo terminou a meio porque o adversario nao jogou a tempo
+		if (end) return "<b>Terminado: </b>Ganhaste o jogo!<br>O tempo de jogada do adversario excedeu.";
+		
 		// Verificar se o jogador ganhou apos a jogada
+		System.out.println(checkWin(1) + ", " + username);
+		System.out.println(checkWin(2) + ", " + username);
 		if (checkWin(1)) return "O jogador " + Profile.getName(username1) + " venceu!!<br>Encontrou todos os navios!";
 		if (checkWin(2)) return "O jogador " + Profile.getName(username2) + " venceu!!<br>Encontrou todos os navios!";
 		
@@ -317,8 +347,8 @@ public class GameModel {
 		
 		int player = getPlayerNumber(username);
 		String letters = "ABCDEFGHIJ";
-		int[] shipSizes  = {5, 4, 3, 2};  // Dimens�o de cada navio
-		int[] shipNumber = {1, 2, 3, 4};  // N�mero de navios a posicionar de cada tipo
+		int[] shipSizes  = {5, 4, 3, 2};  // Dimensao de cada navio
+		int[] shipNumber = {1, 2, 3, 4};  // Numero de navios a posicionar de cada tipo
 		int[] shipSymbol = {ShipType.TYPE1HIDDEN, ShipType.TYPE2HIDDEN, ShipType.TYPE3HIDDEN, ShipType.TYPE4HIDDEN};
 
 		int[][] board = player == 1 ? boardPlayer1 : boardPlayer2;
@@ -400,7 +430,7 @@ public class GameModel {
 				return true;
 			}
 		}	
-		System.out.println("Erro: Sintaxe inv�lida");		
+		System.out.println("Erro: Sintaxe invalida");		
 		return false;
 	}
 
@@ -435,5 +465,11 @@ public class GameModel {
 		
 		if (player == 1) return String.valueOf(pointsPlayer2);
 		else return String.valueOf(pointsPlayer1);		
+	}
+	
+	public void close() {
+		
+		end = true;
+		wait.release();
 	}
 }

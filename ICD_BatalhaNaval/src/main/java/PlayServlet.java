@@ -40,7 +40,9 @@ public class PlayServlet extends HttpServlet {
 		}
 
 		// Enviar os atributos no request
-		if (result.substring(0, 9).equals("O jogador")) request.getSession(true).setAttribute("state", "ended");
+		if (result.substring(0, 9).equals("O jogador") || result.substring(0, 12).equals("<b>Terminado")) {
+			request.getSession(true).setAttribute("state", "ended");
+		}
 		else request.getSession(true).setAttribute("state", "playing");
 		
 		request.getSession(true).setAttribute("username", username);

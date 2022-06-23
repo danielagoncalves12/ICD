@@ -260,9 +260,14 @@ public class HandleConnectionThread extends Thread {
 	private void findGame(String request) throws ParserConfigurationException, IOException {
 
 		String username = MessageProcessor.process(request).split(",")[1];	
-		if (!activeUsers.contains(username)) activeUsers.add(username);
+		if (!activeUsers.contains(username)) {
+			activeUsers.add(username);
+			System.out.println("A procura de jogo " + username);
+			System.out.println("ActiveUsers -> " + activeUsers);
+		}
 		else {
 			os.println(MessageCreator.messageFind(username, "ERROR"));
+			System.out.println("Ja estou a procura de jogo " + username);
 			return;
 		}
 		
@@ -271,6 +276,7 @@ public class HandleConnectionThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
+		System.out.println("Jogo encontrado para " + username);
 		os.println(MessageCreator.messageFind(username, "DONE"));
 	}
 
