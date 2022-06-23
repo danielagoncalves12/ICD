@@ -76,7 +76,7 @@ public class HandleConnectionThread extends Thread {
 
 	public void sendResponse(String request) throws ParserConfigurationException, IOException {
 
-		System.out.println(request);
+		//System.out.println(request);
 		
 		// Primeiro argumento representa o tipo de pedido
 		String method = MessageProcessor.process(request).split(",")[0]; 
@@ -138,48 +138,50 @@ public class HandleConnectionThread extends Thread {
 
 	private void play(String request) throws ParserConfigurationException {
 		
-		String player   = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
-		String position = MessageProcessor.process(request).split(",")[2]; // Posicao
+		String gameID   = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogo
+		String player   = MessageProcessor.process(request).split(",")[2]; // Identificacao do Jogador
+		String position = MessageProcessor.process(request).split(",")[3]; // Posicao
 		
 		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;
-		GameModel game = null;
+		GameModel gameTarget = null;
 		
-		for (GameModel g : activeGames) {
-			String username1 = g.getUsernames().get(0);
-			String username2 = g.getUsernames().get(1);
+		for (GameModel game : activeGames) {
 			
-			if (player.equals(username1) || player.equals(username2)) {
-				game = g;
+			String id = game.getGameID();
+			
+			if (id.equals(gameID)) {
+				gameTarget = game;
 				break;
 			}
 		}
+		if (gameTarget == null) os.println(MessageCreator.messagePlay(gameID, player, position, "Este jogo já terminou"));
 		
-		String result = game.play(player, position);  // Aplicacao da jogada		
-		os.println(MessageCreator.messagePlay(player, position, result));
+		String result = gameTarget.play(player, position);  // Aplicacao da jogada		
+		os.println(MessageCreator.messagePlay(gameID, player, position, result));
 	}
 	
 	private void board(String request) throws ParserConfigurationException {
 		
-		String player = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogador
-		String view   = MessageProcessor.process(request).split(",")[2]; // Tipo de visualizacao		
+		String gameID = MessageProcessor.process(request).split(",")[1]; // Identificacao do Jogo
+		String player = MessageProcessor.process(request).split(",")[2]; // Identificacao do Jogador
+		String view   = MessageProcessor.process(request).split(",")[3]; // Tipo de visualizacao		
 		
 		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;	
-		GameModel game = null;
+		GameModel gameTarget = null;
 		
-		for (GameModel g : activeGames) {
+		for (GameModel game : activeGames) {
 			
-			String username1 = g.getUsernames().get(0);
-			String username2 = g.getUsernames().get(1);
+			String id = game.getGameID();
 
-			if (player.equals(username1) || player.equals(username2)) {
-				game = g;
+			if (id.equals(gameID)) {
+				gameTarget = game;
 				break;
 			}
 		}
-		
-		HashMap<String, List<List<Integer>>> board = (view.equals("true") ? game.getBoardPositionsView(player)
-				  														  : game.getBoardPositions(player));
-		os.println(MessageCreator.messageBoard(player, view, board));
+	
+		HashMap<String, List<List<Integer>>> board = (view.equals("true") ? gameTarget.getBoardPositionsView(player)
+				  														  : gameTarget.getBoardPositions(player));
+		os.println(MessageCreator.messageBoard(gameID, player, view, board));
 	}
 	
 	private void login(String request) throws ParserConfigurationException {
@@ -276,8 +278,8 @@ public class HandleConnectionThread extends Thread {
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Jogo encontrado para " + username);
-		os.println(MessageCreator.messageFind(username, "DONE"));
+		System.out.println("Jogo encontrado para " + username + ", ID: " + GameQueueThread.getGameID());
+		os.println(MessageCreator.messageFind(username, GameQueueThread.getGameID()));
 	}
 
 	private void upload(String request) throws ParserConfigurationException {

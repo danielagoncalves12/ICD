@@ -15,6 +15,7 @@ public class GameModel {
 
 	// Constantes
 	private int MAXPOINTS = 30;
+	private String gameID;
 	
 	// Variaveis
 	private int[][] boardPlayer1 = new int[10][10]; // Tabuleiro do jogador 1
@@ -36,8 +37,9 @@ public class GameModel {
 	private Semaphore wait;
 	public boolean play1, play2;
 	
-	public GameModel(String username1, String username2) {
-		
+	public GameModel(String gameID, String username1, String username2) {
+
+		this.gameID = gameID;
 		this.wait = new Semaphore(0);
 		
 		// Identificacao dos jogadores
@@ -72,6 +74,10 @@ public class GameModel {
 		
 		timer = new TimerThread(this);
 		timer.start();
+	}
+	
+	public String getGameID() {
+		return this.gameID;
 	}
 
 	public ArrayList<String> getUsernames() {
@@ -329,8 +335,6 @@ public class GameModel {
 		if (end) return "<b>Terminado: </b>Ganhaste o jogo!<br>O tempo de jogada do adversario excedeu.";
 		
 		// Verificar se o jogador ganhou apos a jogada
-		System.out.println(checkWin(1) + ", " + username);
-		System.out.println(checkWin(2) + ", " + username);
 		if (checkWin(1)) return "O jogador " + Profile.getName(username1) + " venceu!!<br>Encontrou todos os navios!";
 		if (checkWin(2)) return "O jogador " + Profile.getName(username2) + " venceu!!<br>Encontrou todos os navios!";
 		
@@ -430,7 +434,7 @@ public class GameModel {
 				return true;
 			}
 		}	
-		System.out.println("Erro: Sintaxe invalida");		
+		//System.out.println("Erro: Sintaxe invalida");
 		return false;
 	}
 

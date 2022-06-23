@@ -11,8 +11,7 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
-	public static String messageGetPlayers() throws ParserConfigurationException {
-		
+	public static String messageGetPlayers() throws ParserConfigurationException {		
 		return messageGetPlayers(null);
 	}
 	
@@ -53,8 +52,7 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);
 	}
 	
-	public static String messageGetProfileInfo (String username) throws ParserConfigurationException {
-		
+	public static String messageGetProfileInfo (String username) throws ParserConfigurationException {		
 		return messageGetProfileInfo(username, null);
 	}
 	
@@ -205,12 +203,12 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);
 	}
 	
-	public static String messageBoard(String player, String view) throws ParserConfigurationException {
+	public static String messageBoard(String gameID, String player, String view) throws ParserConfigurationException {
 		
-		return messageBoard(player, view, null);
+		return messageBoard(gameID, player, view, null);
 	}
 	
-	public static String messageBoard(String player, String view, HashMap<String, List<List<Integer>>> dic) throws ParserConfigurationException {
+	public static String messageBoard(String gameID, String player, String view, HashMap<String, List<List<Integer>>> dic) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -226,6 +224,13 @@ public class MessageCreator {
 
         // Elemento Request
         Element elementRequest = document.createElement("Request");
+        
+        // Elemento GameID
+        if (!gameID.equals("")) {
+	    	Element elementGameID = document.createElement("GameID");
+	    	elementGameID.appendChild(document.createTextNode(gameID));
+	    	elementRequest.appendChild(elementGameID);
+        }
         
         // Elemento Player
         if (!player.equals("")) {
@@ -280,12 +285,12 @@ public class MessageCreator {
         return XMLUtils.documentToString(document);		
 	}
 	
-	public static String messagePlay(String player, String position) throws ParserConfigurationException {
+	public static String messagePlay(String gameID, String player, String position) throws ParserConfigurationException {
 		
-		return messagePlay(player, position, "");
+		return messagePlay(gameID, player, position, "");
 	}
 
-	public static String messagePlay(String player, String position, String result) throws ParserConfigurationException {
+	public static String messagePlay(String gameID, String player, String position, String result) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -301,6 +306,13 @@ public class MessageCreator {
 
         // Elemento Request
         Element elementRequest = document.createElement("Request");
+        
+     // Elemento GameID
+        if (!gameID.equals("")) {
+	    	Element elementGameID = document.createElement("GameID");
+	    	elementGameID.appendChild(document.createTextNode(gameID));
+	    	elementRequest.appendChild(elementGameID);
+        }
         
         // Elemento Player
         if (!player.equals("")) {

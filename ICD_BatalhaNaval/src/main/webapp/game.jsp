@@ -13,11 +13,12 @@
 <% 
 String username = Check.username(request, response);
 HashMap<String, String> profile  = Check.profile(username);
-String name = profile.get("Name");
 %>
 
 <%
 // Atributos
+String gameID = (String) session.getAttribute("game_id");
+
 String result = (String) session.getAttribute("result");
 String state  = (String) session.getAttribute("state");
 User user     = (User) session.getAttribute("user");
@@ -26,14 +27,15 @@ if (user == null) user = new User();
 if (result == null) result = "";
 
 // Primeira vez
-if (state == null) {
-	user.sendRequestGame(username);
+if (state == null) {	
+	gameID = user.sendRequestGame(username);
+	session.setAttribute("game_id", gameID);
 	session.setAttribute("clean", false);
 }
 
 // Ao longo do jogo
-String myBoard = user.sendRequestBoard(username, "true");
-String anotherBoard = user.sendRequestBoard(username, "false");
+String myBoard = user.sendRequestBoard(gameID, username, "true");
+String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 %>
 
 <audio src="resources/background.mp3" autoplay loop></audio>
@@ -56,7 +58,7 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 			</div>
 			
 			<div class="center" style="width:70%; float:right">
-				<h3>Bem-vindo <%=name%> !!</h3>
+				<h3>Bem-vindo <%=profile.get("Name")%> !!</h3>
 				<span>Os teus navios foram distribuidos aleatoriamente pelo tabuleiro.</span>
 				<span>Para vencer acerte em todos os navios inimigos, antes do inimigo descobrir todos os teus navios.</span>
 			</div>			
@@ -68,9 +70,10 @@ String anotherBoard = user.sendRequestBoard(username, "false");
 				
 				<!-- FORM JOGADA -->
 				<form method="POST" action="PlayServlet"><br>
-					<input type="hidden" name="username" id="username" value="<%=username%>">
-					<span id="title">Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;">
-					<input type="submit" name="play" id="play" value="Jogar" onclick="buttonClick()">
+					<input type="hidden" name="username" id="username" value="<%=username%>"/>
+					<input type="hidden" name="game_id" id="game_id" value="<%=gameID%>"/>
+					<span id="title">Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;"/>
+					<input type="submit" name="play" id="play" value="Jogar" onclick="buttonClick()"/>
 				</form>
 				
 				<div id="time" class="circle wrapper">

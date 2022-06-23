@@ -133,10 +133,11 @@ public class MessageProcessor {
 	private static String play(Document doc) throws DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodePlayer = null, nodeChoice = null, nodeResult = null;
+        Node nodeGameID = null, nodePlayer = null, nodeChoice = null, nodeResult = null;
         boolean isReply = false;          
         
 		try {
+			nodeGameID = (Node) xPath.compile("//Request/GameID").evaluate(doc, XPathConstants.NODE);
 			nodePlayer = (Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE);
 			nodeChoice = ((Node) xPath.compile("//Request/Position").evaluate(doc, XPathConstants.NODE));
 			nodeResult = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
@@ -144,17 +145,18 @@ public class MessageProcessor {
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
 		if (isReply) return nodeResult.getTextContent();
-		else return "Play" + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
+		else return "Play" + "," + nodeGameID.getTextContent() + "," + nodePlayer.getTextContent() + "," + nodeChoice.getTextContent();
 	}
 	
 	private static String board(Document doc) throws NumberFormatException, DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodeView = null, nodePlayer = null;
+        Node nodeGameID = null, nodeView = null, nodePlayer = null;
         int[][] board = null;
         boolean isReply = false;
         
 		try {
+			nodeGameID = (Node) xPath.compile("//Request/GameID").evaluate(doc, XPathConstants.NODE);
 			nodePlayer = ((Node) xPath.compile("//Request/Player").evaluate(doc, XPathConstants.NODE));
 			nodeView   = ((Node) xPath.compile("//Request/View").evaluate(doc, XPathConstants.NODE));
 			isReply    = (boolean) xPath.compile("boolean(//Response/Board)").evaluate(doc, XPathConstants.BOOLEAN);
@@ -194,7 +196,7 @@ public class MessageProcessor {
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
 		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), board);
-		else return "GetBoard" + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
+		else return "GetBoard" + "," + nodeGameID.getTextContent() + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 	}
 	
 	private static String players(Document doc) {
@@ -224,30 +226,29 @@ public class MessageProcessor {
 	private static String find(Document doc) throws DOMException, SAXException {
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodeNickname = null, nodeResult = null;
+        Node nodeUsername = null, nodeResult = null;
         boolean isReply = false;
         
 		try {	
-			nodeNickname = ((Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE));		
+			nodeUsername = ((Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE));		
 			nodeResult   = ((Node) xPath.compile("//Response/Result").evaluate(doc, XPathConstants.NODE));
 			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
-		String username = nodeNickname.getTextContent();
 		if (isReply) return nodeResult.getTextContent();
-		else return "FindGame," + username;
+		else return "FindGame," + nodeUsername.getTextContent();
 	}
 	
 	private static String session(Document doc) throws DOMException, SAXException, IOException {
 
 		XPath xPath  = XPathFactory.newInstance().newXPath();
-        Node nodeRegister = null, nodeNickname = null, nodeName = null, nodePassword = null,
+        Node nodeRegister = null, nodeUsername = null, nodeName = null, nodePassword = null,
         nodeColor = null, nodeDate = null, nodePicture = null, nodeResult = null;
         boolean isReply = false;
         
 		try {
 			nodeRegister = ((Node) xPath.compile("//Login/@register").evaluate(doc, XPathConstants.NODE));			
-			nodeNickname = ((Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE));
+			nodeUsername = ((Node) xPath.compile("//Request/Username").evaluate(doc, XPathConstants.NODE));
 			nodeName     = ((Node) xPath.compile("//Request/Name").evaluate(doc, XPathConstants.NODE));
 			nodePassword = ((Node) xPath.compile("//Request/Password").evaluate(doc, XPathConstants.NODE));
 			nodeColor	 = ((Node) xPath.compile("//Request/Color").evaluate(doc, XPathConstants.NODE));
@@ -258,7 +259,7 @@ public class MessageProcessor {
 			isReply    = (boolean) xPath.compile("boolean(//Response/Result/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
-		String nickname = nodeNickname.getTextContent();
+		String nickname = nodeUsername.getTextContent();
 		String name     = nodeName.getTextContent(); 
 		String password = nodePassword.getTextContent();
 		String color	= nodeColor.getTextContent();

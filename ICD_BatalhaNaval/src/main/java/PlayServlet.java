@@ -29,12 +29,13 @@ public class PlayServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
+		String gameID   = request.getParameter("game_id");  // Identifacador do jogo
 		String username = request.getParameter("username"); // Identificador do jogador
 		String position = request.getParameter("position"); // Posicao para jogar
 		String result = null;								// Resultado
 
 		try {
-			result = new User().sendRequestPlay(username, position);
+			result = new User().sendRequestPlay(gameID, username, position);
 		} catch (IOException | ParserConfigurationException e) {
 			e.printStackTrace();
 		}

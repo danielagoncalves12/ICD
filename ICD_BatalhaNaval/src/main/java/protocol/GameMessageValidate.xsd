@@ -36,6 +36,7 @@
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
+ 					<xs:element name="GameID" type="xs:string"/>
                     <xs:element name="Player" type="xs:string"/>
                     <xs:element name="View" type="xs:boolean"/>
                   </xs:sequence>
@@ -58,6 +59,7 @@
               <xs:element name="Request">
                 <xs:complexType>
                   <xs:sequence>
+					<xs:element name="GameID" type="xs:string"/>
                     <xs:element name="Player" type="xs:string"/>
                     <xs:element name="Position" type="xs:string" minOccurs="0" maxOccurs="1"/>
                   </xs:sequence>

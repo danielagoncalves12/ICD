@@ -59,17 +59,17 @@ public class User {
 
     private void playGame() throws ParserConfigurationException, IOException {
    
-    	sendRequestGame(username); // Pedido para procurar e iniciar uma partida 
+    	String gameID = sendRequestGame(username); // Pedido para procurar e iniciar uma partida 
         String result = null;   
     	
         while (true) {
 
 			// Enviar Request a pedir o tabuleiro do adversario atualizado
         	System.out.println("Seu tabuleiro: ");
-        	System.out.println(sendRequestBoard(username, "true") + "\n");
+        	System.out.println(sendRequestBoard(gameID, username, "true") + "\n");
         	
         	System.out.println("Tabuleiro do adversario: ");
-			System.out.println(sendRequestBoard(username, "false") + "\n");
+			System.out.println(sendRequestBoard(gameID, username, "false") + "\n");
 
 			if (result != null) if (result.substring(0, 9).equals("O jogador")) mainMenu();
 			
@@ -81,7 +81,7 @@ public class User {
         		if (!checkValid(position)) System.out.println("Posicao invalida! Insira uma posico novamente:\n");
         	}
         	while(!checkValid(position));
-			result = sendRequestPlay(username, position);
+			result = sendRequestPlay(gameID, username, position);
         	System.out.println(result + "\n");
 			
 		}
@@ -327,9 +327,9 @@ public class User {
      * utilizador quer receber o pr�prio tabuleiro, com todos os navios vis�veis, caso seja falso, indica
      * que quer receber o tabuleiro do advers�rio, com os navios que ainda n�o foram encontrados ocultos.
      */
-    public String sendRequestBoard(String player, String view) throws ParserConfigurationException, IOException {
+    public String sendRequestBoard(String gameID, String player, String view) throws ParserConfigurationException, IOException {
 		
-		os.println(MessageCreator.messageBoard(player, view));
+		os.println(MessageCreator.messageBoard(gameID, player, view));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 
@@ -340,9 +340,9 @@ public class User {
      * recebe uma resposta do mesmo, que contem o resultado da jogada. O argumento player indica qual o 
      * jogador a enviar a jogada. O argumento position contem a posi��o do tiro escolhida pelo jogador.
      */
-    public String sendRequestPlay(String username, String position) throws ParserConfigurationException, IOException {	
+    public String sendRequestPlay(String gameID, String username, String position) throws ParserConfigurationException, IOException {	
 		
-    	os.println(MessageCreator.messagePlay(username, position));
+    	os.println(MessageCreator.messagePlay(gameID, username, position));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 

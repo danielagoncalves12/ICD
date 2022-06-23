@@ -25,6 +25,9 @@
 	<link rel="stylesheet" type="text/css" href="css/main.css">
 <!--===============================================================================================-->
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
 	
@@ -53,19 +56,17 @@ String[] playersList  = XMLUtils.stringToArray(playersListStr);
 		<div class="container-login100">
 			<div class="wrap-login100" style="padding-top:50px; padding-left: 95px; padding-right: 95px">
 
-				<div style="width:50%; text-align:center; border-radius:20px; padding:10px; padding-left:80px; padding-right:80px; line-height: 20px;
-background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
+				<div class="white-board" style="background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, rgba(255,255,255,1) 100%);">
 					
 					<h5 style="padding: 10px">Perfil de <%=username%></h5><br>
-
-					<img src="data:image/png;base64,<%=profile.get("Picture")%>" style="object-fit:cover; border-radius: 100%; border: 2px solid #9e9e9e" width="140px" height="140px"/> <br>
+					<img class="circular-image" src="data:image/png;base64,<%=profile.get("Picture")%>" width="140px" height="140px"/> <br>
 					
-					<hr style="width: 80%; margin-left:10% !important; margin-right:10% !important;">
+					<hr class="hr-style">
 					
-					<p><b>Nome público:</b> <%=profile.get("Name")%></p>
-					<p><b>Idade:</b> <%=age%> anos</p>
+					<p style="line-height:10px"><b>Nome público:</b> <%=profile.get("Name")%></p>
+					<p style="line-height:10px"><b>Idade:</b> <%=age%> anos</p>
 					<!--  <p><b>Cor favorita:</b> <%=profile.get("Color")%></p> --> 
-					<p><b>Total de vitórias:</b> <%=profile.get("WinsNum")%></p>
+					<p style="line-height:10px"><b>Total de vitórias:</b> <%=profile.get("WinsNum")%></p>
 					
 					<div class="container-login100-form-btn">
 						<a style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" title="Editar" aria-current="page" href="edit.jsp">Editar perfil</a>
@@ -102,74 +103,201 @@ background: linear-gradient(180deg, <%=rgbColor%> 0%, rgba(255,255,255,0) 75%, r
 							<input type="submit" id="profile" style="padding-right:0px; padding-left:0px; font-size: 13px; background-color:#8b989e" class="login100-form-btn" value="Ver Perfil"/>
 						</form>
 					</div>	
+				</div>			
+			
+			<!--  QUADRO DE HONRA  -->
+			<section class="main-content" style="width:100%">
+			<hr>
+			<div style="text-align:center" class="container align-items-center">
+			
+			<h2>Quadro de Honra</h2>
+			<br>
+			<br>
+
+			<div class="row">
+				<div class="col-sm-4">
+					<div class="leaderboard-card">
+						<div class="leaderboard-card__top">
+							<h3 class="text-center">2º Lugar</h3>
+						</div>
+						<div class="leaderboard-card__body">
+							<div class="text-center">
+								<img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[1][1]%>" width="50px" height="50px"/>
+								<h5 class="mb-0"><%=players[1][0]%></h5>			
+								<hr>
+								<p class="text-muted mb-0">Vitórias: <%=players[1][2]%></p>
+							</div>
+						</div>
+					</div>
 				</div>
-				<br>
-							
-				<div style="width: 100%; text-align: center">
-					<br><hr>
-					<h4>Quadro de honra</h4><br>
-					
-					<table style="width: 100%">
-					  <tr>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white"> Pos.</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Jogador</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Vitorias</th>
-					    <th style="border: 1px solid #9e9e9e"> </th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white"> Pos.</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Jogador</th>
-					    <th style="text-align:left; background-color: #9e9e9e; color: white">Vitorias</th>
-					  </tr>
-					  <tr style="border: 1px solid #9e9e9e">
-					    <td style="text-align:left"> 1º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[0][1]%>" width="44px" height="44px"/> <%=players[0][0]%></td>
-					    <td><%=players[0][2]%></td>
-					    <td></td>
-					    <td style="text-align:left"> 6º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[5][1]%>" width="44px" height="44px"/> <%=players[5][0]%></td>
-					    <td><%=players[5][2]%></td>
-					  </tr>
-					  <tr style="border: 1px solid #9e9e9e">
-					    <td style="text-align:left"> 2º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[1][1]%>" width="44px" height="44px"/> <%=players[1][0]%></td>
-					    <td><%=players[1][2]%></td>
-					    <td></td>
-					    <td style="text-align:left"> 7º</td>
-						<td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[6][1]%>" width="44px" height="44px"/> <%=players[6][0]%></td>
-					    <td><%=players[6][2]%></td>
-					  </tr>
-					  <tr style="border: 1px solid #9e9e9e">
-					    <td style="text-align:left"> 3º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[2][1]%>"width="44px" height="44px"/> <%=players[2][0]%></td>
-					    <td><%=players[2][2]%></td>
-					    <td></td>
-					    <td style="text-align:left"> 8º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[7][1]%>" width="44px" height="44px"/> <%=players[7][0]%></td>
-					    <td><%=players[7][2]%></td>
-					  </tr>
-					  <tr style="border: 1px solid #9e9e9e">
-					    <td style="text-align:left"> 4º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[3][1]%>" width="44px" height="44px"/> <%=players[3][0]%></td>
-					    <td><%=players[3][2]%></td>
-					    <td></td>
-					    <td style="text-align:left"> 9º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[8][1]%>" width="44px" height="44px"/> <%=players[8][0]%></td>
-					    <td><%=players[8][2]%></td>
-					  </tr>
-					  <tr style="border: 1px solid #9e9e9e">
-					    <td style="text-align:left"> 5º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[4][1]%>" width="44px" height="44px"/> <%=players[4][0]%></td>
-					    <td><%=players[4][2]%></td>
-					    <td></td>
-					    <td style="text-align:left"> 10º</td>
-					    <td style="text-align:left"><img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[9][1]%>" width="44px" height="44px"/> <%=players[9][0]%></td>
-					    <td><%=players[9][2]%></td>
-					  </tr>
-					</table> 
+				<div class="col-sm-4">
+					<div class="leaderboard-card leaderboard-card--first">
+						<div class="leaderboard-card__top">
+							<h3 class="text-center">1º Lugar</h3>
+						</div>
+						<div class="leaderboard-card__body">
+							<div class="text-center">
+								<img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[0][1]%>" width="70px" height="70px"/>
+								<h5 class="mb-0"><%=players[0][0]%></h5>							
+								<hr>
+								<p class="text-muted mb-0">Vitórias: <%=players[0][2]%></p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-sm-4">
+					<div class="leaderboard-card">
+						<div class="leaderboard-card__top">
+							<h3 class="text-center">3º Lugar</h3>
+						</div>
+						<div class="leaderboard-card__body">
+							<div class="text-center">
+								<img style="object-fit:cover; border-radius: 100%; border: 1px solid #9e9e9e" src="data:image/png;base64,<%=players[2][1]%>" width="50px" height="50px"/>
+								<h5 class="mb-0"><%=players[2][0]%></h5>
+								<hr><p class="text-muted mb-0">Vitórias: <%=players[2][2]%></p>							
+							</div>
+						</div>
+					</div>
+				</div>
 				
-				</div>
+			</div>
+
+			<br><hr>
+
+			<table class="table">
+				<thead>
+					<tr style="text-align: left;">
+						<th>Jogador</th>
+						<th>Lugar</th>
+						<th>Vitórias</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[3][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+									<h5 class="mb-0"><%=players[3][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">4º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[3][2]%></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[4][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+									<h5 class="mb-0"><%=players[4][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">5º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[4][2]%></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[5][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+								<h5 class="mb-0"><%=players[5][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">6º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[5][2]%></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[6][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+									<h5 class="mb-0"><%=players[6][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">7º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[6][2]%></td>
+					</tr>
+					
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[7][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+									<h5 class="mb-0"><%=players[7][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">8º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[7][2]%></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[8][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+									<h5 class="mb-0"><%=players[8][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">9º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[8][2]%></td>
+					</tr>
+					<tr>
+						<td>
+							<div class="d-flex align-items-center">
+								<img class="circle-img circle-img--small mr-2" src="data:image/png;base64,<%=players[9][1]%>" width="50px" height="50px"/>
+								<div class="user-info__basic">
+									<h5 class="mb-0"><%=players[9][0]%></h5>
+								</div>
+							</div>
+						</td>
+						<td>
+							<div class="d-flex align-items-baseline">
+								<span class="mr-1">10º Lugar</span>
+							</div>
+						</td>
+						<td><%=players[9][2]%></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</section>
+
 			</div>
 		</div>
 	</div>
+	
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>		
 
 	<script type="text/javascript">
 	
