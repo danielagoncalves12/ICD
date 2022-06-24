@@ -141,8 +141,6 @@ public class User {
      */
     private void mainMenu() throws ParserConfigurationException, IOException {
     	
-    	System.out.println("A enviar este " + username);
-    	
     	String profile = sendRequestProfileInfo(username);
     	this.name    = profile.split(",")[0];
     	this.color   = profile.split(",")[1];

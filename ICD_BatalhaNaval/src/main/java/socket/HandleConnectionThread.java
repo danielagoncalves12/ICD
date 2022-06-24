@@ -206,7 +206,7 @@ public class HandleConnectionThread extends Thread {
 			} else
 				result = "Erro: Palavra-passe incorreta!";
 		} else
-			result = "Erro: Nome de utilizador nao esta disponivel";
+			result = "Erro: Nome de utilizador não existe.";
 
 		os.println(MessageCreator.messageSession(username, name, password, picture, color, date, false, result));
 	}
@@ -254,7 +254,7 @@ public class HandleConnectionThread extends Thread {
 			result = "Sucesso!";
 			System.out.println("O utilizador " + name + " entrou no jogo.");
 		} else
-			result = "Erro: Nickname em uso.";
+			result = "Erro: Nome de utilizador em uso.";
 
 		os.println(MessageCreator.messageSession(username, name, hashPassword, color, date, picture, true, result));
 	}

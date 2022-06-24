@@ -25,7 +25,11 @@
 
 </head>
 <body>
-
+	
+	<%
+	String error = (String) session.getAttribute("error");
+	if (error == null) error = "";
+	%>
 	<div class="limiter">
 		<div class="container-login100">
 			<div class="wrap-login100" style="padding-top: 100px">
@@ -78,6 +82,8 @@
 						<input style="width: 100%; height:40px; border: 8px solid #E6E6E6; border-radius: 10px" type="file" onchange="show(this)" id="new_picture" name="new_picture" accept="image/png, image/jpeg" value="" placeholder="Foto de Perfil"><br>
 						<img src="" width="100" height="100" id="showimg">
 					</div>
+					
+					<p style="color:red"><%=error%></p>
 					
 					<div class="container-login100-form-btn">
 						<input class="login100-form-btn" type = "submit" value = "Registar!"/>

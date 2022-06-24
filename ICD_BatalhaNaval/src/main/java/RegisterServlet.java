@@ -75,12 +75,6 @@ public class RegisterServlet extends HttpServlet {
             	} 
             	
             	else if (item.getFieldName().equals("new_picture")) {
-    		
-                    //String imgtype = item.getName().substring(item.getName().lastIndexOf("."));
-                    //String imgName = newUsername + imgtype;
-                    //newPicture = imgName;
-                    //item.write(new File("./src/main/webapp/pictures/", imgName));
-                    
                     byte[] bytes = item.get();
                     newPicture = Base64.getEncoder().encodeToString(bytes);
                 }
@@ -110,7 +104,8 @@ public class RegisterServlet extends HttpServlet {
 			request.getRequestDispatcher("/index.jsp").forward(request, response);
 		}
 		else {
-			session.invalidate();
+			//session.invalidate();
+			session.setAttribute("error", result);
 			request.getRequestDispatcher("/register.jsp").forward(request, response);
 		}
 	}

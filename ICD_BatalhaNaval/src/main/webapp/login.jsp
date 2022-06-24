@@ -28,6 +28,9 @@
 <body>
 	
 	<%
+	String error = (String) session.getAttribute("error");
+	if (error == null) error = "";
+	
 	Cookie[] cookies = request.getCookies();
     if (cookies != null)
         for (Cookie cookie : cookies) {
@@ -68,6 +71,7 @@
 							<i class="fa fa-lock" aria-hidden="true"></i>
 						</span>
 					</div>
+					<p style="color:red"><%=error%></p>
 					
 					<div class="container-login100-form-btn">
 						<input class="login100-form-btn" type = "submit" value = "Entrar!"/>
