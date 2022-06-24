@@ -12,8 +12,10 @@ import java.util.HashMap;
 import java.util.Scanner;
 import javax.xml.parsers.ParserConfigurationException;
 
+import battleship.GameView;
 import protocol.MessageCreator;
 import protocol.MessageProcessor;
+import protocol.XMLUtils;
 
 /**
  * @author Daniela Gon�alves A48579 42D
@@ -60,16 +62,16 @@ public class User {
     private void playGame() throws ParserConfigurationException, IOException {
    
     	String gameID = sendRequestGame(username); // Pedido para procurar e iniciar uma partida 
-        String result = null;   
+        String result = null;
     	
         while (true) {
 
 			// Enviar Request a pedir o tabuleiro do adversario atualizado
         	System.out.println("Seu tabuleiro: ");
-        	System.out.println(sendRequestBoard(gameID, username, "true") + "\n");
+        	System.out.println(GameView.printBoard(sendRequestBoard(gameID, username, "true")) + "\n");
         	
         	System.out.println("Tabuleiro do adversario: ");
-			System.out.println(sendRequestBoard(gameID, username, "false") + "\n");
+			System.out.println(GameView.printBoard(sendRequestBoard(gameID, username, "false")) + "\n");
 
 			if (result != null) if (result.substring(0, 9).equals("O jogador")) mainMenu();
 			

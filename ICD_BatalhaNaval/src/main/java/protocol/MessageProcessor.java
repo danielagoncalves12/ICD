@@ -195,7 +195,8 @@ public class MessageProcessor {
 			}
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
-		if (isReply) return GameView.printBoard(nodePlayer.getTextContent(), nodeView.getTextContent(), board);
+		
+		if (isReply) return Arrays.deepToString(board);
 		else return "GetBoard" + "," + nodeGameID.getTextContent() + "," + nodePlayer.getTextContent() + "," + nodeView.getTextContent();
 	}
 	

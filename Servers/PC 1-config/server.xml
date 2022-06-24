@@ -153,7 +153,7 @@
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log" suffix=".txt"/>
 
-      <Context docBase="ICD_BatalhaNaval" path="/ICD_BatalhaNaval" reloadable="true" source="org.eclipse.jst.jee.server:ICD_BatalhaNaval"/><Context docBase="java-chess-master" path="/chess" reloadable="true" source="org.eclipse.jst.jee.server:java-chess-master"/><Context docBase="JogoGaloSimples" path="/JogoGaloSimples" reloadable="true" source="org.eclipse.jst.jee.server:JogoGaloSimples"/><Context docBase="UpDownFiles(1)" path="/UpDownFiles(1)" reloadable="true" source="org.eclipse.jst.jee.server:UpDownFiles(1)"/><Context docBase="DemoAutoComplete" path="/DemoAutoComplete" reloadable="true" source="org.eclipse.jst.jee.server:DemoAutoComplete"/></Host>
+      <Context docBase="ICD_BatalhaNaval" path="/ICD_BatalhaNaval" reloadable="true" source="org.eclipse.jst.jee.server:ICD_BatalhaNaval"/><Context docBase="java-chess-master" path="/chess" reloadable="true" source="org.eclipse.jst.jee.server:java-chess-master"/><Context docBase="JogoGaloSimples" path="/JogoGaloSimples" reloadable="true" source="org.eclipse.jst.jee.server:JogoGaloSimples"/><Context docBase="UpDownFiles(1)" path="/UpDownFiles(1)" reloadable="true" source="org.eclipse.jst.jee.server:UpDownFiles(1)"/><Context docBase="DemoAutoComplete" path="/DemoAutoComplete" reloadable="true" source="org.eclipse.jst.jee.server:DemoAutoComplete"/><Context docBase="simpleWebApp" path="/simpleWebApp" reloadable="true" source="org.eclipse.jst.jee.server:simpleWebApp"/></Host>
     </Engine>
   </Service>
 </Server>

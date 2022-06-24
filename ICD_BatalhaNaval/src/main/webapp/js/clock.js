@@ -56,5 +56,3 @@ function displayTimeLeft(timeLeft) {
 	displayOutput.textContent = displayString;
 	update(timeLeft, wholeTime);
 }
-const pauseBtn = document.getElementById('play');
-pauseBtn.addEventListener('click', pauseTimer);

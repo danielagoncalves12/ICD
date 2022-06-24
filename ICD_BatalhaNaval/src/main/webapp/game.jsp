@@ -69,12 +69,12 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 			<div class="center" style="width:40%; float:left">
 				
 				<!-- FORM JOGADA -->
-				<form method="POST" action="PlayServlet"><br>
+				<!-- <form method="POST" action="PlayServlet"><br>
 					<input type="hidden" name="username" id="username" value="<%=username%>"/>
 					<input type="hidden" name="game_id" id="game_id" value="<%=gameID%>"/>
 					<span id="title">Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;"/>
 					<input type="submit" name="play" id="play" value="Jogar" onclick="buttonClick()"/>
-				</form>
+				</form> -->
 				
 				<div id="time" class="circle wrapper">
 				
@@ -117,9 +117,15 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 	        <%=GameView.viewBoardView(myBoard)%>
 	    </div>
 	    <div style="margin-left: 50%; height: 450px; font-size: 0px"> 
-	    
 	    	<span style="font-size:18px; font-weight: bold;">Tabuleiro Adversário</span><br>
-	        <%=GameView.viewBoard(anotherBoard)%>  
+	    	
+	    	<!-- FORM JOGADA -->
+	    	<form method="POST" style="float:right; padding-right:80px; display: flex; flex-flow: wrap; width:396px" action="PlayServlet">
+	    	
+	    		<input type="hidden" name="username" id="username" value="<%=username%>"/>
+				<input type="hidden" name="game_id" id="game_id" value="<%=gameID%>"/>
+	        	<%=GameView.viewBoard(anotherBoard)%>  
+	        </form>
 	    </div>
 	</div>
 </div>
@@ -129,13 +135,21 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 
 	function buttonClick() {
 		
-		document.getElementById('play').style.pointerEvents = 'none';
+		/*document.getElementById('play').style.pointerEvents = 'none';
 		document.getElementById('play').style.cursor = 'not-allowed';
 		document.getElementById('play').style.opacity = '0.65';
 		
 		document.getElementById('position').style.pointerEvents = 'none';
 		document.getElementById('position').style.cursor = 'not-allowed';
-		document.getElementById('position').style.opacity = '0.65';
+		document.getElementById('position').style.opacity = '0.65';*/
+		
+		pauseTimer();
+		
+		document.getElementsByName("position").forEach((e) => {
+		    e.style.cursor = 'not-allowed';
+		    e.style.opacity = '0.65';
+		    e.style.pointerEvents = 'none';
+		});
 		
 		document.getElementById('result').innerHTML = "Aguardando a jogada do adversário";
 		
@@ -147,14 +161,14 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 	var state = '<%=session.getAttribute("state")%>';
 	if (state === "ended") {
 		
-		document.getElementById('title').disabled = true;
+		/*document.getElementById('title').disabled = true;
         document.getElementById('title').style.display = 'none';	
         document.getElementById('position').style.pointerEvents = 'none';
 		document.getElementById('position').disabled = true;
         document.getElementById('position').style.display = 'none';	
         document.getElementById('play').style.pointerEvents = 'none';
 		document.getElementById('play').disabled = true;
-        document.getElementById('play').style.display = 'none';      
+        document.getElementById('play').style.display = 'none';      */
         document.getElementById('time').disabled = true;
         document.getElementById('time').style.display = 'none';
         document.getElementById('time').remove();
@@ -186,12 +200,6 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 				});
 				displayTimeLeft(wholeTime);
 				displayOutput.textContent = "00:00";
-				document.getElementById('title').disabled = true;
-		        document.getElementById('title').style.display = 'none';		
-				document.getElementById('position').disabled = true;
-		        document.getElementById('position').style.display = 'none';		
-				document.getElementById('play').disabled = true;
-		        document.getElementById('play').style.display = 'none';  
 		        
 		        if (<%=(boolean) session.getAttribute("clean")%> == true) {
 		        	<%session.removeAttribute("result");%>
@@ -211,7 +219,7 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 
 </script>
 
-<script src="js/clockT.js"></script>
+<script src="js/clock.js"></script>
 
 </body>
 </html>
