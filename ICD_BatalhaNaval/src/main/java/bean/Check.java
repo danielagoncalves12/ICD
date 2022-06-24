@@ -39,6 +39,8 @@ public class Check {
 
 	public static HashMap<String, String> profile(String username) throws ServletException, IOException, ParserConfigurationException {
 
+		if (username == null) return null;
+		
 		HashMap<String, String> profile = new HashMap<>();
 		if (!username.equals("")) {
 			

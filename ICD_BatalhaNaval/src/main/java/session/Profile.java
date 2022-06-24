@@ -36,6 +36,8 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
+import protocol.Backup;
+
 public class Profile {
 
 	public static String dataBasePath   = "src/main/java/protocol/PlayerInfo.xml";
@@ -278,9 +280,7 @@ public class Profile {
 	}
 	
 	public static HashMap<String, String> getHonorBoard() {
-		
-		updateHonorBoard();
-		
+
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         DocumentBuilder builder;
@@ -537,6 +537,8 @@ public class Profile {
 		} catch (IOException | TransformerException e) {
 			e.printStackTrace();
 		}
+		
+		new Backup().start();
 	}
 
 	public static String hex2Rgb(String colorStr) {

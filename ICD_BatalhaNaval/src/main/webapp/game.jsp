@@ -31,15 +31,17 @@ if (state == null) {
 	gameID = user.sendRequestGame(username);
 	session.setAttribute("game_id", gameID);
 	session.setAttribute("clean", false);
+	state = "playing";
 }
 
 // Ao longo do jogo
+
 String myBoard = user.sendRequestBoard(gameID, username, "true");
 String anotherBoard = user.sendRequestBoard(gameID, username, "false");
+
 %>
 
 <audio src="resources/background.mp3" autoplay loop></audio>
-<audio src="resources/beeps.mp3" autoplay></audio>
 
 <br>
 <div style="border-radius:5%; box-shadow: inset 0px 0px 78px 3px rgba(0,0,0,0.73); background-color: rgba(101, 149, 207, 0.8); text-align:center; width:70%" class="center">
@@ -66,17 +68,9 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 		</div>
 		<div class="center" style="text-align:left; height:130px; width: 42%;  padding: 1%; float: right;"> 
 			
-			<div class="center" style="width:40%; float:left">
+			<div class="center" style="width:30%; float:left">
 				
-				<!-- FORM JOGADA -->
-				<!-- <form method="POST" action="PlayServlet"><br>
-					<input type="hidden" name="username" id="username" value="<%=username%>"/>
-					<input type="hidden" name="game_id" id="game_id" value="<%=gameID%>"/>
-					<span id="title">Jogada </span><input type="text" name="position" id="position" min="1" max="9" style="width: 40px;"/>
-					<input type="submit" name="play" id="play" value="Jogar" onclick="buttonClick()"/>
-				</form> -->
-				
-				<div id="time" class="circle wrapper">
+				<div id="time" style="top:50%; transform: translateY(30%);" class="circle wrapper">
 				
 					<svg width="70" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
 					     <g transform="translate(110,110)">
@@ -98,7 +92,7 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 				</div>
 			</div>
 			
-			<div class="center" style="width:59%; float:right">
+			<div class="center" style="width:69%; float:right">
 								
 				<br><span id="result" style="float:left;"><%=result%></span><br><br><br>
 				<a style="float:left;" href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
@@ -130,19 +124,38 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 	</div>
 </div>
 
-
+<script src="js/clock.js"></script>
 <script type="text/javascript">
 
+document.getElementById('exit').disabled = true;
+document.getElementById('exit').style.display = 'none';
+
+	if ("<%=state%>" == "ended") {
+	
+	    if (<%=(boolean) session.getAttribute("clean")%> == true) {
+	    	<%session.removeAttribute("result");%>
+	        <%session.removeAttribute("state");%>
+	        <%session.setAttribute("clean", false);%>
+	    }      
+	    document.getElementById('exit').disabled = false;
+        document.getElementById('exit').style.display = 'block';
+
+	    document.getElementsByName("position").forEach((e) => {
+	        e.disabled = true;
+	    });
+	    
+	    <%session.setAttribute("clean", true);%> 
+	}
+	else {
+		document.getElementById("exit").disabled = false;
+	
+	   	var beepSound = new Audio('resources/beeps.mp3');
+	   	beepSound.loop = false;
+	   	beepSound.play();
+	}
+
 	function buttonClick() {
-		
-		/*document.getElementById('play').style.pointerEvents = 'none';
-		document.getElementById('play').style.cursor = 'not-allowed';
-		document.getElementById('play').style.opacity = '0.65';
-		
-		document.getElementById('position').style.pointerEvents = 'none';
-		document.getElementById('position').style.cursor = 'not-allowed';
-		document.getElementById('position').style.opacity = '0.65';*/
-		
+
 		pauseTimer();
 		
 		document.getElementsByName("position").forEach((e) => {
@@ -158,68 +171,44 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 		shotSound.play();
 	}
 	
-	var state = '<%=session.getAttribute("state")%>';
-	if (state === "ended") {
-		
-		/*document.getElementById('title').disabled = true;
-        document.getElementById('title').style.display = 'none';	
-        document.getElementById('position').style.pointerEvents = 'none';
-		document.getElementById('position').disabled = true;
-        document.getElementById('position').style.display = 'none';	
-        document.getElementById('play').style.pointerEvents = 'none';
-		document.getElementById('play').disabled = true;
-        document.getElementById('play').style.display = 'none';      */
-        document.getElementById('time').disabled = true;
-        document.getElementById('time').style.display = 'none';
-        document.getElementById('time').remove();
-            
-        if (<%=(boolean) session.getAttribute("clean")%> == true) {
-        	<%session.removeAttribute("result");%>
-            <%session.removeAttribute("state");%>
-            <%session.setAttribute("clean", false);%>
-        }      
-        <%session.setAttribute("clean", true);%> 
-	}
-	else {
-		document.getElementById('exit').disabled = true;
-        document.getElementById('exit').style.display = 'none';
-	}
-	
 	function timer(seconds) {
 		let remainTime = Date.now() + (seconds * 1000);
 		displayTimeLeft(seconds);
 
-		intervalTimer = setInterval(function() {
-			timeLeft = Math.round((remainTime - Date.now()) / 1000);
-			if (timeLeft < 0) {
-				clearInterval(intervalTimer);
-				isStarted = false;
-				setterBtns.forEach(function(btn) {
-					btn.disabled = false;
-					btn.style.opacity = 1;
-				});
-				displayTimeLeft(wholeTime);
-				displayOutput.textContent = "00:00";
-		        
-		        if (<%=(boolean) session.getAttribute("clean")%> == true) {
-		        	<%session.removeAttribute("result");%>
-		            <%session.removeAttribute("state");%>
-		            <%session.setAttribute("clean", false);%>
-		        }      
-		        <%session.setAttribute("clean", true);%> 
-		        
-		        document.getElementById('result').innerHTML = "<b>Terminado: </b> Perdeste o jogo.<br> Não jogaste durante o tempo pedido.";
-		        document.getElementById('exit').disabled = true;
-		        document.getElementById('exit').style.display = 'block';
-				return;
-			}
-			displayTimeLeft(timeLeft);
-		}, 1000);
+		if ("<%=state%>" == "playing") {
+			intervalTimer = setInterval(function() {
+				
+				timeLeft = Math.round((remainTime - Date.now()) / 1000);
+				if (timeLeft < 0) {
+					clearInterval(intervalTimer);
+					isStarted = false;
+					setterBtns.forEach(function(btn) {
+						btn.disabled = false;
+						btn.style.opacity = 1;
+					});
+					displayTimeLeft(wholeTime);
+					displayOutput.textContent = "00:00";
+			        
+			        if (<%=(boolean) session.getAttribute("clean")%> == true) {
+			        	<%session.removeAttribute("result");%>
+			            <%session.removeAttribute("state");%>
+			            <%session.setAttribute("clean", false);%>
+			        }      
+			        <%session.setAttribute("clean", true);%> 
+			        
+			        
+				        document.getElementById('result').innerHTML = "<b>Terminado: </b> Perdeste o jogo.<br> Não jogaste durante o tempo pedido.";
+				        document.getElementById('exit').disabled = false;
+				        document.getElementById('exit').style.display = 'block';
+						return;
+			        
+				}
+				displayTimeLeft(timeLeft);
+			}, 1000);
+		}
 	}
-
+	
 </script>
-
-<script src="js/clock.js"></script>
 
 </body>
 </html>

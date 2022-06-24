@@ -33,22 +33,6 @@ public class PlayServlet extends HttpServlet {
 		String username = request.getParameter("username"); // Identificador do jogador
 		String position = request.getParameter("position"); // Posicao para jogar
 		String result = null;								// Resultado
-
-		System.out.println(position);
-		
-		if (position == null) {
-			
-			request.getSession().setAttribute("state", "playing");
-			request.getRequestDispatcher("/game.jsp").forward(request, response);
-			return;
-		}
-		
-		if (position.equals("")) {
-			
-			request.getSession().setAttribute("state", "playing");
-			request.getRequestDispatcher("/game.jsp").forward(request, response);
-			return;
-		}
 		
 		try {
 			result = new User().sendRequestPlay(gameID, username, position);
@@ -58,9 +42,9 @@ public class PlayServlet extends HttpServlet {
 
 		// Enviar os atributos no request
 		if (result.substring(0, 9).equals("O jogador") || result.substring(0, 12).equals("<b>Terminado")) {
-			request.getSession(true).setAttribute("state", "ended");
+			request.getSession().setAttribute("state", "ended");
 		}
-		else request.getSession(true).setAttribute("state", "playing");
+		else request.getSession().setAttribute("state", "playing");
 		
 		request.getSession().setAttribute("username", username);
 		request.getSession().setAttribute("result", (result != null) ? result : "");

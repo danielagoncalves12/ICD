@@ -5,8 +5,8 @@
 		<Color>#e963c0</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>58</WinsNumber>
-		<AverageTime>1.0334955415883915</AverageTime>
+		<WinsNumber>60</WinsNumber>
+		<AverageTime>1.2499995391347607</AverageTime>
 	</Player>
 	<Player Username="Nick">
 		<Name>Nick</Name>
@@ -14,8 +14,8 @@
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>42</WinsNumber>
-		<AverageTime>1.0315489344668487</AverageTime>
+		<WinsNumber>61</WinsNumber>
+		<AverageTime>1.249999538206546</AverageTime>
 	</Player>
 	<Player Username="GoingOn">
 		<Name>GoingOn</Name>
@@ -24,16 +24,7 @@
 		<Date>2010-05-29</Date>
 		<Picture>default.png</Picture>
 		<WinsNumber>21</WinsNumber>
-		<AverageTime>14</AverageTime>
-	</Player>
-	<Player Username="xXTryHardXx">
-		<Name>xXTryHardXx</Name>
-		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
-		<Color>#8892ea</Color>
-		<Date>2000-05-29</Date>
-		<Picture>icd.png</Picture>
-		<WinsNumber>11</WinsNumber>
-		<AverageTime>5</AverageTime>
+		<AverageTime>8</AverageTime>
 	</Player>
 	<Player Username="reallu">
 		<Name>reallu</Name>
@@ -94,8 +85,8 @@
 		<Password>698DC19D489C4E4DB73E28A713EAB07B</Password>
 		<Color>#52e2d8</Color>
 		<Date>2001-06-14</Date>
-		<Picture>shrek.png</Picture>
-		<WinsNumber>14</WinsNumber>
+		<Picture>JohnGames.png</Picture>
+		<WinsNumber>28</WinsNumber>
 		<AverageTime>0</AverageTime>
 	</Player>
 	<Player Username="Dann">
@@ -116,4 +107,13 @@
 		<WinsNumber>0</WinsNumber>
 		<AverageTime>0</AverageTime>
 	</Player>
-<Player Username="Gabby"><Name>Gabby</Name><Password>A9F05641DE6423D839C9F4A164FCCE7D</Password><Color>#cf8929</Color><Date>2008-05-12</Date><Picture>Gabby.png</Picture><WinsNumber>0</WinsNumber><AverageTime>0</AverageTime></Player></Data>
+	<Player Username="Gabby">
+		<Name>Gabby</Name>
+		<Password>A9F05641DE6423D839C9F4A164FCCE7D</Password>
+		<Color>#cf8929</Color>
+		<Date>2008-05-12</Date>
+		<Picture>Gabby.png</Picture>
+		<WinsNumber>25</WinsNumber>
+		<AverageTime>0</AverageTime>
+	</Player>
+</Data>

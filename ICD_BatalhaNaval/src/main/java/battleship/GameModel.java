@@ -14,7 +14,7 @@ import socket.GameQueueThread;
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 30;
+	private int MAXPOINTS = 5;
 	private String gameID;
 	
 	// Variaveis
@@ -134,6 +134,7 @@ public class GameModel {
 		dic.put("Destroyer", positionType3);
 		dic.put("Submarine", positionType4);
 
+		// Se o jogo terminou
 		if (end) {
 			if (GameQueueThread.activeGames.contains(this))
 				GameQueueThread.activeGames.remove(this);

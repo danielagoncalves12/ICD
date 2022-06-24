@@ -87,7 +87,7 @@ String[] playersList  = XMLUtils.stringToArray(playersListStr);
 						</span>
 						
 						<div class="container-login100-form-btn" style="margin: auto; width: 80%">
-							<a id="link" onclick="javascript:clickAndDisable(this);" style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Jogar</a>
+							<a id="link" onclick="javascript:findGame(this);" style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Jogar</a>
 							<p id="searching" style="color: red; display: none">A procurar um oponente...</p>
 						</div>				
 
@@ -301,7 +301,7 @@ String[] playersList  = XMLUtils.stringToArray(playersListStr);
 
 	<script type="text/javascript">
 	
-	    function clickAndDisable(link) {
+	    function findGame(link) {
 	    	document.getElementById("searching").style.display = "block";
 			link.onclick = function(event) {
 		        event.preventDefault();       

@@ -12,7 +12,7 @@ function update(value, timePercent) {
 //circle ends
 const displayOutput = document.querySelector('.display-remain-time')
 const setterBtns = document.querySelectorAll('button[data-setter]');
-let intervalTimer;
+var intervalTimer;
 let timeLeft;
 let wholeTime = 0.5 * 60; // manage this to set the whole time 
 let isPaused = false;
@@ -27,7 +27,7 @@ function changeWholeTime(seconds) {
 	}
 }
 
-function pauseTimer(event){
+function pauseTimer(){
     clearInterval(intervalTimer); 
 }
 
@@ -49,6 +49,7 @@ window.onload = function() {
 		isPaused = isPaused ? false : true;
 	}
 }
+
 function displayTimeLeft(timeLeft) {
 	let minutes = Math.floor(timeLeft / 60);
 	let seconds = timeLeft % 60;
