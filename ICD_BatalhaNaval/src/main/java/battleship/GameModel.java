@@ -14,7 +14,7 @@ import socket.GameQueueThread;
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 5;
+	private int MAXPOINTS = 1;
 	private String gameID;
 	
 	// Variaveis
@@ -136,7 +136,7 @@ public class GameModel {
 
 		// Se o jogo terminou
 		if (end) {
-			if (GameQueueThread.activeGames.contains(this))
+			if (GameQueueThread.activeGames.contains(this)) 
 				GameQueueThread.activeGames.remove(this);
 			
 			timer.interrupt();
@@ -152,7 +152,7 @@ public class GameModel {
 			
 			if (end) {
 				// Terminar jogo
-				if (GameQueueThread.activeGames.contains(this))  				
+				if (GameQueueThread.activeGames.contains(this)) 
 					GameQueueThread.activeGames.remove(this);
 				
 				// Media do tempo de jogada dos jogadores

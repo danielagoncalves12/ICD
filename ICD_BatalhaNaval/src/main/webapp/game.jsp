@@ -29,6 +29,11 @@ if (result == null) result = "";
 // Primeira vez
 if (state == null) {	
 	gameID = user.sendRequestGame(username);
+	
+	do {
+		gameID = user.sendRequestGame(username);
+	} while(gameID.equals("ERROR"));
+	
 	session.setAttribute("game_id", gameID);
 	session.setAttribute("clean", false);
 	state = "playing";

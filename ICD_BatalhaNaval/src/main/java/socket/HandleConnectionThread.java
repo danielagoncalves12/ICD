@@ -16,6 +16,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Semaphore;
 
 import javax.imageio.ImageIO;
@@ -142,7 +143,7 @@ public class HandleConnectionThread extends Thread {
 		String player   = MessageProcessor.process(request).split(",")[2]; // Identificacao do Jogador
 		String position = MessageProcessor.process(request).split(",")[3]; // Posicao
 		
-		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;
+		BlockingQueue<GameModel> activeGames = GameQueueThread.activeGames;
 		GameModel gameTarget = null;
 		
 		for (GameModel game : activeGames) {
@@ -166,7 +167,7 @@ public class HandleConnectionThread extends Thread {
 		String player = MessageProcessor.process(request).split(",")[2]; // Identificacao do Jogador
 		String view   = MessageProcessor.process(request).split(",")[3]; // Tipo de visualizacao		
 		
-		ArrayList<GameModel> activeGames = GameQueueThread.activeGames;	
+		BlockingQueue<GameModel> activeGames = GameQueueThread.activeGames;	
 		GameModel gameTarget = null;
 		
 		for (GameModel game : activeGames) {
@@ -274,6 +275,7 @@ public class HandleConnectionThread extends Thread {
 		}
 		
 		try {
+			System.out.println("Semaforo findGame -> " + semaphore.availablePermits());
 			semaphore.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
