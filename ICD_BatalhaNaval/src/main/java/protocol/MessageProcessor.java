@@ -204,11 +204,16 @@ public class MessageProcessor {
 		
 		XPath xPath  = XPathFactory.newInstance().newXPath();
         NodeList nodePlayers = null;
+        Node nodeQuery = null, nodeNumLetters = null, nodeNumItems = null;
         boolean isReply = false;
         
 		try {		
-			nodePlayers   = ((NodeList) xPath.compile("//Players/Username").evaluate(doc, XPathConstants.NODESET));
-			isReply    = (boolean) xPath.compile("boolean(//Players/Username/text())").evaluate(doc, XPathConstants.BOOLEAN);
+			nodeQuery = ((Node) xPath.compile("//Request/Query").evaluate(doc, XPathConstants.NODE));
+			nodeNumLetters = ((Node) xPath.compile("//Request/NumLetters").evaluate(doc, XPathConstants.NODE));
+			nodeNumItems = ((Node) xPath.compile("//Request/NumItems").evaluate(doc, XPathConstants.NODE));
+			
+			nodePlayers = ((NodeList) xPath.compile("//Response/Players/Username").evaluate(doc, XPathConstants.NODESET));
+			isReply = (boolean) xPath.compile("boolean(//Players/Username/text())").evaluate(doc, XPathConstants.BOOLEAN);
 		} catch (XPathExpressionException e) { e.printStackTrace(); }
 
 		String[] players = new String[nodePlayers.getLength()];
@@ -221,7 +226,7 @@ public class MessageProcessor {
 		}
 		
 		if (isReply) return Arrays.toString(players);
-		else return "GetPlayers";
+		else return "GetPlayers," + nodeQuery.getTextContent() + "," + nodeNumLetters.getTextContent() + "," + nodeNumItems.getTextContent();
 	}
 	
 	private static String find(Document doc) throws DOMException, SAXException {

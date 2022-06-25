@@ -1,6 +1,4 @@
 import java.io.IOException;
-import java.util.Arrays;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.Cookie;
@@ -9,9 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
-
-import protocol.XMLUtils;
-import session.Profile;
 import socket.User;
 
 @WebServlet("/LoginServlet")

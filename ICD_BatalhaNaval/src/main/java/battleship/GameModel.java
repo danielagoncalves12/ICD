@@ -14,7 +14,7 @@ import socket.GameQueueThread;
 public class GameModel {
 
 	// Constantes
-	private int MAXPOINTS = 1;
+	private int MAXPOINTS = 30;
 	private String gameID;
 	
 	// Variaveis

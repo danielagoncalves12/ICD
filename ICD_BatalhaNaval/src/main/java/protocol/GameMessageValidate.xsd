@@ -127,7 +127,15 @@
 		<xs:element name="GetPlayers">
           <xs:complexType>
             <xs:sequence>
-              <xs:element name="Request"/>
+              <xs:element name="Request">
+				<xs:complexType>
+                  <xs:sequence>
+                    <xs:element name="Query" type="xs:string"/>
+					<xs:element name="NumLetters" type="xs:int"/>
+					<xs:element name="NumItems" type="xs:int"/>
+				  </xs:sequence>
+                </xs:complexType>
+              </xs:element>
               <xs:element name="Response">
                 <xs:complexType>
                   <xs:sequence>

@@ -28,7 +28,7 @@ public class SearchServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		String validate = request.getParameter("validate");
-		String username = request.getParameter("search_name");
+		String username = request.getParameter("player");
 		
 		request.getSession(true).setAttribute("username", validate);
 		request.getSession(true).setAttribute("search_username", username);	

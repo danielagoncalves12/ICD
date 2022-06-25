@@ -100,7 +100,7 @@ String anotherBoard = user.sendRequestBoard(gameID, username, "false");
 			<div class="center" style="width:69%; float:right">
 								
 				<br><span id="result" style="float:left;"><%=result%></span><br><br><br>
-				<a style="float:left;" href="index.jsp" class="button-exit" id="exit">Regressar ao Menu</a>
+				<a style="float:left;" href="index.jsp" style="display: none" class="button-exit" id="exit">Regressar ao Menu</a>
 			
 				<br>
 				
@@ -152,7 +152,8 @@ document.getElementById('exit').style.display = 'none';
 	    <%session.setAttribute("clean", true);%> 
 	}
 	else {
-		document.getElementById("exit").disabled = false;
+		document.getElementById("exit").disabled = true;
+		document.getElementById('exit').style.display = 'none';
 	
 	   	var beepSound = new Audio('resources/beeps.mp3');
 	   	beepSound.loop = false;
@@ -200,13 +201,11 @@ document.getElementById('exit').style.display = 'none';
 			            <%session.setAttribute("clean", false);%>
 			        }      
 			        <%session.setAttribute("clean", true);%> 
-			        
-			        
+	        
 				        document.getElementById('result').innerHTML = "<b>Terminado: </b> Perdeste o jogo.<br> Não jogaste durante o tempo pedido.";
 				        document.getElementById('exit').disabled = false;
 				        document.getElementById('exit').style.display = 'block';
-						return;
-			        
+						return;			        
 				}
 				displayTimeLeft(timeLeft);
 			}, 1000);

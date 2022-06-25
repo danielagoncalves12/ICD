@@ -364,9 +364,9 @@ public class User {
 		return MessageProcessor.process(reply); 
     }
     
-public String sendRequestPlayers() throws ParserConfigurationException, IOException {
+    public String sendRequestPlayers(String query, int numLetters, int numItems) throws ParserConfigurationException, IOException {
     	
-    	os.println(MessageCreator.messageGetPlayers());
+    	os.println(MessageCreator.messageGetPlayers(query, numLetters, numItems));
 		String reply = (is.readLine().replaceAll("\6", "\r")).replaceAll("\7", "\n");
 		if (reply == null) return null;
 		return MessageProcessor.process(reply); 

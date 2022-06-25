@@ -2,11 +2,11 @@
 	<Player Username="Dannie">
 		<Name>Dannie12</Name>
 		<Password>5BA4A4AAD2A0FBDF013B98B8B9657E83</Password>
-		<Color>#f05b9e</Color>
+		<Color>#ec60c1</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>66</WinsNumber>
-		<AverageTime>1.6077564954730406</AverageTime>
+		<WinsNumber>68</WinsNumber>
+		<AverageTime>1.475484780967065</AverageTime>
 	</Player>
 	<Player Username="Nick">
 		<Name>Nick</Name>
@@ -14,8 +14,8 @@
 		<Color>#94bfe3</Color>
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
-		<WinsNumber>91</WinsNumber>
-		<AverageTime>1.208478927568649</AverageTime>
+		<WinsNumber>93</WinsNumber>
+		<AverageTime>1.4505299329730406</AverageTime>
 	</Player>
 	<Player Username="GoingOn">
 		<Name>GoingOn</Name>
@@ -116,4 +116,4 @@
 		<WinsNumber>28</WinsNumber>
 		<AverageTime>1.96875</AverageTime>
 	</Player>
-<Player Username="Dartacao"><Name>Dartacão</Name><Password>4A953138E3D3543174A2C5DCC23A6884</Password><Color>#efbe7c</Color><Date>2005-06-13</Date><Picture>Dartacao.png</Picture><WinsNumber>0</WinsNumber><AverageTime>0</AverageTime></Player></Data>
+<Player Username="Dartacao"><Name>Dartacão</Name><Password>4A953138E3D3543174A2C5DCC23A6884</Password><Color>#efbe7c</Color><Date>2005-06-13</Date><Picture>Dartacao.png</Picture><WinsNumber>0</WinsNumber><AverageTime>0</AverageTime></Player><Player Username="ICD"><Name>ICD</Name><Password>10D021B013642BC4964FCA5C3C09E27D</Password><Color>#31e154</Color><Date>2002-05-14</Date><Picture>ICD.png</Picture><WinsNumber>0</WinsNumber><AverageTime>0</AverageTime></Player></Data>

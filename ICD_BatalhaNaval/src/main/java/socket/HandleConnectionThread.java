@@ -77,7 +77,7 @@ public class HandleConnectionThread extends Thread {
 
 	public void sendResponse(String request) throws ParserConfigurationException, IOException {
 
-		System.out.println(request);
+		//System.out.println(request);
 		
 		// Primeiro argumento representa o tipo de pedido
 		String method = MessageProcessor.process(request).split(",")[0]; 
@@ -99,8 +99,37 @@ public class HandleConnectionThread extends Thread {
 	
 	private void players(String request) throws ParserConfigurationException {
 		
+		// Atributos
+		String query    = MessageProcessor.process(request).split(",")[1];
+		String nLetters = MessageProcessor.process(request).split(",")[2];
+		String nItems   = MessageProcessor.process(request).split(",")[3];
+		
+		// Nome de todos os jogadores
 		ArrayList<String> players = Profile.getAllPlayersUsername();
-		os.println(MessageCreator.messageGetPlayers(players));
+
+		// Nomes encontrados
+		List<String> matched = new ArrayList<String>();
+
+		if (query == null || query.length() < Integer.valueOf(nLetters)) { // Minimo num de Letras
+			
+			matched.add("Jogador não encontrado");
+			os.println(MessageCreator.messageGetPlayers(query, Integer.valueOf(nLetters), Integer.valueOf(nItems), matched));
+			return;
+		}
+		
+		query = query.toLowerCase();		
+		for (int i = 0; i < players.size(); i++) {
+			
+			String item = players.get(i).toLowerCase();
+			
+			if (item.toLowerCase().startsWith(query)) {
+				matched.add(players.get(i));
+				if (matched.size() > Integer.valueOf(nItems)) // Limitar respostas
+					break;
+			}
+		}
+		if (matched.size() == 0) matched.add("Jogador não encontrado");
+		os.println(MessageCreator.messageGetPlayers(query, Integer.valueOf(nLetters), Integer.valueOf(nItems), matched));	
 	}
 	
 	private void profile(String request) throws ParserConfigurationException {
@@ -202,7 +231,7 @@ public class HandleConnectionThread extends Thread {
 				date 	= Profile.getDate(username);
 				
 				result = "Sucesso!";
-				System.out.println("O utilizador " + Profile.getName(username) + " entrou no jogo.");
+				//System.out.println("O utilizador " + Profile.getName(username) + " entrou no jogo.");
 
 			} else
 				result = "Erro: Palavra-passe incorreta!";
@@ -253,7 +282,7 @@ public class HandleConnectionThread extends Thread {
 		if (Session.availableNickname(username)) {
 			Session.register(username, name, hashPassword, color, date, picture);
 			result = "Sucesso!";
-			System.out.println("O utilizador " + name + " entrou no jogo.");
+			//System.out.println("O utilizador " + name + " entrou no jogo.");
 		} else
 			result = "Erro: Nome de utilizador em uso.";
 
@@ -265,22 +294,22 @@ public class HandleConnectionThread extends Thread {
 		String username = MessageProcessor.process(request).split(",")[1];	
 		if (!activeUsers.contains(username)) {
 			activeUsers.add(username);
-			System.out.println("A procura de jogo " + username);
-			System.out.println("ActiveUsers -> " + activeUsers);
+			//System.out.println("A procura de jogo " + username);
+			//System.out.println("ActiveUsers -> " + activeUsers);
 		}
 		else {
 			os.println(MessageCreator.messageFind(username, "ERROR"));
-			System.out.println("Ja estou a procura de jogo " + username);
+			//System.out.println("Ja estou a procura de jogo " + username);
 			return;
 		}
 		
 		try {
-			System.out.println("Semaforo findGame -> " + semaphore.availablePermits());
+			//System.out.println("Semaforo findGame -> " + semaphore.availablePermits());
 			semaphore.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
-		System.out.println("Jogo encontrado para " + username + ", ID: " + GameQueueThread.getGameID());
+		//System.out.println("Jogo encontrado para " + username + ", ID: " + GameQueueThread.getGameID());
 		os.println(MessageCreator.messageFind(username, GameQueueThread.getGameID()));
 	}
 

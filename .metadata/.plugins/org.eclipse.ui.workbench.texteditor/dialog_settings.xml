@@ -8,6 +8,7 @@
 		<item key="incremental" value="false"/>
 		<item key="isRegEx" value="false"/>
 		<list key="findhistory">
+			<item value="remove"/>
 			<item value="a enviar"/>
 			<item value="waz"/>
 			<item value="timer"/>
@@ -15,7 +16,6 @@
 			<item value="Clicka"/>
 			<item value="board"/>
 			<item value="System.out.pr"/>
-			<item value="ganhas"/>
 		</list>
 		<list key="replacehistory">
 			<item value="columnValue"/>

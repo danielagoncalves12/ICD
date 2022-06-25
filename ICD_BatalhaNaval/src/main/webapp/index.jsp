@@ -34,23 +34,60 @@
 <% 
 // Obter dados
 String username = Check.username(request, response);
-HashMap<String, String> profile = Check.profile(username);
+HashMap<String, String> profile = null;
+String rgbColor = null, age = null;
+String[][] players = null; String[] playersList = null;
 
-String rgbColor = Profile.hex2Rgb(profile.get("Color"));
+// Informacoes do perfil
+profile = Check.profile(username);	
+rgbColor = Profile.hex2Rgb(profile.get("Color"));
 
 // Calculo da idade
 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 LocalDate birth = LocalDate.parse(profile.get("Date"), formatter);
-String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
+age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 
 // Quadro de honra
 String honor = new User().sendRequestHonorBoard();
-String[][] players = XMLUtils.stringToArray2D(honor);
-
-// Lista de jogadores inscritos
-String playersListStr = new User().sendRequestPlayers();
-String[] playersList  = XMLUtils.stringToArray(playersListStr);
+players = XMLUtils.stringToArray2D(honor);
 %>
+
+<script type="text/javascript">
+
+	function getXHR() {
+		var invocation = null;
+		try {
+			invocation = new XMLHttpRequest();
+		} catch (e) {
+			try { invocation = new ActiveXObject("Msxml2.XMLHTTP");} catch (e) {
+				try {invocation = new ActiveXObject("Microsoft.XMLHTTP");} catch (e) {alert("Your browser broke!");return null;}}
+		}
+		return invocation;
+	}
+
+	var xmlHttp = getXHR();
+	
+	function showState(str) {
+		if (event.key === 'Enter') {
+			document.getElementById("player").value = document.getElementById("players").options[0].value;
+			return;
+		}
+		var url = "AutoServlet";
+		url += "?query=" + str + "&num_letters=0&num_items=10";
+		url = encodeURI(url);
+		
+		xmlHttp.onreadystatechange = function() {
+			if (xmlHttp.readyState == 4 && xmlHttp.status == 200) {
+				document.getElementById("players").innerHTML = xmlHttp.responseText;
+				document.getElementById("player").placeholder = "Procurar um jogador...";
+			} else
+				document.getElementById("player").placeholder = "Erro.";
+		}
+		xmlHttp.open("GET", url, true);
+		xmlHttp.send(null);
+	}
+
+</script>
 	
 	<div class="limiter">
 		<div class="container-login100">
@@ -96,10 +133,18 @@ String[] playersList  = XMLUtils.stringToArray(playersListStr);
 							Procurar um jogador!
 						</span>
 						<br>
-						<h6>Introduza o nome: </h6>
+						<h6>Introduza o nome: </h6>			
+						
 						<form action="SearchServlet" method="POST">
 							<input type="hidden" name="validate" value="<%=username%>"/>
-							<input type="text" style="margin-top:10px; border: 1px solid black" name="search_name" id="tags"/><br><br>	
+							
+							<input style="border: 1px solid black" autocomplete="off" list="players" id="player" type="search" name="player" onkeyup="showState(this.value);" style="width: 450px; ">
+							<br>	
+							<datalist id="players"> 
+							<option>A carregar... </option>
+							</datalist>
+							
+							<br>
 							<input type="submit" id="profile" style="padding-right:0px; padding-left:0px; font-size: 13px; background-color:#8b989e" class="login100-form-btn" value="Ver Perfil"/>
 						</form>
 					</div>	
@@ -313,22 +358,6 @@ String[] playersList  = XMLUtils.stringToArray(playersListStr);
 	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="https://code.jquery.com/jquery-migrate-3.0.0.min.js"></script>
-	
-  <script>
-  $(function() {
-	   
-	var availablePlayers = new Array();
-	
-	<% for (String element : playersList) {%> 
-		availablePlayers.push("<%=element%>");
-	<% } %>
-
-    $( "#tags" ).autocomplete({
-      source: availablePlayers
-    });
-  } );
-  </script>
-
 
 <!--===============================================================================================-->
 	<script src="vendor/bootstrap/js/popper.js"></script>

@@ -11,11 +11,11 @@ import org.w3c.dom.Element;
 
 public class MessageCreator {
 
-	public static String messageGetPlayers() throws ParserConfigurationException {		
-		return messageGetPlayers(null);
+	public static String messageGetPlayers(String query, int numLetters, int numItems) throws ParserConfigurationException {		
+		return messageGetPlayers(query, numLetters, numItems, null);
 	}
 	
-	public static String messageGetPlayers(ArrayList<String> players) throws ParserConfigurationException {
+	public static String messageGetPlayers(String query, int numLetters, int numItems, List<String> players) throws ParserConfigurationException {
 		
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();	 
         DocumentBuilder documentBuilder = documentFactory.newDocumentBuilder();
@@ -30,13 +30,26 @@ public class MessageCreator {
         elementRoot.appendChild(elementMethod); 
 
         // Elemento Request
-        Element elementRequest = document.createElement("Request");     
+        Element elementRequest = document.createElement("Request");
+        
+        Element elementQuery = document.createElement("Query");
+        elementQuery.setTextContent(query);
+        elementRequest.appendChild(elementQuery);
+        
+        Element elementNumLetters = document.createElement("NumLetters");
+        elementNumLetters.setTextContent(String.valueOf(numLetters));
+        elementRequest.appendChild(elementNumLetters);
+        
+        Element elementNumItems = document.createElement("NumItems");
+        elementNumItems.setTextContent(String.valueOf(numItems));
+        elementRequest.appendChild(elementNumItems);
+        
         elementMethod.appendChild(elementRequest);
         
         // Elemento Reply
         Element elementReply = document.createElement("Response");    
         Element elementPlayers = document.createElement("Players");
-        
+
         // Elemento Result
         if (players != null) {
         	for (String username : players) {
