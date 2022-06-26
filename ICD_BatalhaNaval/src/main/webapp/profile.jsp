@@ -30,7 +30,6 @@
 	
 <% 
 // Obter dados
-String validate = Check.username(request, response);
 String username = (String) session.getAttribute("search_username");
 HashMap<String, String> profile = Check.profile(username);
 

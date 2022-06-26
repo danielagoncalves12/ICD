@@ -48,8 +48,6 @@
     <fullyQualifiedTypeName name="java.util.UUID"/>
     <fullyQualifiedTypeName name="socket.GameQueueThread"/>
     <fullyQualifiedTypeName name="battleship.GameView"/>
-    <fullyQualifiedTypeName name="java.util.Arrays"/>
-    <fullyQualifiedTypeName name="protocol.XMLUtils"/>
     <fullyQualifiedTypeName name="java.nio.file.Path"/>
     <fullyQualifiedTypeName name="java.nio.file.Paths"/>
     <fullyQualifiedTypeName name="java.nio.file.Files"/>
@@ -60,4 +58,6 @@
     <fullyQualifiedTypeName name="java.nio.file.StandardCopyOption"/>
     <fullyQualifiedTypeName name="java.util.concurrent.BlockingQueue"/>
     <fullyQualifiedTypeName name="java.util.concurrent.LinkedBlockingQueue"/>
+    <fullyQualifiedTypeName name="protocol.XMLUtils"/>
+    <fullyQualifiedTypeName name="java.util.Arrays"/>
 </qualifiedTypeNameHistroy>

@@ -5,8 +5,8 @@
 		<Color>#ec60c1</Color>
 		<Date>2000-06-12</Date>
 		<Picture>Dannie.png</Picture>
-		<WinsNumber>68</WinsNumber>
-		<AverageTime>1.475484780967065</AverageTime>
+		<WinsNumber>69</WinsNumber>
+		<AverageTime>1.2377423904835325</AverageTime>
 	</Player>
 	<Player Username="Nick">
 		<Name>Nick</Name>
@@ -15,7 +15,7 @@
 		<Date>2010-01-01</Date>
 		<Picture>Nick.png</Picture>
 		<WinsNumber>93</WinsNumber>
-		<AverageTime>1.4505299329730406</AverageTime>
+		<AverageTime>1.2252649664865203</AverageTime>
 	</Player>
 	<Player Username="GoingOn">
 		<Name>GoingOn</Name>

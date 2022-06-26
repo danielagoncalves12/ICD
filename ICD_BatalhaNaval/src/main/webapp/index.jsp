@@ -34,22 +34,19 @@
 <% 
 // Obter dados
 String username = Check.username(request, response);
-HashMap<String, String> profile = null;
-String rgbColor = null, age = null;
-String[][] players = null; String[] playersList = null;
 
 // Informacoes do perfil
-profile = Check.profile(username);	
-rgbColor = Profile.hex2Rgb(profile.get("Color"));
+HashMap<String, String> profile = Check.profile(username);	
+String rgbColor = Profile.hex2Rgb(profile.get("Color"));
 
 // Calculo da idade
 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 LocalDate birth = LocalDate.parse(profile.get("Date"), formatter);
-age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
+String age = String.valueOf(ChronoUnit.YEARS.between(birth, LocalDate.now()));
 
 // Quadro de honra
 String honor = new User().sendRequestHonorBoard();
-players = XMLUtils.stringToArray2D(honor);
+String[][] players = XMLUtils.stringToArray2D(honor);
 %>
 
 <script type="text/javascript">
@@ -115,7 +112,7 @@ players = XMLUtils.stringToArray2D(honor);
 				
 				</div>
 
-				<!-- Procurar Jogo -->
+				
 				<div style="padding: 10px; padding-left: 50px">
 				
 					<div style="height: 50%; text-align:center">
@@ -123,11 +120,13 @@ players = XMLUtils.stringToArray2D(honor);
 							Batalha Naval!
 						</span>
 						
+						<!-- Procurar jogo -->
 						<div class="container-login100-form-btn" style="margin: auto; width: 80%">
 							<a id="link" onclick="javascript:findGame(this);" style="font-size: 13px; background-color:#8b989e" class="login100-form-btn" href="game.jsp">Jogar</a>
 							<p id="searching" style="color: red; display: none">A procurar um oponente...</p>
 						</div>				
 
+						<!-- Encontrar jogador -->
 						<br><br>
 						<span class="login100-form-title" style="padding:12px">
 							Procurar um jogador!
@@ -135,9 +134,7 @@ players = XMLUtils.stringToArray2D(honor);
 						<br>
 						<h6>Introduza o nome: </h6>			
 						
-						<form action="SearchServlet" method="POST">
-							<input type="hidden" name="validate" value="<%=username%>"/>
-							
+						<form action="SearchServlet" method="GET">
 							<input style="border: 1px solid black" autocomplete="off" list="players" id="player" type="search" name="player" onkeyup="showState(this.value);" style="width: 450px; ">
 							<br>	
 							<datalist id="players"> 
@@ -213,7 +210,7 @@ players = XMLUtils.stringToArray2D(honor);
 				<thead>
 					<tr style="text-align: left;">
 						<th>Jogador</th>
-						<th>Lugar</th>
+						<th>Posição</th>
 						<th>Vitórias</th>
 					</tr>
 				</thead>

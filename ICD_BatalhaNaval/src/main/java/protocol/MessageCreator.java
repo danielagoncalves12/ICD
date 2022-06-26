@@ -1,6 +1,5 @@
 package protocol;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
@@ -61,7 +60,7 @@ public class MessageCreator {
         }     
         elementReply.appendChild(elementPlayers);
         elementMethod.appendChild(elementReply);
-        
+
         return XMLUtils.documentToString(document);
 	}
 	
